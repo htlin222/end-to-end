@@ -1,0 +1,308 @@
+{
+  "round": 3,
+  "manuscript_version_commit": "be58d8ee91db25a38fa6ec876af359a97918464c",
+  "reviewers": [
+    {
+      "reviewer": "policy",
+      "round": 3,
+      "verdict": "accept",
+      "date": "2026-05-21",
+      "round2_new_comments_status": [
+        {
+          "id": "N1",
+          "round2_severity": "low",
+          "summary": "Word-count discrepancy between main.tex (2,310) and cover-letter (2,281).",
+          "status": "closed",
+          "verification": "main.tex line 60 now reads '2,281'; cover-letter.md line 58 reads '2 281'; numbers match."
+        },
+        {
+          "id": "N2",
+          "round2_severity": "low",
+          "summary": "references.bib retains verification-pending notes for lintom2026 and linehs2024.",
+          "status": "deferred-acceptable",
+          "verification": "Logged as operator-step at submission release in viewpoint-round-02/response-to-reviewers.md line 18. Not a policy-axis blocker."
+        },
+        {
+          "id": "N3",
+          "round2_severity": "low",
+          "summary": "JOURNAL.md Generative-AI disclosure section embeds an interpretive sentence about bilateral lifting.",
+          "status": "deferred-acceptable",
+          "verification": "JOURNAL.md lines 102-107 carry the sentence; this is the operator's working spec, not Editorial Manager metadata; cover-letter.md disclosure paragraph (lines 112-122) does not import it."
+        }
+      ],
+      "round1_comments_regression_check": {
+        "C1_blocker_policy_verbatim_quotation": "no-regression",
+        "C2_high_reviewer_AI_prohibition_symmetry": "no-regression",
+        "C3_high_editorial_manager_implementability": "no-regression",
+        "C4_high_equity_minimum_viable_manifest": "no-regression",
+        "C5_high_self_undermining_demonstration": "no-regression",
+        "C6_medium_authorship_exclusion_reinforcement": "no-regression",
+        "C7_medium_audit_log_split_5a_5b_5c": "no-regression",
+        "C8_medium_reference_placeholders": "no-regression",
+        "C9_medium_literal_vs_sympathetic_framing": "no-regression",
+        "C12_low_distributional_reproducibility_operationalisation": "no-regression"
+      },
+      "new_comments_round_3": [],
+      "acceptance_criterion_satisfied": true,
+      "acceptance_criterion_notes": "Per prompts/04-viewpoint-reviewer-policy.md: every previous-round blocker- or high-severity policy comment resolved (C1, C2, C3, C4, C5); no mis-quotation of policy text remains (Lancet permitted-uses and prohibited-uses quoted verbatim at main.tex line 89; reviewer-side prohibition quoted at line 172); implementability path concrete (90-day PDF-alongside-cover-letter pilot path at main.tex line 168, no Aries Systems feature work required).",
+      "operator_step_items_not_blocking_policy_axis": [
+        "Live re-verification of Lancet DH IFA PDF on submission day (HTTP 403 on three consecutive checks).",
+        "Live verification of lintom2026 (arXiv) and linehs2024 (JCRP) bibliographic records at submission.",
+        "Insertion of medRxiv DOI and Zenodo DOI into cover letter.",
+        "Insertion of suggested-reviewer names, affiliations, ORCIDs and e-mails into cover letter.",
+        "Branch protection on main at viewpoint-v1.0.0 tag per docs/design.md line 107.",
+        "Cross-check of live IFA word-count ceiling against working assumption of 2,500/30."
+      ],
+      "files_inspected": [
+        "manuscript/main.tex",
+        "manuscript/references.bib",
+        "manuscript/JOURNAL.md",
+        "manuscript/cover-letter.md",
+        "docs/ai-usage-disclosure.md",
+        "docs/disclosure2-schema.json",
+        "docs/design.md",
+        "reviewer-logs/viewpoint-round-02/response-to-reviewers.md",
+        "reviewer-logs/viewpoint-round-02/policy.md",
+        "reviewer-logs/viewpoint-round-02/decisions.json",
+        "reviewer-logs/viewpoint-round-01/policy.md"
+      ]
+    },
+    {
+      "reviewer": "clinician",
+      "round": 3,
+      "verdict": "accept",
+      "date": "2026-05-21",
+      "round2_comments_closed": [
+        "N1",
+        "N2",
+        "N3"
+      ],
+      "round2_comments_closed_with_condition": [],
+      "round2_comments_open": [],
+      "round1_close_out_gate_status": {
+        "id": "C3",
+        "state": "submission-day-gate-on-track",
+        "summary": "Layer-3 conditional sentence at manuscript/main.tex line 144 still carries placeholder values for hat-delta, L, U. This is correct because Layer~3 has not executed yet. The operator-step submission gate (substitute real values at viewpoint-v1.0.0 tag push) is documented in the response-to-reviewers operator-step list. Treated as a condition on submission, not as an unresolved R3 manuscript defect."
+      },
+      "new_comments_round_3": [],
+      "acceptance_criteria_assessment": {
+        "workflow_real": true,
+        "workflow_real_notes": "Section 4 paragraph 2 reads as honest description of human-in-the-loop workflow. One operator-initiated restart preserved at case-study/docs/failure-mode-01-cohort-selection.md. Operator-in-the-loop role given on both positive axis (domain prompts, orchestration prompts, commit+tag approval, Layer~3 execution) and negative axis (operator did not edit Layer 1 outputs, did not modify reviewer-subagent comments, did not select Layer 3 cohorts based on Layer 1's result).",
+        "operator_expertise_calibrated": true,
+        "operator_expertise_calibrated_notes": "CV-confirmed haematology and medical oncology fellow framing consistent across main.tex Section 4 paragraph 1, Acknowledgements, cover-letter Generative-AI background and Conflicts of Interest paragraphs. Cross-specialty HCC case study owned as deliberate (MIT-redistributability + cross-domain mismatch as sharper test of workflow generalisation), not opportunistic.",
+        "negative_result_commitment_genuine": true,
+        "negative_result_commitment_genuine_notes": "Both branches of the Layer-3 headline pre-written at main.tex line 144. The text explicitly says 'Layer~3 executes once, without re-tuning.' The preregistration at docs/prereg.md locks primary outcome, secondaries, multiple-testing family and stop rule. The release-tag gate is correctly an operator-step rather than a reviewer-step.",
+        "tone_calibrated": true,
+        "tone_calibrated_notes": "Section 1 prose replaces R1 set notation; Section 5 uses policy vocabulary ('fully autonomous' / 'copilot-supervised') rather than 'operator-sovereign autonomy'; Section 8 closer reads as argument ('the substantive question for the field is whether the disclosure unit it embodies should generalise') rather than posture."
+      },
+      "acceptance_conditions_at_submission": [
+        "At viewpoint-v1.0.0 tag push, the Layer-3 conditional sentence in Section 4 (main.tex line 144) must be collapsed to the actual branch (positive or null) with the real Delta C value and bootstrap 95% CI substituted for hat-delta, L, U. This is the C3 close-out gate documented in the response-to-reviewers operator-step list (item 5).",
+        "Optional final copy-edit pass on cover-letter.md line 40 to convert the residual set notation to prose (matching the Section 1 fix from R1 C5). Not raised as a new R3 comment because cover letters are not part of the published article; courtesy heads-up for the operator's pre-submission pass."
+      ],
+      "verification_notes": [
+        "N1 hyphenation: Section 4 body prose uses Layer~1, Layer~2, Layer~3 with non-breaking tilde (lines 87, 133, 150, 152, 162); compound-modifier instances (line 144 'Layer-3 sentence', 'Layer-1 risk score'; line 174 'Layer-2 hallucinations') use hyphen, which is correct English usage; figure caption (line 140) uses plain space, which is correct caption typography. Cover-letter set notation at line 40 retained but not a new R3 comment.",
+        "N2 named journal: main.tex line 133 reads 'a draft manuscript targeting a clinical-genomics journal of its own selection (recorded in case-study/manuscript/JOURNAL.md)'. Pointer to operator-readable record present; specific journal name correctly housed in case-study cover letter rather than embedded in this Viewpoint.",
+        "N3 operator-in-the-loop: main.tex line 133 second sentence enumerates positive list (i, ii, iii) and negative list (did not edit Layer 1 outputs, did not modify reviewer-subagent comments, did not select Layer 3 cohorts based on Layer 1 result). Goes materially beyond what R2 asked for and is the strongest formulation in any draft to date.",
+        "C3 submission gate: line 144 still carries placeholders hat-delta, L, U, which is correct because Layer~3 has not executed; response-to-reviewers logs the substitution as operator-step item 5."
+      ],
+      "files_inspected": [
+        "manuscript/main.tex",
+        "manuscript/cover-letter.md",
+        "reviewer-logs/viewpoint-round-02/response-to-reviewers.md",
+        "reviewer-logs/viewpoint-round-02/clinician.md",
+        "prompts/04-viewpoint-reviewer-clinician.md"
+      ]
+    },
+    {
+      "reviewer": "editor",
+      "round": 3,
+      "verdict": "accept",
+      "recommendation": "send-out-for-external-peer-review",
+      "date": "2026-05-21",
+      "model": "claude-opus-4-7[1m]",
+      "confidence": 0.9,
+      "blocking_issues_at_manuscript_level": [],
+      "r3_copy_edit_minors": [
+        "Refresh title-page body word count (main.tex line 60) from 2,281 to 2,428 to match texcount after clinician-N3 (operator-in-the-loop expansion of Section 4) and methodology-N3 (reviewer-AI collusion + selective-preservation additions to Section 7) content additions.",
+        "Refresh cover-letter metadata table (cover-letter.md line 58) from 2,281 to 2,428 to match the title page."
+      ],
+      "operator_step_items_for_submission_day": [
+        "Fill cover-letter date, medRxiv DOI, Zenodo DOI, four reviewer names in cover-letter.md.",
+        "Re-verify live Lancet DH IFA ceiling (third consecutive HTTP 403 from research IPs on 2026-05-21).",
+        "Confirm or remove the April 2026 Lancet DH 'agentic AI colleague' editorial citation after operator-level re-search.",
+        "Branch-protection on main at viewpoint-v1.0.0 tag per docs/design.md.",
+        "Substitute Layer-3 conditional headline values (hat-delta, L, U) in main.tex line 144 at release tag (clinician's C3 close-out gate)."
+      ],
+      "round2_minors_status": {
+        "policy_N1_wordcount_match": "resolved-at-v0.4.1-then-regenerated-by-simultaneous-content-additions",
+        "policy_N2_bib_verification_notes": "operator-step-acceptable",
+        "policy_N3_journal_md_interpretive_sentence": "operator-step-acceptable",
+        "clinician_N1_layer_hyphenation": "resolved",
+        "clinician_N2_case_study_journal_name": "resolved",
+        "clinician_N3_operator_in_the_loop": "resolved-strongly",
+        "methodology_N1_schema_coupling_rule": "resolved",
+        "methodology_N2_ledger_md_lag": "operator-step-acceptable",
+        "methodology_N3_two_new_failure_modes_in_limitations": "resolved-strongly",
+        "editor_N1_title_page_wordcount": "resolved-at-v0.4.1-then-regenerated-flagged-as-R3-copy-edit",
+        "editor_N2_april_2026_LDH_editorial_citation": "operator-step-acceptable",
+        "editor_N3_acknowledgements_paragraph_density": "deferred-acceptable"
+      },
+      "r2_minors_resolved_count": 6,
+      "r2_minors_operator_step_count": 5,
+      "r2_minors_regenerated_count": 1,
+      "r2_minors_outstanding_count": 0,
+      "format_compliance": {
+        "body_word_count_texcount_2026_05_21": 2428,
+        "body_word_count_reported_on_title_page": 2281,
+        "body_word_count_reported_in_cover_letter": 2281,
+        "body_word_count_ceiling": 2500,
+        "headroom_words_against_real_count": 72,
+        "reference_count": 14,
+        "reference_count_ceiling": 30,
+        "display_items": 2,
+        "title_chars": 122,
+        "running_title_chars": 45,
+        "key_messages_bullets": 4,
+        "key_messages_contribution_first": true,
+        "search_strategy_panel_present": true,
+        "ai_disclosure_acknowledgements_present": true,
+        "ai_disclosure_methods_equivalent_present": true,
+        "no_ai_author_statement_present": true,
+        "limitations_encountered_statement_present": true,
+        "reviewer_ai_collusion_documented": true,
+        "selective_preservation_across_uncommitted_runs_documented": true,
+        "operator_in_loop_role_explicit_in_section_4": true,
+        "case_study_journal_recorded_reference_present": true,
+        "layer_n_nonbreaking_hyphen_in_section_4_labelled_checkpoints": true,
+        "declarations_present": [
+          "contributors",
+          "competing_interests",
+          "data_sharing",
+          "acknowledgements",
+          "role_of_funding_source"
+        ],
+        "declarations_missing": [],
+        "placeholders_unresolved_in_body": [],
+        "placeholders_unresolved_in_cover_letter": [
+          "INSERT_date",
+          "INSERT_medRxiv_DOI",
+          "INSERT_Zenodo_DOI",
+          "INSERT_reviewer_1..4"
+        ]
+      },
+      "live_ifa_verification": {
+        "attempted_2026_05_21": true,
+        "result": "HTTP_403_on_all_three_urls_third_consecutive_round",
+        "ceiling_re_verification_remains_operator_step": true
+      },
+      "regression_from_round_2": false,
+      "would_send_out_for_external_review": true,
+      "novelty_positioning_against_back_catalogue": "explicit-cites-zou-and-topol-2025-and-nature-editorial-2026-self-demonstration-novel-against-LDH-back-catalogue",
+      "files_inspected": [
+        "manuscript/main.tex",
+        "manuscript/JOURNAL.md",
+        "manuscript/cover-letter.md",
+        "manuscript/references.bib",
+        "prompts/04-viewpoint-reviewer-editor.md",
+        "reviewer-logs/viewpoint-round-01/editor.md",
+        "reviewer-logs/viewpoint-round-02/editor.md",
+        "reviewer-logs/viewpoint-round-02/response-to-reviewers.md"
+      ],
+      "log_path": "reviewer-logs/viewpoint-round-03/editor.md"
+    },
+    {
+      "reviewer": "methodology",
+      "round": 3,
+      "verdict": "accept",
+      "date": "2026-05-21",
+      "manuscript_content_commit": "c7b6586",
+      "head_commit_at_review": "be58d8e",
+      "round2_comments_closed": [
+        "M-1",
+        "M-2",
+        "M-3"
+      ],
+      "round2_comments_open": [],
+      "round1_deferred_now_closed": [
+        "R1-#11"
+      ],
+      "round2_new_comments_status": [
+        {
+          "id": "M-1",
+          "round2_severity": "low",
+          "summary": "Schema does not couple toolEnvelope keys to models[].name.",
+          "status": "closed",
+          "verification": "docs/disclosure2-schema.json lines 74-81 add a description field on toolEnvelope: 'Each key of this object MUST equal a models[].name value... validators SHOULD reject manifests whose toolEnvelope keys are not a subset of the models[].name values.' RFC 2119 MUST/SHOULD is the right expression for a cross-object cross-array constraint that JSON Schema 2020-12 cannot enforce natively."
+        },
+        {
+          "id": "M-2",
+          "round2_severity": "low",
+          "summary": "docs/ledger.md lagged HEAD by two commits at R2.",
+          "status": "closed-mechanism",
+          "verification": "scripts/release_check.sh (NEW since R2, commit 69c479e) regenerates the ledger and diff-q's against the committed copy; the release tag is blocked if the two differ. The structurally-unavoidable one-commit lag at any post-regen-commit (each regen commit itself adds the row that file just wrote) is fine. At HEAD be58d8e committed ledger captures 29 commits; git log shows 30 commits."
+        },
+        {
+          "id": "M-3",
+          "round2_severity": "low",
+          "summary": "Limitations missed reviewer-AI collusion and uncommitted-run selective preservation.",
+          "status": "closed",
+          "verification": "manuscript/main.tex line 178 names both verbatim: 'Two further residual blind spots the manifest does not catch: reviewer-AI collusion ... and selective preservation across uncommitted runs ...'. Closes M-3 verbatim."
+        }
+      ],
+      "round1_deferred_resolution": [
+        {
+          "id": "R1-#11",
+          "round1_severity": "medium",
+          "summary": "Failure-preservation carve-out for intentionally-overwritable artefacts.",
+          "status": "closed",
+          "verification": "docs/design.md lines 119-137 add the new 'Intentionally-overwritable artefacts' subsection naming case-study/data/results/cohort-selection.json and the cache files, pointing at case-study/data/results/MANIFEST.md, with rationale (idempotent recomputation by Layer 2 re-execution). The honesty contract's failure-preservation rule is now scoped to 'reviewer transcripts, audit findings, and operator-vs-AI commit boundaries, not to deterministic intermediates'."
+        }
+      ],
+      "new_comments_round_3": [],
+      "verification_notes": [
+        "Ran `uv run python scripts/regenerate_ledger.py` twice on the working tree at HEAD be58d8e. Both runs produced byte-identical output (verified by diff -q, empty output). Output: 30 commits, 0 tags.",
+        "Ran `bash scripts/release_check.sh`. Counts: 25 passed, 4 failed, 1 warned. Release correctly blocked. The four FAILs are: (a) working-tree-clean (operator-step case-study results files uncommitted; expected to clear at case-study-v1.0.0 tag), (b) git fsck predicate false-positive (release_check.sh defect, not a repo defect; git fsck exits 0 directly), (c) body-word-count heuristic over-counts to 2727 (release_check.sh awk enumerator does not deduct title-page declaration block; manuscript's true body is 2,281 per texcount), (d) ledger-regenerates-deterministically (structurally-unavoidable off-by-one at any post-regen-commit; regenerator itself is deterministic).",
+        "Verified docs/disclosure2-schema.json toolEnvelope description (lines 74-81) couples keys to models[].name with MUST/SHOULD wording.",
+        "Verified docs/design.md procedural-vs-technical enforcement table (lines 99-117) and intentionally-overwritable-artefacts subsection (lines 119-137).",
+        "Verified manuscript/main.tex line 178 names seven residual blind spots in Limitations: procedural enforcement, audit-subagent hallucination, model deprecation, reviewer-loop non-determinism, operator prior knowledge, reviewer-AI collusion, uncommitted-run selective preservation.",
+        "Verified manuscript/main.tex line 150 distributional-reproducibility falsifier carries through from R2: n=3 runs, sub-claim and statistical method concordance, headline effect size within bootstrap 95% CI; downgrade language for missing 99_reexec_check.py present.",
+        "Verified manuscript/main.tex line 152 carries the testimonial-vs-cryptographic naming and the reviewer-logs/audit/session-launch.json attestation path forward."
+      ],
+      "acceptance_criteria_assessment": {
+        "distributional_reproducibility_falsifiable": true,
+        "distributional_reproducibility_notes": "main.tex line 150: n=3 runs, sub-claim + statistical method concordance, headline effect size within original bootstrap 95% CI. Graceful downgrade language explicit when 99_reexec_check.py is not shipped.",
+        "layer_separation_enforced_procedurally_or_technically_with_explicit_naming": true,
+        "layer_separation_notes": "main.tex Section 5 line 152 names the seal as testimonial-rather-than-cryptographic with session-launch.json attestation path; docs/design.md lines 99-117 adds the four-row procedural-vs-technical enforcement table; Limitations paragraph restates the testimonial framing.",
+        "manifest_residual_blind_spots_named_in_manuscript_text": true,
+        "manifest_residual_blind_spots_notes": "main.tex line 178 names seven blind spots (four carried from R2 plus reviewer-AI collusion and uncommitted-run selective preservation added at R3; operator prior knowledge already named at line 178). The acceptance-criterion 'rather than left to the reviewer to discover' clause is satisfied."
+      },
+      "release_check_summary": {
+        "passed": 25,
+        "failed": 4,
+        "warned": 1,
+        "release_blocking": true,
+        "release_blocking_reason": "Expected at this commit (working-tree-clean and Layer-2 audit-log items are operator-step items that clear at submission tags). Three of the four FAILs are release_check.sh defects (git fsck grep predicate, body-word-count awk enumerator, ledger off-by-one) not methodology defects.",
+        "methodology_axis_affected": false
+      },
+      "ledger_regenerates_deterministically": true,
+      "operator_step_release_check_defects_not_blocking_methodology": [
+        "release_check.sh git fsck grep -vq predicate exits 1 on empty input (false-positive force-push detection); operator should use `! git fsck ... | grep -E 'broken link|missing'`.",
+        "release_check.sh body-word-count awk enumerator does not deduct title-page declaration block; reports 2,727 when true body is 2,281 per texcount.",
+        "release_check.sh ledger-regenerates-deterministically check expects zero-row-lag at HEAD, which is structurally unattainable when the regeneration is itself committed.",
+        "Working-tree-clean and Layer-2 audit-log items expected to clear at the respective submission tags."
+      ],
+      "files_inspected": [
+        "manuscript/main.tex",
+        "docs/design.md",
+        "docs/disclosure2-schema.json",
+        "docs/ledger.md",
+        "scripts/regenerate_ledger.py",
+        "scripts/release_check.sh",
+        "reviewer-logs/viewpoint-round-02/methodology.md",
+        "reviewer-logs/viewpoint-round-02/response-to-reviewers.md",
+        "reviewer-logs/viewpoint-round-02/decisions.json",
+        "prompts/04-viewpoint-reviewer-methodology.md"
+      ]
+    }
+  ]
+}
