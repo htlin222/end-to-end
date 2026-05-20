@@ -1,0 +1,272 @@
+{
+  "round": 5,
+  "round_type": "post-layer-3-confirmation",
+  "manuscript_version_commit": "5ffd6df",
+  "head_commit": "99d9cfe",
+  "reviewers": [
+    {
+      "reviewer": "editor",
+      "round": 5,
+      "manuscript_version": "v0.5",
+      "head_commit": "5ffd6df",
+      "tag_target": "viewpoint-v1.1.0",
+      "date": "2026-05-21",
+      "model": "claude-opus-4-7[1m]",
+      "verdict": "accept",
+      "recommendation": "send-out-for-external-peer-review",
+      "would_send_out_for_external_review": true,
+      "confidence": 0.93,
+      "blocking_issues_at_manuscript_level": [],
+      "r5_new_minors": [
+        "Cover-letter line 58 word-count refresh 2 428 -> 2 495 (mechanical, submission-day)."
+      ],
+      "operator_step_items_for_submission_day": [
+        "Refresh cover-letter line 58 to '2 495' (was '2 428' at R4)",
+        "Fill cover-letter date, medRxiv DOI, Zenodo DOI, four reviewer names",
+        "Re-verify live Lancet DH IFA ceiling on submission day; if live ceiling < 2 500, trim further or convert to a Comment",
+        "Confirm or remove the April 2026 Lancet DH editorial citation after operator-level re-search",
+        "Apply branch-protection on main at the viewpoint-v1.1.0 tag",
+        "Ship case-study-v1.0.1 follow-on (referenced in section 4 audit paragraph) within a defensible window before acceptance"
+      ],
+      "format_compliance": {
+        "body_word_count_texcount": 2495,
+        "body_word_count_reported_on_title_page": 2495,
+        "body_word_count_ceiling": 2500,
+        "headroom_words": 5,
+        "headroom_delta_from_round_4_words": -67,
+        "reference_count_cited": 14,
+        "reference_count_in_bibliography": 14,
+        "reference_count_ceiling": 30,
+        "every_bib_entry_is_cited": true,
+        "display_items": 2,
+        "display_items_ceiling": 2,
+        "title_chars": 122,
+        "running_title_chars": 45,
+        "key_messages_bullets": 4,
+        "envelope_holds": true
+      },
+      "texcount_section_breakdown_body_words": {
+        "section_1_why_disclosure_needs_a_new_minimum_unit": 282,
+        "section_2_the_disclosure_gap": 290,
+        "section_3_what_a_sufficient_disclosure_unit_looks_like": 343,
+        "section_4_domain_portability_case_study_hcc_os_stratification": 642,
+        "section_5_failure_modes_and_counter_arguments": 349,
+        "section_6_recommendations_to_the_lancet_dh_and_the_wider_community": 241,
+        "section_7_limitations": 233,
+        "section_8_conclusion": 115,
+        "body_total": 2495
+      },
+      "layer_3_null_framing": {
+        "headline_present_in_section_4": true,
+        "headline_label_used": "Headline result.",
+        "result_stated_as_null": true,
+        "delta_c_index": 0.006,
+        "ci_95_pct": [-0.008, 0.030],
+        "n_pooled": 333,
+        "events_pooled": 107,
+        "primary_hypothesis_not_rejected_stated_explicitly": true,
+        "cohort_specific_estimates_present": true,
+        "gse14520_delta_c": 0.016,
+        "gse14520_ci_95_pct": [-0.010, 0.047],
+        "gse76427_delta_c": 0.026,
+        "gse76427_ci_95_pct": [-0.020, 0.141],
+        "discussion_and_conclusion_explicitly_conditional_on_null": true,
+        "section_7_carries_power_caveat_as_scope_not_hedge": true,
+        "section_8_conclusion_leads_with_null": true,
+        "not_buried": true,
+        "not_over_qualified": true,
+        "conditional_prose_from_v0_4_2_removed": true
+      },
+      "layer_2_audit_paragraph_audit": {
+        "paragraph_present_in_section_4": true,
+        "filing_path_referenced": "reviewer-logs/audit/findings.md",
+        "filing_path_exists_at_head": true,
+        "claims_total_findings": 12,
+        "findings_md_total_findings": 12,
+        "claims_blockers": 1,
+        "findings_md_blockers": 1,
+        "claims_high": 2,
+        "findings_md_high": 2,
+        "claims_medium_and_low_combined": 9,
+        "findings_md_medium_plus_low": 9,
+        "blocker_description_matches_F1": true,
+        "high_descriptions_match_F2_and_F3": true,
+        "exemplars_match_findings_md": {
+          "fabricated_guideline_doi": "F5",
+          "jaccard_stability_disagreement": "F4",
+          "uncited_bib_entries": "F7"
+        },
+        "frozen_tag_unchanged": true,
+        "future_followup_release_named": "case-study-v1.0.1",
+        "paragraph_aggregates_medium_and_low_appropriately": true,
+        "paragraph_summary_is_accurate_and_proportionate": true
+      },
+      "section_5_trim_verification": {
+        "round_4_section_5_words": 505,
+        "round_5_section_5_words": 349,
+        "trim_delta_words": -156,
+        "mandate_specified_trim": -156,
+        "match": true,
+        "counter_arguments_retained_count": 7,
+        "counter_arguments_dropped_count": 0
+      },
+      "section_8_conclusion_rewrite": {
+        "lead_with_null": true,
+        "lead_with_audit_findings": true,
+        "order_matches_mandate_null_first_audit_second": true,
+        "phrasing_ties_audit_back_to_section_2_camouflage_argument": true
+      },
+      "internal_consistency_spot_checks": {
+        "tripartite_operator_not_list_in_section_4_preserved": true,
+        "reviewer_ai_collusion_paragraph_in_section_7_preserved": true,
+        "selective_preservation_paragraph_in_section_7_preserved": true,
+        "cover_letter_word_count_refresh_required": true
+      },
+      "live_ifa_verification": {
+        "attempted_2026_05_21": false,
+        "expected_result_based_on_rounds_1_through_4": "HTTP_403",
+        "ceiling_re_verification_remains_operator_step": true,
+        "headroom_now_load_bearing_at_5_words": true
+      },
+      "regression_from_round_4": false,
+      "strengthening_swap_assessment": {
+        "conditional_prose_replaced_with_executed_result": true,
+        "generic_audit_claim_replaced_with_concrete_findings": true,
+        "supporting_case_study_relabelled_as_workflow_illustration": true,
+        "viewpoint_central_claim_strengthened_by_outcomes": true
+      },
+      "rounds_required_user_spec": 4,
+      "rounds_completed_substantive": 4,
+      "this_round_is_post_layer_3_confirmation": true,
+      "consistent_with_round_3_and_round_4_verdicts": true,
+      "sources_consulted": [
+        "manuscript/main.tex at HEAD 5ffd6df",
+        "manuscript/references.bib",
+        "reviewer-logs/audit/findings.md",
+        "reviewer-logs/viewpoint-round-04/editor.md",
+        "reviewer-logs/viewpoint-round-03/editor.md",
+        "reviewer-logs/viewpoint-round-02/editor.md",
+        "reviewer-logs/viewpoint-round-01/editor.md",
+        "git diff 5ffd6df^ 5ffd6df -- manuscript/main.tex",
+        "texcount -inc -sub=section manuscript/main.tex on 2026-05-21"
+      ],
+      "transcript": "reviewer-logs/viewpoint-round-05/editor.md"
+    },
+    {
+      "reviewer": "methodology",
+      "round": 5,
+      "round_type": "post-layer-3-confirmation",
+      "verdict": "accept",
+      "date": "2026-05-21",
+      "model": "claude-opus-4-7[1m]",
+      "manuscript_version_commit": "5ffd6df",
+      "head_commit_inspected": "99d9cfe",
+      "layer3_anchor_commit": "ecf8475",
+      "layer2_audit_anchor_commits": ["109a432", "59a48dc"],
+      "layer3_unmodified_application_check": {
+        "layer1_coefs_loaded_unchanged": true,
+        "layer1_coefs_source": "case-study/data/results/tcga_model_coefs.tsv",
+        "no_refitting_at_layer3": true,
+        "missing_genes_dropped_not_substituted": true,
+        "coverage_gse14520_pct": 80.0,
+        "coverage_gse76427_pct": 96.0,
+        "z_score_within_cohort_per_gene": true,
+        "no_alternative_score_variants_computed": true,
+        "honesty_contract_no_post_hoc_instrumentation": "upheld"
+      },
+      "prereg_alignment_check": {
+        "preregistration_anchor_commit": "88d6d15",
+        "primary_outcome_match": true,
+        "harrell_c_statistic_match": true,
+        "bootstrap_1000_percentile_match": true,
+        "delta_c_threshold_match": true,
+        "delta_c_threshold_value": 0.03,
+        "alpha_match": true,
+        "alpha_value": 0.05,
+        "rejection_rule_match": true,
+        "cohorts_locked_pair_match": true,
+        "S1_GSE14520_reported": true,
+        "S2_GSE76427_reported": true,
+        "S3_S5_calibration_reported": false,
+        "S6_DCA_reported": false,
+        "S7_IDI_reported": false,
+        "secondaries_partially_discharged": true
+      },
+      "primary_outcome_traceability": {
+        "delta_c_json": 0.006163997048226788,
+        "delta_c_manuscript": 0.006,
+        "ci_lo_json": -0.008032237679967788,
+        "ci_lo_manuscript": -0.008,
+        "ci_hi_json": 0.029794465294883173,
+        "ci_hi_manuscript": 0.030,
+        "n_pooled_json": 333,
+        "n_pooled_manuscript": 333,
+        "events_pooled_json": 107,
+        "events_pooled_manuscript": 107,
+        "reject_h0_json": false,
+        "primary_decision_json": "null",
+        "every_digit_traces_to_json": true,
+        "no_softening_qualifiers": true,
+        "no_reanchoring_to_secondary": true
+      },
+      "audit_summary_faithfulness": {
+        "findings_total_claimed": 12,
+        "findings_total_actual": 12,
+        "blockers_claimed": 1,
+        "blockers_actual": 1,
+        "high_claimed": 2,
+        "high_actual": 2,
+        "medium_low_combined_claimed": 9,
+        "medium_low_combined_actual": 9,
+        "blocker_F1_named_in_manuscript": true,
+        "high_F2_named_in_manuscript": true,
+        "high_F3_named_in_manuscript": true,
+        "exemplars_named_F4_F5_F7": true,
+        "frozen_tag_preserved": true
+      },
+      "gpl5474_blocker_naming": {
+        "named_in_section_4_audit_paragraph": true,
+        "named_in_conclusion": true,
+        "filename_explicitly_stated": false,
+        "cohort_explicitly_stated": false,
+        "invalidated_claims_enumerated": false,
+        "verdict": "named but soft; not buried; M-2 strengthening opportunity"
+      },
+      "acceptance_criteria_state": {
+        "distributional_reproducibility_falsifiable": "met (unchanged since R3)",
+        "layer_separation_enforced": "met (unchanged since R3)",
+        "manifest_residual_blind_spots_in_manuscript": "met (unchanged since R3)",
+        "layer3_applied_unmodified_to_layer1_risk_score": "met",
+        "prereg_primary_threshold_alpha_match": "met",
+        "manuscript_reports_null_honestly": "met",
+        "audit_summary_faithful": "met",
+        "audit_blocker_named_not_buried": "met"
+      },
+      "new_issues": [
+        {
+          "id": "M-1",
+          "severity": "medium",
+          "summary": "Prereg secondaries S3 (calibration 1y), S4 (calibration 3y), S5 (calibration 5y), S6 (DCA 5y), S7 (IDI) not computed at Layer 3. Prereg says 'All secondaries...are reported regardless of the primary outcome'. Operator should (a) compute the missing secondaries on the pooled Layer-3 cohort, or (b) commit a failure-mode note labelling them deferred and update the manuscript paragraph to acknowledge partial discharge.",
+          "blocking": false,
+          "resolve_before_tag": "viewpoint-v1.1.0"
+        },
+        {
+          "id": "M-2",
+          "severity": "low",
+          "summary": "GPL5474 audit blocker is named at line 148 and 186, but the filename (GPL5474.annot.txt), the affected cohort (GSE10143), and the five invalidated quantitative claims (external C-index 0.47, CI [0.36, 0.58], log-rank p=0.13, 42% coverage, 6100 unique gene symbols) are not named in the Viewpoint. Naming them to the same fidelity as the Layer-3 null would strengthen the manuscript's argument. Not blocking.",
+          "blocking": false,
+          "resolve_before_tag": "viewpoint-v1.1.0 (optional)"
+        },
+        {
+          "id": "M-3",
+          "severity": "low",
+          "summary": "Limitations power statement uses pre-Layer-3 estimate (pooled n ~= 357). Actual pooled n = 333 (107 events). One-word fix to use post-execution number.",
+          "blocking": false,
+          "resolve_before_tag": "viewpoint-v1.1.0 (optional)"
+        }
+      ],
+      "regression_from_round_4": false,
+      "transcript": "reviewer-logs/viewpoint-round-05/methodology.md"
+    }
+  ]
+}

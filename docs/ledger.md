@@ -4,12 +4,12 @@ Regenerated from `git log` by `scripts/regenerate_ledger.py`. Re-run after every
 
 ## Summary
 
-- Total commits: **52**
-- AI-co-authored commits: **52**
+- Total commits: **54**
+- AI-co-authored commits: **54**
 - Operator-only commits: **0**
 - Tags: case-study-v1.0.0, viewpoint-v1.0.0
 - First commit: 2026-05-20T16:17:31+00:00
-- Latest commit: 2026-05-20T19:52:20+00:00
+- Latest commit: 2026-05-20T19:58:58+00:00
 
 ## Chronological narrative
 
@@ -67,6 +67,8 @@ Regenerated from `git log` by `scripts/regenerate_ledger.py`. Re-run after every
 | 50 | 2026-05-20 19:48 | `ecf8475` | Layer 1 | AI-co-authored | case-study: Layer 3 external validation — preregistered NULL result |
 | 51 | 2026-05-20 19:50 | `5ffd6df` | Viewpoint | AI-co-authored | manuscript: v0.5 — Layer 3 NULL headline + Layer 2 audit reference |
 | 52 | 2026-05-20 19:52 | `99d9cfe` | Operator | AI-co-authored | docs: update RELEASE_NOTES.md for viewpoint-v1.1.0 (post-Layer-3 + Layer-2-audit) |
+| 53 | 2026-05-20 19:53 | `7b5e188` | Viewpoint | AI-co-authored | chore: fix ledger + Figure 1 git-tag parsing (use \\t separator instead of %x1f) |
+| 54 | 2026-05-20 19:58 | `3a39827` | Layer 1 | AI-co-authored | case-study: extend Layer 3 to compute preregistered secondaries S3-S7 |
 
 ## Tags
 
