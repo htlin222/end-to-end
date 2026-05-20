@@ -1,0 +1,68 @@
+[
+  {
+    "reviewer": "methods",
+    "round": 1,
+    "verdict": "major-revision",
+    "comments": [
+      {"id": 1, "severity": "high",   "summary": "Standardisation contract during the bootstrap-optimism step not stated in Methods."},
+      {"id": 2, "severity": "high",   "summary": "Bootstrap ΔC distribution mixes bootstrap-fit combo C with apparent AJCC C; CI is narrower than the standard Harrell-Lee-Mark estimator."},
+      {"id": 3, "severity": "medium", "summary": "Score-test vs Cox MLE screen: justify equivalence or spot-check agreement on a sample."},
+      {"id": 4, "severity": "medium", "summary": "Report bootstrap feature-set stability (Jaccard overlap with apparent 50-gene signature)."},
+      {"id": 5, "severity": "medium", "summary": "Multiple-testing family: state explicitly why the primary outcome is excluded from Bonferroni correction."},
+      {"id": 6, "severity": "medium", "summary": "Document the one-sample-per-case rule (lexicographic-minimum)."},
+      {"id": 7, "severity": "low",    "summary": "Report calibration slope from cross-validation in addition to apparent."},
+      {"id": 8, "severity": "low",    "summary": "Document the diagnoses-row selection rule (prefer stage-bearing row)."},
+      {"id": 9, "severity": "low",    "summary": "Confirm uv.lock is committed at the case-study release tag."}
+    ]
+  },
+  {
+    "reviewer": "clinical",
+    "round": 1,
+    "verdict": "major-revision",
+    "comments": [
+      {"id": 1, "severity": "high",   "summary": "Abstract and Introduction must state up-front that the comparator is AJCC (TCGA's record), not BCLC (clinical standard)."},
+      {"id": 2, "severity": "high",   "summary": "Population framing: state in abstract that findings apply to resected surgical-candidate population only."},
+      {"id": 3, "severity": "high",   "summary": "Aetiology heterogeneity: add a subgroup analysis or explicitly state aetiology data unavailable."},
+      {"id": 4, "severity": "high",   "summary": "Decision-curve analysis (Vickers-Elkin) on TCGA-LIHC at 5-year thresholds 0.1/0.2/0.3 is required for a clinical-translation positioning."},
+      {"id": 5, "severity": "medium", "summary": "Expand the treatment-era confounding statement to a full paragraph (pre-immune-checkpoint era)."},
+      {"id": 6, "severity": "medium", "summary": "Strike 'clinically meaningful' from Discussion or define which clinical decision changes."},
+      {"id": 7, "severity": "medium", "summary": "Competing risks: state more explicitly that OS (not cancer-specific) is the endpoint and discuss transplant/non-cancer death."},
+      {"id": 8, "severity": "low",    "summary": "Add plain-language summary (~100 words)."},
+      {"id": 9, "severity": "low",    "summary": "Add a Cohort Characteristics table with follow-up and event accrual by stage."}
+    ]
+  },
+  {
+    "reviewer": "biostat",
+    "round": 1,
+    "verdict": "major-revision",
+    "comments": [
+      {"id": 1, "severity": "blocker","summary": "Name the C-statistic explicitly (Harrell vs Uno) and discuss the censoring-induced bias."},
+      {"id": 2, "severity": "blocker","summary": "TRIPOD-aligned calibration plot at 1, 3, 5 years with Hosmer-Lemeshow p is required."},
+      {"id": 3, "severity": "high",   "summary": "Add a sample-size / power statement using Pencina-D'Agostino's formula."},
+      {"id": 4, "severity": "high",   "summary": "Bootstrap optimism CI uses a non-standard estimator; either re-run with paired-optimism or document the deviation."},
+      {"id": 5, "severity": "high",   "summary": "Schoenfeld for AJCC stage covariate (p=0.034) indicates non-PH for stage; add stratified Cox or time-varying coefficient sensitivity."},
+      {"id": 6, "severity": "medium", "summary": "Explicitly tally L1-L7 against the Bonferroni-corrected threshold of α/7 = 0.0071."},
+      {"id": 7, "severity": "medium", "summary": "Fine-Gray sensitivity analysis with cancer-specific death as event and transplant as competing event."},
+      {"id": 8, "severity": "medium", "summary": "Add Pencina IDI to complement ΔC-index."},
+      {"id": 9, "severity": "low",    "summary": "Document Breslow tie handling in the score test."},
+      {"id":10, "severity": "low",    "summary": "Mention NumPy PCG64 RNG for deterministic seed reproducibility."}
+    ]
+  },
+  {
+    "reviewer": "editor",
+    "round": 1,
+    "verdict": "major-revision",
+    "comments": [
+      {"id": 1, "severity": "blocker","summary": "Introduction must state the methodological novelty contribution within JCO CCI's recent publications, or reconsider the venue."},
+      {"id": 2, "severity": "high",   "summary": "Body word count is within limit but revisions will push to ~2,700; track this."},
+      {"id": 3, "severity": "high",   "summary": "Final PubMed sweep of all references before submission."},
+      {"id": 4, "severity": "high",   "summary": "Add explicit author-review statement to satisfy ASCO journals' AI disclosure policy."},
+      {"id": 5, "severity": "high",   "summary": "Replace tag placeholder in Data Availability with concrete case-study-v1.0.0 when ready."},
+      {"id": 6, "severity": "medium", "summary": "Confirm reference style is rendered as Vancouver-superscript-numeric on the final PDF; verify Villanueva 2015 vs 2019 bib entry."},
+      {"id": 7, "severity": "medium", "summary": "Align cover-letter language with the manuscript's 'illustrative, not for clinical use' framing."},
+      {"id": 8, "severity": "low",    "summary": "Figure count budget OK; adding the calibration plot brings it to 5/5."},
+      {"id": 9, "severity": "low",    "summary": "Consider adding a labeled Plain-language Summary subsection."},
+      {"id":10, "severity": "low",    "summary": "Consider shortening the title for PubMed-display compatibility."}
+    ]
+  }
+]
