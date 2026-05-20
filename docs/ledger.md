@@ -4,12 +4,12 @@ Regenerated from `git log` by `scripts/regenerate_ledger.py`. Re-run after every
 
 ## Summary
 
-- Total commits: **21**
-- AI-co-authored commits: **21**
+- Total commits: **23**
+- AI-co-authored commits: **23**
 - Operator-only commits: **0**
 - Tags: (none yet)
 - First commit: 2026-05-20T16:17:31+00:00
-- Latest commit: 2026-05-20T17:37:08+00:00
+- Latest commit: 2026-05-20T17:51:05+00:00
 
 ## Chronological narrative
 
@@ -36,6 +36,8 @@ Regenerated from `git log` by `scripts/regenerate_ledger.py`. Re-run after every
 | 19 | 2026-05-20 17:33 | `a573625` | Viewpoint | AI-co-authored | manuscript: correct author lists for roessler2010 and grinchuk2018 |
 | 20 | 2026-05-20 17:34 | `e008175` | Viewpoint | AI-co-authored | manuscript: substitute <<USER>> placeholders with the operator's verified GitHub handle |
 | 21 | 2026-05-20 17:37 | `209e75d` | Layer 1 | AI-co-authored | manuscript: replace Figure 1 placeholder with deterministic git-log-derived artefact ledger |
+| 22 | 2026-05-20 17:39 | `3c43693` | Reviewer | AI-co-authored | docs+scripts: ship Disclosure 2.0 schema and ledger generator (resolves reviewer-flagged hallucinated artefacts) |
+| 23 | 2026-05-20 17:51 | `da4ddce` | Viewpoint | AI-co-authored | manuscript: v0.4 — full revision addressing 44 Round 1 reviewer comments |
 
 ## Tags
 
