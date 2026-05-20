@@ -1,0 +1,158 @@
+{
+  "round": 4,
+  "round_type": "confirmation",
+  "manuscript_version_commit": "98bd5eb",
+  "reviewers": [
+    {
+      "reviewer": "clinician",
+      "round": 4,
+      "verdict": "accept",
+      "date": "2026-05-21",
+      "summary": "Round 4 confirmation. No clinician-axis regression since R3. The two intervening commits (dd7b3e4 word-count metadata + release_check.sh; 98bd5eb ledger/Figure 1 regeneration) do not touch any of the four clinician-axis loci: workflow realism (Section 1 paragraph 2, Section 4 paragraph 2), operator-expertise calibration (Section 4 paragraph 1, cover letter lines 66-72), negative-result commitment (Section 4 conditional sentence at line 144 with placeholders correctly preserved pre-Layer-3 execution), and tone calibration (Sections 1, 5, 8). R3 conditions remain as submission-day operator steps, not manuscript defects.",
+      "new_comments": [],
+      "carried_conditions": [
+        {
+          "id": "C3",
+          "summary": "At viewpoint-v1.0.0 tag push, Layer-3 conditional sentence (line 144) must collapse to the actual branch with real $\\Delta C$ value and bootstrap 95% CI substituted for $\\hat{\\delta}$, $L$, $U$ placeholders.",
+          "type": "submission-day-operator-step",
+          "status": "on-track"
+        },
+        {
+          "id": "cover-letter-optional",
+          "summary": "Optional pre-submission copy-edit of cover-letter.md line 40 set-notation residual (parallels Section 1 main.tex correction made in R1).",
+          "type": "operator-courtesy",
+          "status": "non-blocking"
+        }
+      ],
+      "acceptance_criteria": {
+        "workflow_real": "yes",
+        "operator_expertise_calibrated": "yes",
+        "negative_result_commitment_genuine": "yes",
+        "tone_calibrated": "yes"
+      },
+      "transcript": "reviewer-logs/viewpoint-round-04/clinician.md"
+    },
+    {
+      "reviewer": "policy",
+      "round": 4,
+      "verdict": "accept",
+      "date": "2026-05-21",
+      "manuscript_version_commit": "98bd5eb5bb1c0001803d7fac34c1f952fbd5f58d",
+      "comments": [
+        "Round 4 confirmation pass. Single inter-round change to manuscript/main.tex between R3 baseline be58d8e and HEAD 98bd5eb is the v0.4.2 word-count refresh on title-page metadata (line 60): body 2,281 -> 2,428, full texcount sum 3,175 -> approx 3,334. Still under the 2,500 body-word ceiling.",
+        "Lancet verbatim quotations at main.tex line 89 ('readability and language improvements only'; 'generate scientific arguments, draft methodology descriptions, write literature reviews, or create new content') are byte-identical to R3-accepted text. C1 blocker closure intact.",
+        "R1 high-severity closures C2 (reviewer-AI symmetric replacement, line 172), C3 (90-day Editorial Manager pilot path, line 168), C4 (equity / minimum viable manifest items 1,2,3,6 at line 116), C5 (Section 5 forward-reference resolution to docs/disclosure2-schema.json, docs/ledger.md, scripts/regenerate_ledger.py): all intact.",
+        "R1 medium closures C6 (line 203 'No AI tool is listed as an author of this Viewpoint.'), C7 (line 112 audit-log split 5a/5b/5c with 'Partial discharge of (5a) alone does not satisfy item 5'), C8 (repoprereg SHA 88d6d15, no HEADLINE macro), C9 (three harms with citations icmje2024, luSakana2026, zhaoHallucinations2026 at line 89), C12 (distributional reproducibility n=3 at Section 5): all intact.",
+        "R2 minor closures: N1 (word-count consistency) re-aligned at the new number - main.tex line 60 '2,428' and cover-letter.md line 58 '2 428' match. N2 (lintom2026/linehs2024 verification-pending) and N3 (JOURNAL.md interpretive sentence) remain appropriately deferred operator-step items. No regression.",
+        "No new policy-axis issues at HEAD. Verdict carried forward from Round 3."
+      ],
+      "transcript": "reviewer-logs/viewpoint-round-04/policy.md"
+    },
+    {
+      "reviewer": "editor",
+      "round": 4,
+      "verdict": "accept",
+      "recommendation": "send-out-for-external-peer-review",
+      "date": "2026-05-21",
+      "manuscript_version_commit": "98bd5eb5bb1c0001803d7fac34c1f952fbd5f58d",
+      "confidence": 0.95,
+      "blocking_issues_at_manuscript_level": [],
+      "r3_copy_edit_minor_status": "resolved",
+      "r4_new_minors": [],
+      "operator_step_items_for_submission_day": [
+        "Fill cover-letter date, medRxiv DOI, Zenodo DOI, four reviewer names",
+        "Re-verify live Lancet DH IFA ceiling on submission day",
+        "Confirm or remove the April 2026 Lancet DH editorial citation after operator-level re-search",
+        "Branch-protection on main at viewpoint-v1.0.0 tag"
+      ],
+      "format_compliance": {
+        "body_word_count_texcount": 2428,
+        "body_word_count_reported_on_title_page": 2428,
+        "body_word_count_reported_in_cover_letter": 2428,
+        "metadata_internally_consistent": true,
+        "body_word_count_ceiling": 2500,
+        "headroom_words": 72,
+        "reference_count": 14,
+        "reference_count_ceiling": 30,
+        "display_items": 2,
+        "title_chars": 122,
+        "running_title_chars": 45,
+        "key_messages_bullets": 4
+      },
+      "live_ifa_verification": {
+        "attempted_2026_05_21": true,
+        "result": "HTTP_403_fourth_consecutive_round",
+        "ceiling_re_verification_remains_operator_step": true
+      },
+      "regression_from_round_3": false,
+      "would_send_out_for_external_review": true,
+      "transcript": "reviewer-logs/viewpoint-round-04/editor.md"
+    },
+    {
+      "reviewer": "methodology",
+      "round": 4,
+      "verdict": "accept",
+      "date": "2026-05-21",
+      "manuscript_version_commit": "98bd5eb5bb1c0001803d7fac34c1f952fbd5f58d",
+      "confirmation": true,
+      "round3_followups_status": [
+        {
+          "id": "R3-CS-1",
+          "round3_severity": "operator-hygiene (non-blocking)",
+          "summary": "release_check.sh `git fsck` predicate (`grep -vq`) returned wrong exit code on empty input.",
+          "status": "closed",
+          "verification": "scripts/release_check.sh line 65 now uses `! ... | grep -qE \"broken link|missing\"`. Check reports OK at HEAD 98bd5eb."
+        },
+        {
+          "id": "R3-CS-2",
+          "round3_severity": "operator-hygiene (non-blocking)",
+          "summary": "release_check.sh body-word-count shell-awk enumerator did not deduct title-page non-body metadata block; reported 2,727 vs true 2,281.",
+          "status": "closed",
+          "verification": "scripts/release_check.sh line 105 now uses Python wrapper over `texcount -inc -sum manuscript/main.tex`. Check reports OK at HEAD 98bd5eb. Title page (line 60), cover letter (line 58), and release check all in agreement at 2,428 words (< 2,500 Lancet DH ceiling)."
+        },
+        {
+          "id": "R3-CS-3",
+          "round3_severity": "operator-hygiene (non-blocking)",
+          "summary": "release_check.sh ledger-regen-deterministic check compared committed ledger to fresh regen at HEAD, causing structurally-unavoidable off-by-one FAIL.",
+          "status": "closed",
+          "verification": "scripts/release_check.sh lines 175-181 now compare two consecutive regen runs against each other (diff -q /tmp/ledger.run1 /tmp/ledger.run2). Check reports OK at HEAD 98bd5eb. Verified ledger byte-identical across three consecutive regenerations (sha256 f8b5f775...)."
+        }
+      ],
+      "release_check_summary_at_head_98bd5eb": {
+        "passed": 28,
+        "failed": 1,
+        "warned": 1,
+        "failed_checks": [
+          {
+            "check": "working tree is clean",
+            "category": "operator-step (case-study-v1.0.0 tag will clear)",
+            "methodology_relevance": "none"
+          }
+        ],
+        "warned_checks": [
+          {
+            "check": "item 5 audit log: Layer-2 audit complete",
+            "category": "operator-step (submission-day)",
+            "methodology_relevance": "covered by Section 3 item 5 downgrade language"
+          }
+        ]
+      },
+      "ledger_determinism_check": {
+        "method": "three consecutive runs of `uv run python scripts/regenerate_ledger.py`",
+        "sha256_run1": "f8b5f7759af75ceb7ddaf4372e2795f2dde2ddcf1549dbde18f89ca75cdcab6e",
+        "sha256_run2": "f8b5f7759af75ceb7ddaf4372e2795f2dde2ddcf1549dbde18f89ca75cdcab6e",
+        "sha256_run3": "f8b5f7759af75ceb7ddaf4372e2795f2dde2ddcf1549dbde18f89ca75cdcab6e",
+        "byte_identical": true,
+        "working_tree_restored": true
+      },
+      "acceptance_criteria_state": {
+        "distributional_reproducibility_falsifiable": "met (unchanged since R3)",
+        "layer_separation_enforced": "met (unchanged since R3)",
+        "manifest_residual_blind_spots_in_manuscript": "met (unchanged since R3)"
+      },
+      "new_issues": [],
+      "regression_from_round_3": false,
+      "transcript": "reviewer-logs/viewpoint-round-04/methodology.md"
+    }
+  ]
+}
