@@ -113,6 +113,15 @@ We propose the following minimum disclosure unit, which we call \textbf{Disclosu
 
 Disclosure 2.0 is a strict superset of the current policy's requirements. A reviewer who can read a methods paragraph can read a six-item Disclosure 2.0 manifest. A reviewer who suspects hallucination can re-execute the audit. A reviewer who suspects undocumented intervention can diff the prompts. A reviewer who suspects authorship inflation reads the acknowledgement and sees that no model is listed as an author.
 
+Figure~\ref{fig:policygap} maps each of twelve common activities onto the current policy's permitted/prohibited categorisation and onto the Disclosure 2.0 categorisation. The two activities the current policy correctly prohibits (image generation and listing a model as an author) remain prohibited under Disclosure 2.0; eight activities currently prohibited are reclassified as permitted-with-manifest, on the grounds that prohibition without enforcement has produced camouflage rather than compliance.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.92\textwidth]{figures/fig2-policy-gap.pdf}
+\caption{\textbf{Current Lancet group AI policy vs Disclosure 2.0.} Twelve activities a clinician-investigator commonly performs with a generative-AI tool. Green: permitted with brief acknowledgement (status quo). Red: prohibited. Blue: permitted under Disclosure 2.0 conditional on the six-item manifest in Section~\ref{sec:unit}. Authorship listing and image generation remain prohibited under both regimes.}
+\label{fig:policygap}
+\end{figure}
+
 \section{Domain-portability case study: HCC OS stratification}\label{sec:case}
 
 To establish that the workflow is not a methodological self-portrait, the supporting case study runs the pipeline on a domain outside the operator's clinical specialty. The operator is a board-certified medical oncologist whose published work is in hematologic malignancies\citep{linehs2024,lintom2026}. The case study is on overall-survival stratification of hepatocellular carcinoma using TCGA-LIHC\citep{tcgalihc2017} and external validation on the GEO cohorts \texttt{GSE14520}\citep{wang2010} and \texttt{GSE76427}\citep{grinchuk2018}.
