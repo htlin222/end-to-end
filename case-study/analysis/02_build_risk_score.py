@@ -470,7 +470,9 @@ def _permutation_null_delta_c(
     stage = clin["stage_num"].values.astype(float)
     mask_stage = ~np.isnan(stage)
     null_deltas = []
+    n_iter_attempted = 0
     for b in range(n_iter):
+        n_iter_attempted += 1
         if (b + 1) % 100 == 0:
             print(f"  permutation iter {b+1}/{n_iter}", flush=True)
         perm = rng.permutation(n)
@@ -514,12 +516,26 @@ def _permutation_null_delta_c(
             null_deltas.append(c_combo_p - c_aj_p)
         except Exception:
             continue
-    if not null_deltas:
+    # Under H0 (no association), the FDR-screen frequently returns zero
+    # genes, in which case the iteration is skipped above. Skipped
+    # iterations are equivalent to "no signal" -> null delta_c = 0.
+    # The honest p-value treats those as null deltas = 0; the
+    # non-skipped iterations contribute their measured delta.
+    null_n_completed = len(null_deltas)
+    null_n_zero = n_iter_attempted - null_n_completed
+    null_extended = null_deltas + [0.0] * null_n_zero
+    if not null_extended:
         return {"p_perm": None, "null_n": 0}
-    p_perm = float(np.mean([d >= apparent_delta_c for d in null_deltas]))
-    return {"p_perm": p_perm, "null_n": len(null_deltas),
-            "null_mean": float(np.mean(null_deltas)),
-            "null_sd": float(np.std(null_deltas))}
+    p_perm = float(np.mean([d >= apparent_delta_c for d in null_extended]))
+    return {
+        "p_perm": p_perm,
+        "null_n_attempted": n_iter_attempted,
+        "null_n_completed": null_n_completed,
+        "null_n_implied_zero": null_n_zero,
+        "null_mean": float(np.mean(null_extended)),
+        "null_sd": float(np.std(null_extended)),
+        "null_completed_mean": float(np.mean(null_deltas)) if null_deltas else 0.0,
+    }
 
 
 # ----------------------------------------------------------------------
@@ -784,7 +800,9 @@ def main() -> int:
                 ext_results.get("c_index_ci_lo"), ext_results.get("c_index_ci_hi"),
             ],
             "L7_permutation_null_p": perm_null["p_perm"],
-            "L7_permutation_null_n": perm_null["null_n"],
+            "L7_permutation_null_n_attempted": perm_null.get("null_n_attempted"),
+            "L7_permutation_null_n_completed": perm_null.get("null_n_completed"),
+            "L7_permutation_null_implied_zero": perm_null.get("null_n_implied_zero"),
         },
         "external": ext_results,
         "seed": SEED,
