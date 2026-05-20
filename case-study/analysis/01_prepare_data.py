@@ -407,11 +407,44 @@ def fetch_tcga_lihc(manifest: Manifest) -> None:
 # ----------------------------------------------------------------------
 
 GEO_BASE = "https://ftp.ncbi.nlm.nih.gov/geo/series"
+GPL_BASE = "https://ftp.ncbi.nlm.nih.gov/geo/platforms"
 
 
 def _geo_series_matrix_url(acc: str) -> str:
     prefix = acc[:-3] + "nnn"
     return f"{GEO_BASE}/{prefix}/{acc}/matrix/{acc}_series_matrix.txt.gz"
+
+
+def _gpl_annot_url(platform_id: str) -> str:
+    # GPL5474 -> GPL5nnn/GPL5474/annot/GPL5474.annot.gz
+    digits = platform_id.replace("GPL", "")
+    prefix = "GPL" + digits[:-3] + "nnn" if len(digits) > 3 else f"GPL{digits[:1]}nnn"
+    return f"{GPL_BASE}/{prefix}/{platform_id}/annot/{platform_id}.annot.gz"
+
+
+def _download_gpl_annotation(platform_id: str) -> Path | None:
+    """Download and decompress the GPL annotation file used by 02_build_risk_score
+    to map probe IDs to gene symbols. Addresses Layer-2 audit blocker F1
+    (resolved at case-study-v1.0.1)."""
+    dest_gz = RAW / f"{platform_id}.annot.gz"
+    dest_txt = RAW / f"{platform_id}.annot.txt"
+    if dest_txt.exists() and dest_txt.stat().st_size > 0:
+        return dest_txt
+    url = _gpl_annot_url(platform_id)
+    try:
+        r = requests.get(url, timeout=300, stream=True)
+    except Exception:
+        return None
+    if r.status_code != 200:
+        return None
+    with dest_gz.open("wb") as f:
+        for chunk in r.iter_content(chunk_size=1 << 20):
+            if chunk:
+                f.write(chunk)
+    # decompress
+    with gzip.open(dest_gz, "rt", encoding="utf-8", errors="replace") as gf:
+        dest_txt.write_text(gf.read())
+    return dest_txt
 
 
 def _download_geo_series_matrix(acc: str) -> Path:
@@ -829,6 +862,26 @@ def main() -> int:
         manifest.save(RES / "data-prep-manifest.json")
         sys.stderr.write(f"FAIL Harmonise: {exc}\n")
         return 5
+
+    # Layer-2 audit F1 fix (case-study-v1.0.1): 02_build_risk_score requires
+    # the GPL annotation file for the chosen external cohort. Previous
+    # release did not download this in 01; a clean clone failed to
+    # reproduce the external scoring. Download now.
+    chosen_platform = (
+        manifest.geo.get("chosen_processed", {}).get("platform", "")
+    )
+    if chosen_platform:
+        gpl_path = _download_gpl_annotation(chosen_platform)
+        if gpl_path is not None:
+            manifest.geo["chosen_processed"]["gpl_annotation_path"] = str(
+                gpl_path.relative_to(REPO_ROOT)
+            )
+        else:
+            manifest.failures.append({
+                "stage": "gpl-annotation-download",
+                "platform": chosen_platform,
+                "error": "GPL annotation download failed (non-fatal)",
+            })
 
     manifest.finished_utc = _now_utc()
     manifest.save(RES / "data-prep-manifest.json")
