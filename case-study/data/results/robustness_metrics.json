@@ -47,5 +47,88 @@
       "mean": 0.7059699810932971,
       "sd": 0.05706313479934754
     }
+  },
+  "calibration_landmarks_summary": {
+    "month_12": {
+      "hosmer_lemeshow_chi2": 12.78206484263896,
+      "hosmer_lemeshow_df": 8,
+      "hosmer_lemeshow_p": 0.11957131154741563,
+      "n_bins": 10
+    },
+    "month_36": {
+      "hosmer_lemeshow_chi2": 5.893846512368952,
+      "hosmer_lemeshow_df": 8,
+      "hosmer_lemeshow_p": 0.6591214209395383,
+      "n_bins": 10
+    },
+    "month_60": {
+      "hosmer_lemeshow_chi2": 8.546896256539622,
+      "hosmer_lemeshow_df": 8,
+      "hosmer_lemeshow_p": 0.38194705474767265,
+      "n_bins": 10
+    }
+  },
+  "idi_summary": {
+    "month_12": {
+      "idi": 0.10831944716042863,
+      "p_with_event_mean": 0.2911102727991275,
+      "p_with_nonevent_mean": 0.14860475763741218,
+      "p_without_event_mean": 0.20096231266645176,
+      "p_without_nonevent_mean": 0.16677624466516508,
+      "n_events": 55,
+      "n_nonevents": 287
+    },
+    "month_36": {
+      "idi": 0.11682388059881138,
+      "p_with_event_mean": 0.48140243579792047,
+      "p_with_nonevent_mean": 0.3052721401944046,
+      "p_without_event_mean": 0.3895083356895041,
+      "p_without_nonevent_mean": 0.3302019206847996,
+      "n_events": 93,
+      "n_nonevents": 249
+    },
+    "month_60": {
+      "idi": 0.10643092710778579,
+      "p_with_event_mean": 0.6216980399991434,
+      "p_with_nonevent_mean": 0.4505977863824079,
+      "p_without_event_mean": 0.5262084834243518,
+      "p_without_nonevent_mean": 0.46153915691540204,
+      "n_events": 107,
+      "n_nonevents": 235
+    }
+  },
+  "dca_5yr_summary": {
+    "landmark_months": 60.0,
+    "thresholds": {
+      "0.1": {
+        "net_benefit_model": 0.2365172189733593,
+        "net_benefit_treat_all": 0.2365172189733593,
+        "net_benefit_treat_none": 0.0,
+        "n_positive": 342,
+        "n_event": 107,
+        "prevalence_at_landmark": 0.3128654970760234
+      },
+      "0.2": {
+        "net_benefit_model": 0.14912280701754388,
+        "net_benefit_treat_all": 0.14108187134502925,
+        "net_benefit_treat_none": 0.0,
+        "n_positive": 331,
+        "n_event": 107,
+        "prevalence_at_landmark": 0.3128654970760234
+      },
+      "0.3": {
+        "net_benefit_model": 0.06390977443609017,
+        "net_benefit_treat_all": 0.018379281537176273,
+        "net_benefit_treat_none": 0.0,
+        "n_positive": 269,
+        "n_event": 107,
+        "prevalence_at_landmark": 0.3128654970760234
+      }
+    }
+  },
+  "uno_c_sensitivity": {
+    "trs_uno_c_60m": 0.6952372536891402,
+    "harrell_c_trs_full": 0.7136598964555954,
+    "tau_months": 60.0
   }
 }

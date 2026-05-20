@@ -1,0 +1,29 @@
+{
+  "month_12": {
+    "idi": 0.10831944716042863,
+    "p_with_event_mean": 0.2911102727991275,
+    "p_with_nonevent_mean": 0.14860475763741218,
+    "p_without_event_mean": 0.20096231266645176,
+    "p_without_nonevent_mean": 0.16677624466516508,
+    "n_events": 55,
+    "n_nonevents": 287
+  },
+  "month_36": {
+    "idi": 0.11682388059881138,
+    "p_with_event_mean": 0.48140243579792047,
+    "p_with_nonevent_mean": 0.3052721401944046,
+    "p_without_event_mean": 0.3895083356895041,
+    "p_without_nonevent_mean": 0.3302019206847996,
+    "n_events": 93,
+    "n_nonevents": 249
+  },
+  "month_60": {
+    "idi": 0.10643092710778579,
+    "p_with_event_mean": 0.6216980399991434,
+    "p_with_nonevent_mean": 0.4505977863824079,
+    "p_without_event_mean": 0.5262084834243518,
+    "p_without_nonevent_mean": 0.46153915691540204,
+    "n_events": 107,
+    "n_nonevents": 235
+  }
+}

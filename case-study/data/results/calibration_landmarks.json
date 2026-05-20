@@ -1,0 +1,239 @@
+{
+  "month_12": {
+    "landmark_months": 12.0,
+    "n_bins": 10,
+    "hosmer_lemeshow_chi2": 12.78206484263896,
+    "hosmer_lemeshow_df": 8,
+    "hosmer_lemeshow_p": 0.11957131154741563,
+    "bins": [
+      {
+        "bin": 0,
+        "n": 35,
+        "predicted_survival": 0.9496884334073848,
+        "observed_survival": 1.0,
+        "chi2_contribution": 1.8541921421782344
+      },
+      {
+        "bin": 1,
+        "n": 34,
+        "predicted_survival": 0.9320480935001252,
+        "observed_survival": 0.9117647058823528,
+        "chi2_contribution": 0.22086145496403006
+      },
+      {
+        "bin": 2,
+        "n": 34,
+        "predicted_survival": 0.9176180711193582,
+        "observed_survival": 1.0,
+        "chi2_contribution": 3.052452507310621
+      },
+      {
+        "bin": 3,
+        "n": 34,
+        "predicted_survival": 0.9002095365800722,
+        "observed_survival": 0.9040178571428574,
+        "chi2_contribution": 0.005489253197625546
+      },
+      {
+        "bin": 4,
+        "n": 34,
+        "predicted_survival": 0.8845854466786901,
+        "observed_survival": 0.8178104575163396,
+        "chi2_contribution": 1.4849307623412988
+      },
+      {
+        "bin": 5,
+        "n": 34,
+        "predicted_survival": 0.860657120066842,
+        "observed_survival": 0.9384164222873901,
+        "chi2_contribution": 1.7142283702460996
+      },
+      {
+        "bin": 6,
+        "n": 34,
+        "predicted_survival": 0.8286327523590764,
+        "observed_survival": 0.8413388613611084,
+        "chi2_contribution": 0.03865575444367083
+      },
+      {
+        "bin": 7,
+        "n": 34,
+        "predicted_survival": 0.7833247626152285,
+        "observed_survival": 0.7669465020576134,
+        "chi2_contribution": 0.05373575213846622
+      },
+      {
+        "bin": 8,
+        "n": 34,
+        "predicted_survival": 0.7205956559646718,
+        "observed_survival": 0.5600175554092607,
+        "chi2_contribution": 4.3543843075732696
+      },
+      {
+        "bin": 9,
+        "n": 35,
+        "predicted_survival": 0.5131270132226865,
+        "observed_survival": 0.5178571428571429,
+        "chi2_contribution": 0.0031345382456424483
+      }
+    ]
+  },
+  "month_36": {
+    "landmark_months": 36.0,
+    "n_bins": 10,
+    "hosmer_lemeshow_chi2": 5.893846512368952,
+    "hosmer_lemeshow_df": 8,
+    "hosmer_lemeshow_p": 0.6591214209395383,
+    "bins": [
+      {
+        "bin": 0,
+        "n": 35,
+        "predicted_survival": 0.8758907266074653,
+        "observed_survival": 0.8483109888179846,
+        "chi2_contribution": 0.2449030245807818
+      },
+      {
+        "bin": 1,
+        "n": 34,
+        "predicted_survival": 0.8346672795512065,
+        "observed_survival": 0.875294117647059,
+        "chi2_contribution": 0.40666122377043007
+      },
+      {
+        "bin": 2,
+        "n": 34,
+        "predicted_survival": 0.8018819633299876,
+        "observed_survival": 0.869931350114417,
+        "chi2_contribution": 0.9910438902520171
+      },
+      {
+        "bin": 3,
+        "n": 34,
+        "predicted_survival": 0.7633992982775122,
+        "observed_survival": 0.75103021978022,
+        "chi2_contribution": 0.02879955807554364
+      },
+      {
+        "bin": 4,
+        "n": 34,
+        "predicted_survival": 0.7298175543524507,
+        "observed_survival": 0.8178104575163396,
+        "chi2_contribution": 1.3350661251292602
+      },
+      {
+        "bin": 5,
+        "n": 34,
+        "predicted_survival": 0.6802413881170706,
+        "observed_survival": 0.6567542142018834,
+        "chi2_contribution": 0.0862293558881217
+      },
+      {
+        "bin": 6,
+        "n": 34,
+        "predicted_survival": 0.6171942281966446,
+        "observed_survival": 0.5506001010770618,
+        "chi2_contribution": 0.6381906620036327
+      },
+      {
+        "bin": 7,
+        "n": 34,
+        "predicted_survival": 0.534360504627396,
+        "observed_survival": 0.41390763603109315,
+        "chi2_contribution": 1.9825723741376007
+      },
+      {
+        "bin": 8,
+        "n": 34,
+        "predicted_survival": 0.43220298259630235,
+        "observed_survival": 0.46801467130631075,
+        "chi2_contribution": 0.1776837257519044
+      },
+      {
+        "bin": 9,
+        "n": 35,
+        "predicted_survival": 0.2049319532421139,
+        "observed_survival": 0.20138888888888884,
+        "chi2_contribution": 0.0026965727796599386
+      }
+    ]
+  },
+  "month_60": {
+    "landmark_months": 60.0,
+    "n_bins": 10,
+    "hosmer_lemeshow_chi2": 8.546896256539622,
+    "hosmer_lemeshow_df": 8,
+    "hosmer_lemeshow_p": 0.38194705474767265,
+    "bins": [
+      {
+        "bin": 0,
+        "n": 35,
+        "predicted_survival": 0.7919818674610829,
+        "observed_survival": 0.7540542122826528,
+        "chi2_contribution": 0.3056072131125596
+      },
+      {
+        "bin": 1,
+        "n": 34,
+        "predicted_survival": 0.7274348289289252,
+        "observed_survival": 0.7352470588235294,
+        "chi2_contribution": 0.010465608781837462
+      },
+      {
+        "bin": 2,
+        "n": 34,
+        "predicted_survival": 0.677873717660175,
+        "observed_survival": 0.608951945080092,
+        "chi2_contribution": 0.7396339500612912
+      },
+      {
+        "bin": 3,
+        "n": 34,
+        "predicted_survival": 0.6216521807071809,
+        "observed_survival": 0.48280514128728436,
+        "chi2_contribution": 2.7868491943613334
+      },
+      {
+        "bin": 4,
+        "n": 34,
+        "predicted_survival": 0.5742783187431694,
+        "observed_survival": 0.7155841503267972,
+        "chi2_contribution": 2.7768402682465934
+      },
+      {
+        "bin": 5,
+        "n": 34,
+        "predicted_survival": 0.5074587389040643,
+        "observed_survival": 0.5351330634237567,
+        "chi2_contribution": 0.10418126389234264
+      },
+      {
+        "bin": 6,
+        "n": 34,
+        "predicted_survival": 0.4276909513325801,
+        "observed_survival": 0.4129500758077964,
+        "chi2_contribution": 0.03018316656834986
+      },
+      {
+        "bin": 7,
+        "n": 34,
+        "predicted_survival": 0.33204939193283284,
+        "observed_survival": 0.31043072702331986,
+        "chi2_contribution": 0.07164561553266788
+      },
+      {
+        "bin": 8,
+        "n": 34,
+        "predicted_survival": 0.22959440180378957,
+        "observed_survival": 0.3120097808708738,
+        "chi2_contribution": 1.3056137452841412
+      },
+      {
+        "bin": 9,
+        "n": 35,
+        "predicted_survival": 0.07243881539015737,
+        "observed_survival": 0.10069444444444443,
+        "chi2_contribution": 0.415876230698504
+      }
+    ]
+  }
+}

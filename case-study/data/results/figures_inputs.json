@@ -1,14 +1,23 @@
 {
   "primary_estimate": {
     "delta_c_apparent": 0.11689278271594428,
-    "delta_c_optimism_corrected": 0.05998260057005172,
-    "delta_c_95ci_lo": 0.08463615872070766,
-    "delta_c_95ci_hi": 0.13689235741929986,
+    "delta_c_optimism_corrected": 0.06278349516310125,
+    "delta_c_95ci_lo": 0.0026823688025954975,
+    "delta_c_95ci_hi": 0.11318508770574032,
     "c_apparent_trs": 0.7136598964555954,
     "c_apparent_ajcc": 0.599817122442904,
     "c_apparent_combo": 0.7167099051588482,
     "c_corrected_trs": 0.6567497143097027,
-    "n_bootstrap_iter_completed": 999
+    "n_bootstrap_iter_completed": 999,
+    "delta_c_corrected_paired": 0.06278349516310125,
+    "delta_c_paired_ci_lo": 0.0026823688025954975,
+    "delta_c_paired_ci_hi": 0.11318508770574032,
+    "opt_combo_avg": 0.054063858313583166,
+    "opt_ajcc_avg": -4.542923925985141e-05,
+    "opt_delta_avg": 0.05410928755284302,
+    "delta_c_corrected_legacy": 0.05998260057005172,
+    "delta_c_legacy_ci_lo": 0.0834091779015863,
+    "delta_c_legacy_ci_hi": 0.1387657891379237
   },
   "external": {
     "accession": "GSE10143",

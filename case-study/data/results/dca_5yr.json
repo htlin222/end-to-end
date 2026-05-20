@@ -1,0 +1,29 @@
+{
+  "landmark_months": 60.0,
+  "thresholds": {
+    "0.1": {
+      "net_benefit_model": 0.2365172189733593,
+      "net_benefit_treat_all": 0.2365172189733593,
+      "net_benefit_treat_none": 0.0,
+      "n_positive": 342,
+      "n_event": 107,
+      "prevalence_at_landmark": 0.3128654970760234
+    },
+    "0.2": {
+      "net_benefit_model": 0.14912280701754388,
+      "net_benefit_treat_all": 0.14108187134502925,
+      "net_benefit_treat_none": 0.0,
+      "n_positive": 331,
+      "n_event": 107,
+      "prevalence_at_landmark": 0.3128654970760234
+    },
+    "0.3": {
+      "net_benefit_model": 0.06390977443609017,
+      "net_benefit_treat_all": 0.018379281537176273,
+      "net_benefit_treat_none": 0.0,
+      "n_positive": 269,
+      "n_event": 107,
+      "prevalence_at_landmark": 0.3128654970760234
+    }
+  }
+}
