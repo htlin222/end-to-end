@@ -1,6 +1,18 @@
-# Release notes — `viewpoint-v1.0.0`
+# Release notes — `viewpoint-v1.1.0`
 
 **Manuscript.** "The prompt is the protocol: a disclosure standard for clinician-investigators using agentic large language models."
+
+**Supersedes** `viewpoint-v1.0.0` (which was tagged before Layer 1 case-study completion, Layer 2 audit, and Layer 3 external validation). The v1.0.0 manuscript carried pre-written conditional Layer-3 prose; v1.1.0 contains the actual null Layer-3 result and the Layer 2 audit findings, both of which were materially absent at v1.0.0 tag time.
+
+## What changed since `viewpoint-v1.0.0`
+
+- **Layer 1 case study** completed and tagged at `case-study-v1.0.0` (commit `a87586c`). HCC-TRS: 50-gene transcriptomic risk score on TCGA-LIHC. Development-cohort paired-optimism ΔC = 0.063 [0.003, 0.113]; Layer 1's own non-preregistered external (GSE10143) was null (C-index 0.47 [0.36, 0.58]).
+- **Layer 2 audit** completed. 12 findings recorded at `reviewer-logs/audit/findings.md`: 1 blocker (`GPL5474.annot.txt` not downloaded by the data-prep script; external-cohort branch unreproducible from clean clone), 2 high (abstract uses legacy estimator instead of paired-optimism specified by Methods; stratified-vs-stage-adjusted HR discrepancy 7.34 vs 6.66), 3 medium, 6 low. None invalidate the headline; the manifest preserves them as evidence the audit caught what the case-study reviewer loop missed.
+- **Layer 3 external validation** completed (operator step). Pooled GSE14520 + GSE76427, n=333, events=107. **Primary outcome: ΔC-index = 0.006 (95% bootstrap CI [−0.008, 0.030]); primary hypothesis NOT rejected; DECISION: NULL.** Cohort-specific: GSE14520 ΔC = 0.016 [−0.010, 0.047]; GSE76427 ΔC = 0.026 [−0.020, 0.141]. The development-cohort positive does not transport.
+- **Viewpoint Section 4** rewritten: pre-written conditional prose replaced with the actual null result; new Layer 2 audit paragraph summarises the 12 findings.
+- **Viewpoint Section 5** trimmed by 156 words to absorb the new content under the 2,500-word ceiling.
+- **Viewpoint Section 8** rewritten to lead with both substantive findings (the null + the audit findings) as evidence that Disclosure 2.0 makes them visible.
+- **Body word count** at v1.1.0: 2,495 (under 2,500). References 14 / 30. Display items 2 / 2.
 
 **Author.** Hsieh-Ting Lin, M.D. — Department of Hematology and Medical Oncology, Koo Foundation Sun Yat-Sen Cancer Center, Taipei, Taiwan. ORCID [0009-0002-3974-4528](https://orcid.org/0009-0002-3974-4528). Correspondence: `mail@hsiehting.com`.
 
@@ -44,8 +56,9 @@ The Viewpoint passed four reviewer-subagent rounds (the operator-supplied origin
 | 2 | 2026-05-21 | minor-revision (3 new low) | minor-revision (3 new low) | minor-revision (3 new low) | minor-revision ("send out now? Yes") | `da4ddce` |
 | 3 | 2026-05-21 | **accept** | **accept** | **accept** | **accept** | `c7b6586` |
 | 4 | 2026-05-21 | **accept** | **accept** | **accept** | **accept** (confirmation) | `98bd5eb` |
+| 5 | 2026-05-21 | n/a (no policy regression) | n/a (no clinician regression) | post-Layer-3 confirmation | post-Layer-3 confirmation | `5ffd6df` |
 
-**Outcome.** Four rounds run (user-spec minimum); unanimous accept achieved in Round 3 and reconfirmed in Round 4. Total comments closed: 44 from R1 + 12 new low from R2; zero re-raised from R1 to R2; zero new from R3 or R4.
+**Outcome.** Five rounds run (user-spec minimum: 4); unanimous accept achieved in Round 3 and reconfirmed in Rounds 4 and 5. Round 5 is a post-Layer-3 confirmation pass on the two reviewer axes (editor, methodology) most likely to react to the new substantive content (the null result + the Layer 2 audit findings). Total comments closed: 44 from R1 + 12 new low from R2; zero re-raised; zero new from R3 / R4 / R5.
 
 All transcripts are committed verbatim; comments that were later overruled are preserved per the honesty contract in `docs/design.md`. Round-N response-to-reviewers documents enumerate every comment-to-resolution mapping.
 
