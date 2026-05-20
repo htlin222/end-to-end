@@ -15,6 +15,18 @@ manuscript/*.log
 manuscript/*.out
 manuscript/*.synctex.gz
 manuscript/*.toc
+# Compiled manuscript PDF (built by CI on each v* tag)
+manuscript/main.pdf
+case-study/manuscript/*.aux
+case-study/manuscript/*.bbl
+case-study/manuscript/*.blg
+case-study/manuscript/*.fdb_latexmk
+case-study/manuscript/*.fls
+case-study/manuscript/*.log
+case-study/manuscript/*.out
+case-study/manuscript/*.synctex.gz
+case-study/manuscript/*.toc
+case-study/manuscript/main.pdf
 
 # Raw data (regenerable from documented URLs)
 case-study/data/raw/*
