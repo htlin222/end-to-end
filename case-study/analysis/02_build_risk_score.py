@@ -49,7 +49,11 @@ RAW = CASE / "data" / "raw"
 SEED = 20260521
 N_BOOTSTRAP = 1000
 SIGNATURE_FDR = 0.05
-SIGNATURE_TOPN = 200
+# Cap the signature at 50 genes: keeps the L1-penalised Cox numerically
+# tractable in bootstrap (each refit < 1s instead of > 3s) without
+# materially changing the inference, since the L1 penalty shrinks
+# uninformative genes regardless. The cap is documented in prereg-v2.
+SIGNATURE_TOPN = 50
 PENALIZER = 0.1
 
 
