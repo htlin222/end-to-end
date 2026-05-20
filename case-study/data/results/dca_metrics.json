@@ -1,0 +1,88 @@
+{
+  "combo": {
+    "thresholds": [
+      0.1,
+      0.2,
+      0.3
+    ],
+    "landmark_months": 60.0,
+    "results": [
+      {
+        "threshold": 0.1,
+        "n_treated": 342,
+        "n_untreated": 0,
+        "overall_mortality_5y": 0.48554044849892675,
+        "net_benefit_model": 0.42837827610991863,
+        "net_benefit_treat_all": 0.42837827610991863,
+        "net_benefit_treat_none": 0.0,
+        "delta_vs_treat_all": 0.0,
+        "delta_vs_treat_none": 0.42837827610991863
+      },
+      {
+        "threshold": 0.2,
+        "n_treated": 331,
+        "n_untreated": 11,
+        "overall_mortality_5y": 0.48554044849892675,
+        "net_benefit_model": 0.3636055367192007,
+        "net_benefit_treat_all": 0.35692556062365843,
+        "net_benefit_treat_none": 0.0,
+        "delta_vs_treat_all": 0.006679976095542273,
+        "delta_vs_treat_none": 0.3636055367192007
+      },
+      {
+        "threshold": 0.3,
+        "n_treated": 269,
+        "n_untreated": 73,
+        "overall_mortality_5y": 0.48554044849892675,
+        "net_benefit_model": 0.28739376386905646,
+        "net_benefit_treat_all": 0.26505778356989534,
+        "net_benefit_treat_none": 0.0,
+        "delta_vs_treat_all": 0.022335980299161118,
+        "delta_vs_treat_none": 0.28739376386905646
+      }
+    ]
+  },
+  "ajcc_alone": {
+    "thresholds": [
+      0.1,
+      0.2,
+      0.3
+    ],
+    "landmark_months": 60.0,
+    "results": [
+      {
+        "threshold": 0.1,
+        "n_treated": 342,
+        "n_untreated": 0,
+        "overall_mortality_5y": 0.48554044849892675,
+        "net_benefit_model": 0.42837827610991863,
+        "net_benefit_treat_all": 0.42837827610991863,
+        "net_benefit_treat_none": 0.0,
+        "delta_vs_treat_all": 0.0,
+        "delta_vs_treat_none": 0.42837827610991863
+      },
+      {
+        "threshold": 0.2,
+        "n_treated": 342,
+        "n_untreated": 0,
+        "overall_mortality_5y": 0.48554044849892675,
+        "net_benefit_model": 0.35692556062365843,
+        "net_benefit_treat_all": 0.35692556062365843,
+        "net_benefit_treat_none": 0.0,
+        "delta_vs_treat_all": 0.0,
+        "delta_vs_treat_none": 0.35692556062365843
+      },
+      {
+        "threshold": 0.3,
+        "n_treated": 342,
+        "n_untreated": 0,
+        "overall_mortality_5y": 0.48554044849892675,
+        "net_benefit_model": 0.26505778356989534,
+        "net_benefit_treat_all": 0.26505778356989534,
+        "net_benefit_treat_none": 0.0,
+        "delta_vs_treat_all": 0.0,
+        "delta_vs_treat_none": 0.26505778356989534
+      }
+    ]
+  }
+}

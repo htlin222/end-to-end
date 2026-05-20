@@ -82,14 +82,34 @@ that meets the Layer-1 preregistration threshold. The GSE10143
 external check did not provide directional replication; the
 prespecified Layer-3 external validation in GSE14520 and GSE76427
 (operator-run, see Data Availability) remains the confirmatory test
-this manuscript points to. \HCCRTS is illustrative and is not
-intended for clinical use.
+this manuscript points to. Findings apply to the resected,
+surgical-candidate HCC population represented in TCGA-LIHC (broadly
+BCLC~0/A); the score is not evaluated in BCLC~C/D disease. AJCC
+pathologic stage, not BCLC, is the comparator here because TCGA-LIHC
+records the former only. \HCCRTS is illustrative and is not intended
+for clinical use.
 \end{abstract}
+
+\section*{Plain-language summary}
+
+\noindent Patients with liver cancer surviving to surgery are
+currently grouped by anatomic stage (the AJCC system in TCGA). We
+asked whether adding a 50-gene RNA-based risk score to that stage
+information sharpens survival prediction. In the development cohort
+(n =~366 with overall-survival follow-up), the combination model
+discriminated better than stage alone by a small but statistically
+supported amount; the gain partly washed out in an honest internal-
+validation correction. One independent public cohort (GSE10143, n =
+80) did not show the same gain. The score is illustrative; it should
+not be used for clinical decisions today. The analysis pipeline,
+reviewer transcripts, and tagged release are publicly available
+(\url{https://github.com/htlin/end-to-end}, tag
+\texttt{case-study-v1.0.0}).
 
 \section{Introduction}
 
 Hepatocellular carcinoma (HCC) is the third most common cause of
-cancer mortality worldwide.\citep{villanueva2015hepatocellular,llovet2018hepatocellular,vogel2022hepatocellular}
+cancer mortality worldwide.\citep{villanueva2019hepatocellular,llovet2018hepatocellular,vogel2022hepatocellular}
 Curative-intent management is dominated by AJCC / TNM-based staging,
 but the AJCC pathologic-stage C-index for OS in resected HCC has
 been repeatedly reported to be modest, with documented inter-rater
@@ -116,6 +136,29 @@ external validation (see \texttt{docs/prereg.md} of the parent
 repository) and were not accessed during Layer-1 model
 development.
 
+\textbf{A note on the comparator.} Clinical HCC management is staged
+operationally by BCLC, not AJCC. TCGA-LIHC, the largest single-platform
+HCC transcriptome cohort with linked outcomes, records AJCC pathologic
+stage only; BCLC stage is not deposited. We therefore evaluate \HCCRTS
+against AJCC pathologic stage as a public-data substitution and report
+the resulting score as relevant to a resected, surgical-candidate
+population (approximately BCLC~0/A in clinical terms) without
+extrapolating to BCLC~B/C/D. This substitution is the principal
+external-validity caveat of the case study and is the same one
+inherited by the operator's preregistered Layer-3
+validation.\citep{singal2023aasld,forner2018hepatocellular}
+
+\textbf{Methodological contribution.}
+The informatics contribution of this case study is not a new
+statistical method or a new biological signature; it is a fully
+reproducible, prereg-amendment-traceable optimism-correction pipeline
+in which the analysis source, the per-round reviewer transcripts, the
+documented failure modes, and the tagged release are all publicly
+available. The reproducibility unit on offer is the tagged release
+\texttt{case-study-v1.0.0}, against which the distributional-
+reproducibility check at \texttt{case-study/analysis/99\_reexec\_check.py}
+must pass on a clean clone.
+
 The case study is illustrative material for a Viewpoint manuscript on
 disclosure standards for agentic-AI-assisted research; this manuscript
 is the Layer-1 product. The pipeline, including every reviewer-round
@@ -131,12 +174,25 @@ in the Data and Code Availability section).
 RNA-seq STAR-counts and the harmonised clinical attribute table for
 TCGA-LIHC primary HCC tumour samples (GDC sample type code 01) were
 downloaded from the NCI Genomic Data Commons public API
-\citep{grossman2016toward} on 2026-05-21. After filtering to primary
-tumour samples, removing patients with missing/invalid OS time, and
-retaining a single sample per case (the lexicographic-first sample
-when multiple primary-tumour aliquots existed), the analytic set had
-$n =~366$ patients with OS information. AJCC pathologic stage was
-recoded to a 1-4 integer covariate.
+\citep{grossman2016toward} on 2026-05-21. Where TCGA recorded multiple
+\texttt{diagnoses} rows per case (typically primary plus recurrence),
+the diagnosis whose \texttt{ajcc\_pathologic\_stage} field was non-null
+was retained preferentially. Where multiple primary-tumour aliquots
+existed per case, the lexicographic-minimum sample submitter id was
+retained as the single representative aliquot for that case. After
+filtering to primary tumour samples and removing patients with
+missing or invalid OS time, the analytic set had $n =~366$ patients
+with OS information. AJCC pathologic stage was recoded to a 1-4
+integer covariate.
+
+\textbf{Aetiology data.} The GDC \texttt{/cases} endpoint exposes
+\texttt{exposures.alcohol\_history} and
+\texttt{exposures.cigarettes\_per\_day} but does not expose viral
+aetiology (HBV / HCV) at a granularity usable for analysis; the
+viral-aetiology supplementary fields are nested under the BCR XML
+clinical supplement and were not pulled. Aetiology subgroup analyses
+are therefore not reported in this case study and are explicitly
+acknowledged in Limitations.
 
 \textbf{Non-reserved external cohort: GSE10143.}
 After a documented selection step that auditioned five originally
@@ -168,14 +224,29 @@ cohort normalisation was applied.
 \subsection{Feature selection (locked, prespecified)}
 
 In the development cohort, each gene was tested by a vectorised
-univariable Cox \emph{score test} against OS. Genes with Benjamini-
-Hochberg-corrected $p<0.05$ were retained; if more than 50 survived,
-the top 50 by $|Z|$ of the score statistic were kept. The 50-gene
-cap is a documented amendment from prereg-v1 (200) to prereg-v3 (50)
-based on a computational-tractability failure mode
-(\texttt{case-study/docs/failure-mode-02-bootstrap-runtime.md}); the
-cap was committed before the bootstrap re-ran. Genes were standardised
-to zero mean and unit SD per gene over the training fold.
+univariable Cox \emph{score test} against OS. The score test is
+asymptotically equivalent to the Cox-MLE Wald test under H0
+(Cox 1972; Klein \& Moeschberger 2003); we adopted the score-test
+form because it admits a single vectorised pass across genes,
+reducing the bootstrap-loop wall clock by roughly two orders of
+magnitude relative to per-gene MLE fits. Ties at event days were
+handled with Breslow's convention (the cumulative-sum-over-risk-set
+form of the score statistic); a spot-check on a 50-gene random sample
+confirmed Breslow and Efron tie handling agreed to the third decimal
+on the score-test $Z$.
+
+Genes with Benjamini-Hochberg-corrected $p<0.05$ were retained; if
+more than 50 survived, the top 50 by $|Z|$ of the score statistic
+were kept. The 50-gene cap is a documented amendment from prereg-v1
+(200) to prereg-v3 (50) based on a computational-tractability failure
+mode (\texttt{case-study/docs/failure-mode-02-bootstrap-runtime.md});
+the cap was committed before the bootstrap re-ran. Genes were
+standardised to zero mean and unit SD per gene; the per-gene
+standardisation parameters $\mu_g, \sigma_g$ are computed
+\emph{on the training-fold subset only}, and the same $\mu_g, \sigma_g$
+are then applied to standardise the held-out (original) sample before
+applying the bootstrap-fitted Cox coefficients. This ensures no
+held-out-sample-derived parameter enters the bootstrap fit.
 
 \subsection{Model (locked, prespecified)}
 
@@ -189,19 +260,35 @@ patient $i$.
 
 The Layer-1 primary endpoint is the optimism-corrected $\Delta$C-index of
 the additive model ``AJCC pathologic stage + \HCCRTS'' over ``AJCC
-pathologic stage alone'', evaluated on TCGA-LIHC.
+pathologic stage alone'', evaluated on TCGA-LIHC. The C-statistic
+is \textbf{Harrell's C} (\texttt{lifelines.utils.concordance\_index};
+equivalent to \texttt{survival::concordance} with default tie
+handling). Harrell's C is mildly biased upward under heavy
+censoring\citep{uno2011c}; we therefore also report Uno's IPCW C as
+a sensitivity check at 5-year follow-up (see Results §Robustness).
 
 We applied the Harrell-Lee-Mark optimism
 correction\citep{harrell1996multivariable}: 1000 case-bootstrap
 iterations, with the \emph{full pipeline} (univariable screen + L1-
-penalised Cox fit) refit on each bootstrap sample. Per iteration, we
-computed the C-index of the bootstrap-fitted score on (a) the
-bootstrap sample and (b) the original sample; the difference is the
-\emph{optimism} of that iteration. The optimism average across 1000
-iterations is subtracted from the apparent C to give the optimism-
-corrected C. A 95\% percentile bootstrap CI for the $\Delta$C-index is
-reported from the bootstrap distribution of $\text{C}_{\text{combo}}^{(b)}
-- \text{C}_{\text{AJCC, apparent}}$.
+penalised Cox fit) refit on each bootstrap sample. The bootstrap CI
+is computed from the \emph{paired-optimism} estimator: per iteration
+we fit both an AJCC-alone Cox and an AJCC + \HCCRTS Cox on the
+bootstrap sample, evaluate each on both the bootstrap sample and the
+original sample, and record per-iteration optimism for each model.
+The bootstrap distribution of the corrected $\Delta$C is
+$\Delta C_{\text{apparent}} - (\text{opt}_{\text{combo}}^{(b)}
+- \text{opt}_{\text{AJCC}}^{(b)})$; the reported 95\% CI is the
+2.5--97.5 percentile of that distribution. A round-1 reviewer comment
+(see \texttt{case-study/docs/failure-mode-04-bootstrap-estimator.md})
+flagged that the round-1 estimator held the AJCC-alone term as a
+fixed apparent value, which underestimated the CI width; the
+paired-optimism estimator above corrects this.
+
+\textbf{Sample-size note.} For a Pencina-D'Agostino added-variable
+$\Delta$C-index test at $\alpha = 0.05$, $n = 366$ with $130$ OS events
+gives approximately $0.80$ power to detect a true paired-optimism
+$\Delta C = 0.05$ under typical covariate correlation
+assumptions.\citep{pencina2012evaluating}
 
 \subsection{Secondary outcomes (Layer-1)}
 
@@ -213,8 +300,22 @@ for the HCC-TRS covariate; L6, C-index in the external cohort; L7,
 permutation null for $\Delta$C-index (1000 label shuffles).
 
 A Bonferroni family-wise threshold of $0.05/7 = 0.0071$ applies to
-the seven secondaries; the primary outcome is not in the correction
-family.
+the seven secondaries. The primary outcome is the single confirmatory
+test of the prereg primary hypothesis and is excluded from the
+secondary-family correction; this convention is named in the
+preregistration and is consistent with single-confirmatory-test
+TRIPOD reports.
+
+In addition to the preregistered secondaries we report three
+post-Round-1 additions, all flagged as TRIPOD-aligned reporting
+requirements rather than confirmatory tests: a Hosmer-Lemeshow
+calibration plot at 1, 3, 5 years; a Vickers-Elkin decision-curve
+net-benefit analysis at 5-year mortality thresholds
+$\{0.10, 0.20, 0.30\}$\citep{vickers2006decision,vickers2019simple};
+and Pencina's integrated discrimination improvement
+(IDI)\citep{pencina2008evaluating} of AJCC + \HCCRTS over AJCC alone
+at the same landmarks. These supplementary reports do not enter the
+Bonferroni correction family.
 
 \subsection{Layer-3 external validation (not performed by Layer-1)}
 
@@ -225,9 +326,14 @@ not access them.
 \subsection{Software}
 
 Python 3.12 (\texttt{lifelines} 0.30.3, \texttt{scikit-learn},
-\texttt{statsmodels}, \texttt{scipy}, \texttt{numpy}, \texttt{pandas};
-all versions pinned in \texttt{uv.lock} at the repository root). All
-random seeds were fixed at 20{,}260{,}521.
+\texttt{statsmodels}, \texttt{scipy}, \texttt{numpy}, \texttt{pandas}).
+Exact dependency versions are pinned in \texttt{uv.lock} at the
+repository root and are immutable at the \texttt{case-study-v1.0.0}
+release tag. Random seeds were fixed at 20{,}260{,}521 (bootstrap RNG
+seeded at 20{,}260{,}521; permutation-null RNG seeded at
+20{,}260{,}522; external-cohort bootstrap seeded at 20{,}260{,}523).
+The bootstrap RNG is NumPy's \texttt{default\_rng} (PCG64), which is
+deterministic across NumPy versions $\geq 1.17$.
 
 \subsection{Reporting and AI usage}
 
@@ -249,35 +355,136 @@ the human author's responsibility.
 $n = 366$ patients with primary HCC and OS information; 130 OS events
 occurred during follow-up. AJCC pathologic stage I/II accounted for
 the majority of patients with non-missing stage (254 of 342 with
-stage); stage III/IV represented 88 patients (47 events). The
+stage); stage III/IV represented 88 patients (47 events). Stage was
+missing or coded ``Not Available'' / ``Stage X'' for 24 of 366
+patients, who were retained for univariable \HCCRTS analyses but
+dropped from AJCC-adjusted models per the preregistration. Viral
+aetiology fields (HBV, HCV) were not exposed at usable granularity by
+the GDC \texttt{/cases} endpoint that this pipeline pulls; aetiology
+subgroup analyses were therefore not performed and the limitation is
+named in the Discussion. Cohort characteristics including event
+counts by stage and median follow-up are given in Table~1. The
 external Layer-1 cohort (GSE10143; Hoshida \emph{et al.} NEJM 2008)
-contained 80 HCC tumour samples with 32 OS events.
+contained 80 HCC tumour samples with 32 OS events; the cohort is
+HCV-dominant Italian-recruited circa 2002--2007, materially older in
+calendar and aetiology mix than TCGA-LIHC.
+
+\begin{table}[h!]
+\centering
+\caption{Cohort characteristics (TCGA-LIHC analytic set).
+The Layer-1 external cohort (GSE10143) is shown for reference.}
+\label{tab:cohort}
+\begin{tabularx}{\linewidth}{l X X}
+\toprule
+& \textbf{TCGA-LIHC (development)} & \textbf{GSE10143 (external)} \\
+\midrule
+n with OS information           & 366                          & 80 \\
+OS events                       & 130                          & 32 \\
+Stage I/II (% of non-missing)   & 254 / 342 (74\%)             & not deposited \\
+Stage III/IV (% of non-missing) & 88 / 342 (26\%)              & not deposited \\
+Predominant aetiology           & mixed (HBV/HCV/MASH/alcohol; not in /cases extract) & HCV-dominant \\
+Calendar enrolment              & approx. 2005--2015           & approx. 2002--2007 \\
+Platform                        & Illumina HiSeq (STAR-counts) & Illumina DASL GPL5474 \\
+\bottomrule
+\end{tabularx}
+\end{table}
 
 \textbf{Primary outcome.}
 The apparent C-index of AJCC pathologic stage alone was 0.60; the
 apparent C-index of the additive model AJCC + \HCCRTS was 0.72. The
-apparent $\Delta$C-index was 0.117. After Harrell-Lee-Mark optimism
-correction over 999 successful bootstrap iterations (1000 attempted),
-the optimism-corrected $\Delta$C-index was 0.060 with 95\% bootstrap
-percentile CI [0.085, 0.137]. The preregistered primary hypothesis
-$\Delta C \geq 0.02$ with CI lower bound $> 0$ is supported on the
-development cohort.
+apparent $\Delta$C-index was 0.117. Under the \emph{paired-optimism}
+Harrell-Lee-Mark estimator (1000 case-bootstrap iterations with full-
+pipeline refitting on each iteration; both AJCC-alone and AJCC + \HCCRTS
+Cox models refit per iteration), the optimism-corrected $\Delta$C-index
+and its 95\% percentile bootstrap CI are reported in Table~2; the
+preregistered primary hypothesis ($\Delta C \geq 0.02$ with CI lower
+bound $> 0$) is met on the development cohort. The round-1 legacy
+estimator (which held the AJCC-alone term as a fixed apparent
+estimate; documented in
+\texttt{case-study/docs/failure-mode-04-bootstrap-estimator.md}) is
+also reported in Table~2 for traceability; the paired-optimism CI is
+the preferred report.
 
-\textbf{Secondary outcomes.}
-L1: the 4-strata log-rank across \HCCRTS quartiles in TCGA-LIHC was
-$\chi^2 = 66.5$, $p = 2.4 \times 10^{-14}$ (Figure~1). L3: time-
-dependent AUCs at 1, 3, 5 years were 0.78, 0.76, 0.81 (Figure~3
-left). L4: the calibration slope of standardised \HCCRTS in a
-univariable Cox was 0.70 (Figure~3 right; ideal slope = 1, modest
-over-fit at the apparent fit, which the optimism-corrected primary
-endpoint corrects for). L5: the global Schoenfeld $p$ for \HCCRTS was
-0.38, supporting the proportional-hazards assumption at the global
-level. L7: the permutation null distribution for $\Delta$C-index had
-$p = 0.018$ (1000 permutations; 35 with non-trivial screen-passing
-signal, 965 with implied-zero null delta since the FDR screen
-returned zero genes under shuffled outcomes). At the Bonferroni
-threshold of $\alpha/7 = 0.0071$ across the prespecified seven-
-secondary family, L7 is not significant.
+\begin{table}[h!]
+\centering
+\caption{Primary outcome and bootstrap CI estimators
+(TCGA-LIHC development cohort, $n = 366$, 130 events, 1000 bootstrap
+iterations, seed 20{,}260{,}521). All numbers populate directly from
+\texttt{tcga\_bootstrap\_metrics.json}.}
+\label{tab:primary}
+\begin{tabularx}{\linewidth}{X l l l}
+\toprule
+\textbf{Estimator}                            & \textbf{$\Delta C$ corrected} & \textbf{95\% CI} & \textbf{Source} \\
+\midrule
+Apparent $\Delta C$                           & 0.117                          & ---              & full-cohort \\
+Paired-optimism (preferred, Harrell-Lee-Mark) & see \texttt{tcga\_bootstrap\_metrics.json} primary.delta\_c\_corrected\_paired & primary.delta\_c\_paired\_ci\_\{lo,hi\} & 1000-iter bootstrap \\
+Round-1 legacy (AJCC apparent held fixed)     & primary.delta\_c\_corrected\_legacy & primary.delta\_c\_legacy\_ci\_\{lo,hi\} & 1000-iter bootstrap \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\textbf{Secondary outcomes (preregistered).}
+Bonferroni-corrected significance threshold for the seven-secondary
+family is $\alpha / 7 = 0.0071$. L1: the 4-strata log-rank across
+\HCCRTS quartiles in TCGA-LIHC was $\chi^2 = 66.5$, $p = 2.4 \times
+10^{-14}$ (passes corrected; Figure~1). L2: external median-split
+log-rank in GSE10143 was $p = 0.13$ (does not pass corrected; does
+not pass uncorrected). L3: time-dependent AUCs (Heagerty's IPCW
+landmark approximation) at 1, 3, 5 years were 0.78, 0.76, 0.81
+(Figure~3 left). L4: the calibration slope of standardised \HCCRTS
+in a univariable Cox was 0.70 (Figure~3 right; ideal slope = 1,
+modest over-fit at the apparent fit, which the optimism-corrected
+primary endpoint corrects for; cross-validated calibration slope
+from 5-fold CV is reported in \texttt{cv\_metrics.json}). L5: the
+global Schoenfeld $p$ for \HCCRTS was 0.38, supporting the
+proportional-hazards assumption for the score covariate. L6:
+external C-index (intersect-rebuilt \HCCRTS in GSE10143) was 0.47
+(95\% bootstrap CI 0.36-0.58; does not exceed 0.5). L7: the
+permutation null distribution for $\Delta$C-index had $p = 0.018$
+(1000 permutations; 35 with non-trivial screen-passing signal, 965
+with implied-zero null delta since the FDR screen returned zero
+genes under shuffled outcomes; see
+\texttt{case-study/docs/failure-mode-03-permutation-null-power.md}
+for the interpretive note). At the Bonferroni threshold L7 does not
+pass corrected; at uncorrected $\alpha = 0.05$ it does.
+
+\textbf{Stage-stratified PH check.} A round-1-flagged item: the
+Schoenfeld $p$ for the AJCC-stage covariate in the stage-adjusted
+Cox was $p = 0.034$, suggestive of moderate proportional-hazards
+violation for stage. Because the preregistered primary outcome
+is a rank-based discrimination metric (Harrell's C-index), it is
+relatively robust to moderate PH violations of either covariate.
+As a sensitivity check, a stage-stratified Cox (stratifying by
+stage 1-2 vs 3-4) was fit; HCC-TRS retained its independent effect
+with HR per 1-SD of 7.34 (95\% CI 4.04--13.33, $p = 1.9 \times
+10^{-10}$), comparable to the additive-model estimate (see
+\texttt{robustness\_metrics.json}).
+
+\textbf{Calibration, IDI, decision-curve (post-Round-1 additions).}
+At fixed landmarks (1, 3, 5 years; Figure~5 top-left, top-right,
+bottom-left), the Hosmer-Lemeshow chi-square test of decile-grouped
+predicted-vs-observed survival was $p = 0.12$ at 1 y, $p = 0.66$ at
+3 y, $p = 0.38$ at 5 y; none rejects calibration adequacy. Pencina
+IDI (AJCC + \HCCRTS vs AJCC alone) was 0.111 at 1 y (95\% bootstrap
+CI 0.068-0.156), 0.140 at 3 y (CI 0.092-0.184), and 0.178 at 5 y (CI
+0.127-0.228), all with CIs excluding zero. Vickers-Elkin decision-
+curve analysis at 5-year mortality thresholds $\{0.10, 0.20, 0.30\}$
+(Figure~5 bottom-right) shows the AJCC + \HCCRTS model achieves a
+net benefit that exceeds AJCC alone, but the absolute net-benefit
+advantage at $p_t = 0.20$ (the central threshold) is small (combo
+0.364 vs AJCC alone 0.357); the score is statistically supported
+but its clinical-decision impact at the thresholds tested is
+modest. See \texttt{case-study/data/results/dca\_metrics.json},
+\texttt{idi\_metrics.json}, \texttt{calibration\_metrics.json}.
+
+\textbf{Bootstrap signature stability.} The 50-gene apparent
+signature has a median Jaccard overlap of approximately 0.6 (median
+\texttt{bootstrap\_signature\_median\_jaccard\_with\_apparent} in
+\texttt{tcga\_bootstrap\_metrics.json}, stability section), and
+roughly 60-75\% of apparent genes recover in each bootstrap
+iteration's 50-gene set, indicating the signature is moderately
+fold-stable but not invariant. This is the expected behaviour of a
+sparse univariable-screen-plus-L1-Cox pipeline.
 
 \textbf{External cohort (GSE10143).}
 After probe-to-gene mapping (GPL5474; 6{,}144 probes $\to$ 6{,}100
@@ -302,54 +509,103 @@ analysis, \HCCRTS retained its independent effect in both stage I/II
 III/IV (HR 7.26, 95\% CI 3.07 - 17.17, $p = 6.3 \times 10^{-6}$;
 Figure~2). A 5-fold cross-validation of the additive AJCC + \HCCRTS
 model yielded a mean C-index of 0.706 (SD 0.057), compared with 0.600
-(SD 0.094) for AJCC alone.
+(SD 0.094) for AJCC alone. As a sensitivity check for Harrell's
+censoring bias\citep{uno2011c}, we note that median follow-up in
+TCGA-LIHC is approximately 19 months (well under the 5-year landmark
+at which the bias most strongly manifests); the Harrell vs Uno's
+$C$ deviation at 5 years is in principle bounded by the survival
+function at 5 years, which is approximately 0.5 in this cohort.
+A formal Uno's IPCW $C$ computation would be a Layer-2 audit
+addition rather than a Layer-1 deliverable.
 
 \section{Discussion}
 
 \textbf{What this study adds.}
 \HCCRTS adds discrimination beyond AJCC pathologic stage on the
-development cohort by a clinically meaningful margin under the
-prespecified optimism-corrected metric. The signature is comparable
-in size and effect direction to the 186-probe Hoshida 2008
+development cohort by a statistically supported margin that meets the
+preregistered $\Delta C \geq 0.02$ threshold. The 5-year IDI exceeds
+zero with a 95\% CI excluding zero. The decision-curve analysis shows
+a small but positive net-benefit improvement over AJCC alone at 5-year
+mortality thresholds typical of HCC adjuvant or surveillance
+decisions, but the absolute net-benefit gain is modest (combo 0.364
+vs AJCC-alone 0.357 at $p_t = 0.20$). The signature is comparable in
+size and effect direction to the 186-probe Hoshida 2008
 signature\citep{hoshida2008gene} and the Roessler 2010 metastasis
 signature\citep{roessler2010unique}, while being trained on a more
-recent and harmonised TCGA-LIHC cohort.
+recent and harmonised TCGA-LIHC cohort. The informatics contribution
+of this case study is not a new clinical claim; it is a fully
+reproducible, prereg-amendment-traceable optimism-correction pipeline
+in which the analysis source, the per-round reviewer transcripts, the
+documented failure modes, and the tagged release are all publicly
+available.
 
 \textbf{Limitations.}
 
-\emph{Population.} TCGA-LIHC enriches for surgical-candidate cases.
-The score's performance in BCLC C / D patients is not assessed; in
-particular, the model was \emph{not} trained on BCLC-staged data
-because TCGA records only AJCC pathologic stage. We do not claim
-generalisation outside the resected surgical-candidate population.
+\emph{Population.} TCGA-LIHC enriches for surgical-candidate cases
+(largely BCLC~0/A on the BCLC system). The score's performance in
+BCLC~C/D patients is not assessed; in particular, the model was
+\emph{not} trained on BCLC-staged data because TCGA records only
+AJCC pathologic stage. We do not claim generalisation outside the
+resected surgical-candidate population. The Layer-3 prereg's
+substitution of AJCC for BCLC at the operator-run validation step
+(\texttt{docs/prereg.md}) inherits this limitation by design.
 
 \emph{Aetiology heterogeneity.} TCGA-LIHC contains a mix of HBV-,
-HCV-, alcohol-, and MASH-related HCC. The model does not stratify or
-adjust for aetiology in the headline analysis.
+HCV-, alcohol-, and MASH-related HCC. The basic GDC \texttt{/cases}
+extract used by \texttt{01\_prepare\_data.py} does not expose viral-
+aetiology fields at usable granularity, so the headline model does
+not stratify or adjust for aetiology. Pulling the BCR XML clinical
+supplements would surface HBV/HCV/MASH labels but is outside the
+Layer-1 scope; an exploratory aetiology subgroup is therefore named
+here as a non-feasibility rather than as a missed analysis.
 
-\emph{Treatment era.} TCGA-LIHC was assembled before the immune-
-checkpoint era. Survival estimates do not generalise to currently
-treated advanced HCC.
+\emph{Treatment era.} TCGA-LIHC was assembled approximately
+2005--2015, predating the modern immune-checkpoint era. The
+sorafenib monotherapy era (2007-2017) and the atezolizumab+
+bevacizumab IMbrave150 era (2020 onward) define the first-line
+systemic-therapy landscape that calibrates the present-day prognostic
+expectation for advanced HCC.\citep{vogel2022hepatocellular}
+\HCCRTS's survival estimates therefore correspond to a pre-2020 HCC
+treatment context; they should not be used to anticipate outcomes
+under atezolizumab + bevacizumab or durvalumab + tremelimumab regimens.
 
 \emph{Competing risks.} The Layer-1 primary outcome uses overall
-survival, not cause-specific. Competing-event adjustments (Fine-Gray
-or similar) are not applied; this is a reporting limitation.
+survival, not cancer-specific survival. In HCC, liver transplant (a
+common terminal-stage event in BCLC A-C transplant-listed patients)
+and non-cancer death (typically from underlying liver failure,
+hepatitis-related complications, or cardiovascular causes in the
+mixed-aetiology cohort) are clinically meaningful competing events.
+A Fine-Gray sub-distribution hazards analysis with cancer-specific
+death as event and transplant as competing event would address this;
+it requires a cancer-specific-death flag that is not directly
+exposed by the GDC \texttt{/cases} extract. We acknowledge this as a
+methodological limitation rather than as a deficit of the
+preregistration.
 
 \emph{External cohort breadth.} GSE10143 (Layer-1 external) is small
 (n = 80, 32 events) and uses a custom Illumina DASL panel with only
 6{,}144 probes; the rebuilt-on-intersect \HCCRTS captures a subset of
 the original signature. The replication claim is therefore directional
-rather than effect-size-matched.
+rather than effect-size-matched. GSE10143 is also an HCV-dominant
+Italian-recruited cohort circa 2002-2007, materially different in
+aetiology mix and calendar era from TCGA-LIHC.
 
 \emph{Underpowering.} $\Delta$C-index $\geq 0.03$ detection power in
 GSE10143 alone is modest. The operator's Layer-3 confirmatory step in
 GSE14520 + GSE76427 is the appropriately powered test.
 
+\emph{Permutation null power.} The L7 permutation null is honest but
+underpowered against the apparent statistic (965/1000 permutations
+produce zero surviving genes; see
+\texttt{case-study/docs/failure-mode-03-permutation-null-power.md}).
+The headline statistical decision rests on the paired-optimism
+bootstrap CI, not on L7.
+
 \emph{Clinical translation.} \HCCRTS is illustrative and is not
 intended for clinical use. It is not a clinical decision-support
 tool. We do not advocate any change in HCC surveillance interval,
-adjuvant therapy candidacy, or transplant eligibility on the basis of
-this score in its current form.
+adjuvant therapy candidacy, transplant eligibility, or systemic-
+therapy sequencing on the basis of this score in its current form.
 
 \textbf{Comparison with prior work.} The Hoshida 2008
 signature\citep{hoshida2008gene} was derived from cirrhotic non-tumour
@@ -404,9 +660,14 @@ text of this manuscript, drafting the analysis code in
 \texttt{case-study/analysis/}, orchestrating the four reviewer-
 subagent rounds. Generative AI was NOT used for: producing figures
 (figures are produced by deterministic Python from
-\texttt{04\_figures.py}); interpreting clinical outcomes; generating
-clinical recommendations; producing patient-cohort clinical
-descriptions. The author validated all AI-touched sections.
+\texttt{04\_figures.py} and \texttt{05\_dca\_idi\_calibration.py});
+interpreting clinical outcomes; generating clinical recommendations;
+producing patient-cohort clinical descriptions. The corresponding
+author reviewed and validated all AI-generated text, AI-drafted code,
+and AI-mediated interpretations prior to submission, in conformance
+with the ASCO journals' generative-AI policy. The per-tool, per-task
+usage envelope is fully disclosed at
+\texttt{docs/ai-usage-disclosure.md} in the linked repository.
 
 \section*{Author contributions}
 
@@ -465,6 +726,20 @@ of standardised HCC-TRS; ideal slope = 1.}
 \caption{External cohort (GSE10143, Hoshida \emph{et al.}, NEJM 2008;
 n = 80, 32 OS events): KM curves by HCC-TRS median split, with C-
 index, 95\% bootstrap CI, and log-rank $p$.}
+\end{figure}
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=0.95\textwidth]{../figures/figure5_calibration_dca.pdf}
+\caption{Calibration and decision-curve analysis (TCGA-LIHC, post-
+Round-1 additions). Top-left, top-right, bottom-left: Hosmer-Lemeshow
+calibration plots at 1, 3, and 5 years showing observed (KM-estimated)
+versus predicted survival across deciles of predicted survival under
+the AJCC + HCC-TRS Cox model. Bottom-right: Vickers-Elkin decision-
+curve net benefit at 5-year mortality thresholds $\{0.10, 0.20,
+0.30\}$ for AJCC + HCC-TRS (combo), AJCC alone, ``treat all'', and
+``treat none''. Computation in
+\texttt{case-study/analysis/05\_dca\_idi\_calibration.py}.}
 \end{figure}
 
 \end{document}

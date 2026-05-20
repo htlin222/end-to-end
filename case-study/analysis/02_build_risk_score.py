@@ -314,40 +314,46 @@ def _bootstrap_optimism(
     )
     delta_c_apparent = c_apparent_combo - c_apparent_ajcc
 
-    # Bootstrap loop
-    opt_apparent = []
-    delta_c_boot = []
-    c_boot_combo = []
-    c_boot_ajcc = []
-    c_boot_trs = []
+    # Bootstrap loop (paired-optimism per Harrell-Lee-Mark)
+    # Per round-01 reviewer feedback (failure-mode-04), each iteration
+    # now computes optimism for BOTH the combo (AJCC + TRS) and the
+    # AJCC-alone Cox; the optimism of the ΔC-index is then the
+    # difference of those two optimisms (paired across the same
+    # bootstrap sample). The bootstrap CI for ΔC is the percentile of
+    # `delta_c_apparent - optimism_delta_b`.
+    opt_trs_apparent = []      # in - out for the TRS-only model
+    opt_combo_apparent = []    # in - out for the AJCC + TRS combo
+    opt_ajcc_apparent = []     # in - out for the AJCC-alone Cox
+    opt_delta_apparent = []    # optimism_combo - optimism_ajcc
+    delta_c_boot_paired = []   # delta_c_apparent - opt_delta_b
+    delta_c_boot_legacy = []   # legacy form, kept for traceability
+    bootstrap_gene_sets: list[list[str]] = []
     for b in range(n_iter):
         if (b + 1) % 50 == 0:
             print(f"  bootstrap iter {b+1}/{n_iter}", flush=True)
         idx = rng.integers(0, n, size=n)
         boot_cases = [cases[i] for i in idx]
-        # Refit feature selection on bootstrap sample
         clin_b = clin.loc[boot_cases].copy()
         expr_b = expr[boot_cases].copy()
-        # Lose duplicate columns inside expression: lifelines is fine.
-        # Reset numeric index for the bootstrap-fitted Cox
         clin_b.index = [f"B{i}" for i in range(n)]
         expr_b.columns = clin_b.index
         try:
             genes_b = _univariable_screen(expr_b, clin_b)
             if len(genes_b) == 0:
                 continue
+            bootstrap_gene_sets.append(list(genes_b))
             mu_b = expr_b.loc[genes_b].mean(axis=1)
             sd_b = expr_b.loc[genes_b].std(axis=1).replace(0, 1)
             z_b = expr_b.loc[genes_b].subtract(mu_b, axis=0).divide(sd_b, axis=0)
             cph_b = _fit_cox(z_b, clin_b)
             score_in = _risk_score(cph_b, z_b)
-            c_in_trs = _harrell_c(
-                score_in.values,
-                clin_b["os_time_months"].values,
-                clin_b["os_event"].values.astype(int),
-            )
-            # Apply the bootstrap-fitted model to the original sample
-            # using bootstrap-derived gene list & standardisation
+            t_b = clin_b["os_time_months"].values.astype(float)
+            e_b = clin_b["os_event"].values.astype(int)
+            stage_b = clin_b["stage_num"].values.astype(float)
+            mask_stage_b = ~np.isnan(stage_b)
+            c_in_trs = _harrell_c(score_in.values, t_b, e_b)
+
+            # Project model onto original sample
             valid_in_orig = [g for g in genes_b if g in expr.index]
             z_orig = expr.loc[valid_in_orig].subtract(mu_b.loc[valid_in_orig], axis=0).divide(
                 sd_b.loc[valid_in_orig].replace(0, 1), axis=0
@@ -356,44 +362,122 @@ def _bootstrap_optimism(
             valid_coefs = [g for g in valid_in_orig if g in coefs.index]
             score_orig = z_orig.loc[valid_coefs].T.dot(coefs.loc[valid_coefs])
             c_out_trs = _harrell_c(score_orig.values, t, e)
-            opt_apparent.append(c_in_trs - c_out_trs)
-            # Bootstrap ΔC on the original sample
-            df_combo_b = pd.DataFrame({
+            opt_trs_apparent.append(c_in_trs - c_out_trs)
+
+            # AJCC-alone Cox on bootstrap sample
+            cph_ajcc_b = CoxPHFitter(penalizer=0.0)
+            df_ajcc_b_in = pd.DataFrame({
+                "stage_num": stage_b[mask_stage_b],
+                "os_time_months": t_b[mask_stage_b],
+                "os_event": e_b[mask_stage_b],
+            })
+            cph_ajcc_b.fit(df_ajcc_b_in, duration_col="os_time_months",
+                           event_col="os_event", show_progress=False)
+            c_in_ajcc = _harrell_c(
+                cph_ajcc_b.predict_partial_hazard(df_ajcc_b_in).values,
+                t_b[mask_stage_b], e_b[mask_stage_b],
+            )
+            # Out-of-sample AJCC: same fitted Cox applied to original
+            df_ajcc_b_out = pd.DataFrame({
+                "stage_num": stage[mask_stage],
+                "os_time_months": t[mask_stage],
+                "os_event": e[mask_stage],
+            })
+            c_out_ajcc = _harrell_c(
+                cph_ajcc_b.predict_partial_hazard(df_ajcc_b_out).values,
+                t[mask_stage], e[mask_stage],
+            )
+            opt_ajcc_apparent.append(c_in_ajcc - c_out_ajcc)
+
+            # Combo (AJCC + TRS) Cox on bootstrap sample (in-sample)
+            df_combo_b_in = pd.DataFrame({
+                "stage_num": stage_b[mask_stage_b],
+                "trs": score_in.values[mask_stage_b],
+                "os_time_months": t_b[mask_stage_b],
+                "os_event": e_b[mask_stage_b],
+            })
+            cph_combo_b = CoxPHFitter(penalizer=0.0)
+            cph_combo_b.fit(df_combo_b_in, duration_col="os_time_months",
+                            event_col="os_event", show_progress=False)
+            c_in_combo = _harrell_c(
+                cph_combo_b.predict_partial_hazard(df_combo_b_in).values,
+                t_b[mask_stage_b], e_b[mask_stage_b],
+            )
+            # Combo on original
+            df_combo_b_out = pd.DataFrame({
                 "stage_num": stage[mask_stage],
                 "trs": score_orig.loc[clin.index].values[mask_stage],
                 "os_time_months": t[mask_stage],
                 "os_event": e[mask_stage],
             })
-            cph_c = CoxPHFitter(penalizer=0.0)
-            cph_c.fit(df_combo_b, duration_col="os_time_months", event_col="os_event",
-                      show_progress=False)
-            c_combo_b = _harrell_c(
-                cph_c.predict_partial_hazard(df_combo_b).values,
+            c_out_combo = _harrell_c(
+                cph_combo_b.predict_partial_hazard(df_combo_b_out).values,
                 t[mask_stage], e[mask_stage],
             )
-            delta_c_boot.append(c_combo_b - c_apparent_ajcc)
-            c_boot_combo.append(c_combo_b)
-            c_boot_ajcc.append(c_apparent_ajcc)
-            c_boot_trs.append(c_out_trs)
+            opt_combo_apparent.append(c_in_combo - c_out_combo)
+
+            # Paired optimism of the ΔC
+            opt_delta_b = (c_in_combo - c_out_combo) - (c_in_ajcc - c_out_ajcc)
+            opt_delta_apparent.append(opt_delta_b)
+            delta_c_boot_paired.append(delta_c_apparent - opt_delta_b)
+            delta_c_boot_legacy.append(c_out_combo - c_apparent_ajcc)
         except Exception as exc:
             continue
 
-    opt_avg = float(np.mean(opt_apparent)) if opt_apparent else 0.0
-    c_corrected_trs = c_apparent_trs - opt_avg
-    delta_c_corrected = c_apparent_combo - c_apparent_ajcc - opt_avg
+    opt_trs_avg = float(np.mean(opt_trs_apparent)) if opt_trs_apparent else 0.0
+    opt_combo_avg = float(np.mean(opt_combo_apparent)) if opt_combo_apparent else 0.0
+    opt_ajcc_avg = float(np.mean(opt_ajcc_apparent)) if opt_ajcc_apparent else 0.0
+    opt_delta_avg = float(np.mean(opt_delta_apparent)) if opt_delta_apparent else 0.0
+    c_corrected_trs = c_apparent_trs - opt_trs_avg
+    delta_c_corrected_paired = delta_c_apparent - opt_delta_avg
+    delta_c_corrected_legacy = delta_c_apparent - opt_trs_avg
+
+    # Jaccard stability: how often does each apparent gene appear in
+    # the bootstrap gene set?
+    apparent_set = set(apparent_genes)
+    jaccard_overlaps = []
+    apparent_recovery_pct = []
+    for gs in bootstrap_gene_sets:
+        s = set(gs)
+        if s | apparent_set:
+            jaccard_overlaps.append(len(s & apparent_set) / len(s | apparent_set))
+        apparent_recovery_pct.append(
+            100.0 * len(s & apparent_set) / max(1, len(apparent_set))
+        )
+    median_jaccard = float(np.median(jaccard_overlaps)) if jaccard_overlaps else None
+    median_apparent_recovery = (
+        float(np.median(apparent_recovery_pct)) if apparent_recovery_pct else None
+    )
 
     return {
-        "n_iter_completed": len(opt_apparent),
+        "n_iter_completed": len(opt_combo_apparent),
         "c_apparent_trs": c_apparent_trs,
         "c_apparent_ajcc": c_apparent_ajcc,
         "c_apparent_combo": c_apparent_combo,
         "delta_c_apparent": delta_c_apparent,
-        "opt_avg": opt_avg,
+        # New paired-optimism estimator (preferred, per failure-mode-04)
+        "opt_trs_avg": opt_trs_avg,
+        "opt_combo_avg": opt_combo_avg,
+        "opt_ajcc_avg": opt_ajcc_avg,
+        "opt_delta_avg": opt_delta_avg,
+        "delta_c_corrected_paired": delta_c_corrected_paired,
+        "delta_c_paired_ci_lo": float(np.percentile(delta_c_boot_paired, 2.5)) if delta_c_boot_paired else None,
+        "delta_c_paired_ci_hi": float(np.percentile(delta_c_boot_paired, 97.5)) if delta_c_boot_paired else None,
         "c_corrected_trs": c_corrected_trs,
-        "delta_c_corrected": delta_c_corrected,
-        "delta_c_boot_ci_lo": float(np.percentile(delta_c_boot, 2.5)) if delta_c_boot else None,
-        "delta_c_boot_ci_hi": float(np.percentile(delta_c_boot, 97.5)) if delta_c_boot else None,
-        "delta_c_boot_distribution_size": len(delta_c_boot),
+        # Backwards-compat fields (legacy estimator from round-01)
+        "delta_c_corrected_legacy": delta_c_corrected_legacy,
+        "delta_c_legacy_ci_lo": float(np.percentile(delta_c_boot_legacy, 2.5)) if delta_c_boot_legacy else None,
+        "delta_c_legacy_ci_hi": float(np.percentile(delta_c_boot_legacy, 97.5)) if delta_c_boot_legacy else None,
+        # Headline fields (kept identical to round-01 for ledger
+        # continuity; values reflect the paired-optimism estimator)
+        "delta_c_corrected": delta_c_corrected_paired,
+        "delta_c_boot_ci_lo": float(np.percentile(delta_c_boot_paired, 2.5)) if delta_c_boot_paired else None,
+        "delta_c_boot_ci_hi": float(np.percentile(delta_c_boot_paired, 97.5)) if delta_c_boot_paired else None,
+        "delta_c_boot_distribution_size": len(delta_c_boot_paired),
+        # Stability check
+        "bootstrap_signature_median_jaccard_with_apparent": median_jaccard,
+        "bootstrap_signature_median_apparent_recovery_pct": median_apparent_recovery,
+        "bootstrap_gene_sets_count": len(bootstrap_gene_sets),
     }
 
 
@@ -787,6 +871,24 @@ def main() -> int:
             "c_apparent_combo": boot["c_apparent_combo"],
             "c_corrected_trs": boot["c_corrected_trs"],
             "n_bootstrap_iter_completed": boot["n_iter_completed"],
+            # Paired-optimism estimator (preferred; round-02, failure-mode-04)
+            "delta_c_corrected_paired": boot.get("delta_c_corrected_paired"),
+            "delta_c_paired_ci_lo": boot.get("delta_c_paired_ci_lo"),
+            "delta_c_paired_ci_hi": boot.get("delta_c_paired_ci_hi"),
+            "opt_combo_avg": boot.get("opt_combo_avg"),
+            "opt_ajcc_avg": boot.get("opt_ajcc_avg"),
+            "opt_delta_avg": boot.get("opt_delta_avg"),
+            # Legacy estimator (round-01, retained for traceability)
+            "delta_c_corrected_legacy": boot.get("delta_c_corrected_legacy"),
+            "delta_c_legacy_ci_lo": boot.get("delta_c_legacy_ci_lo"),
+            "delta_c_legacy_ci_hi": boot.get("delta_c_legacy_ci_hi"),
+        },
+        "stability": {
+            "bootstrap_signature_median_jaccard_with_apparent":
+                boot.get("bootstrap_signature_median_jaccard_with_apparent"),
+            "bootstrap_signature_median_apparent_recovery_pct":
+                boot.get("bootstrap_signature_median_apparent_recovery_pct"),
+            "bootstrap_gene_sets_count": boot.get("bootstrap_gene_sets_count"),
         },
         "secondary": {
             "L1_logrank_quartiles_p": l1_p,

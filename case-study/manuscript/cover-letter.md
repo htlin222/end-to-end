@@ -14,6 +14,15 @@ Dear Editors,
 I am submitting the enclosed manuscript for consideration in *JCO
 Clinical Cancer Informatics* as an Original Report.
 
+**Framing up-front.** HCC-TRS is illustrative. The case study
+deliberately bounds its clinical claim: the score is statistically
+supported on TCGA-LIHC but should not be treated as a clinical
+decision-support tool. The Discussion section says so plainly, and
+this cover letter does too. The manuscript is positioned as a
+TRIPOD-aligned, fully reproducible single-cohort development with one
+non-reserved external check, bundled with a Viewpoint manuscript on
+disclosure standards for agentic-AI-assisted research.
+
 ## What the manuscript reports
 
 This case study develops a 50-gene transcriptomic overall-survival risk

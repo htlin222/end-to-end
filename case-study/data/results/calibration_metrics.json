@@ -1,0 +1,290 @@
+{
+  "L12m_combo": {
+    "landmark_months": 12.0,
+    "n_groups": 10,
+    "chi2": 12.782064842638958,
+    "dof": 8,
+    "p": 0.11957131154741574,
+    "groups": [
+      {
+        "group": 0,
+        "n": 35,
+        "pred_survival": 0.5131270132226865,
+        "obs_survival": 0.5178571428571429
+      },
+      {
+        "group": 1,
+        "n": 34,
+        "pred_survival": 0.7205956559646718,
+        "obs_survival": 0.5600175554092607
+      },
+      {
+        "group": 2,
+        "n": 34,
+        "pred_survival": 0.7833247626152285,
+        "obs_survival": 0.7669465020576134
+      },
+      {
+        "group": 3,
+        "n": 34,
+        "pred_survival": 0.8286327523590764,
+        "obs_survival": 0.8413388613611084
+      },
+      {
+        "group": 4,
+        "n": 34,
+        "pred_survival": 0.860657120066842,
+        "obs_survival": 0.9384164222873901
+      },
+      {
+        "group": 5,
+        "n": 34,
+        "pred_survival": 0.8845854466786901,
+        "obs_survival": 0.8178104575163396
+      },
+      {
+        "group": 6,
+        "n": 34,
+        "pred_survival": 0.9002095365800722,
+        "obs_survival": 0.9040178571428574
+      },
+      {
+        "group": 7,
+        "n": 34,
+        "pred_survival": 0.9176180711193582,
+        "obs_survival": 1.0
+      },
+      {
+        "group": 8,
+        "n": 34,
+        "pred_survival": 0.9320480935001252,
+        "obs_survival": 0.9117647058823528
+      },
+      {
+        "group": 9,
+        "n": 35,
+        "pred_survival": 0.9496884334073848,
+        "obs_survival": 1.0
+      }
+    ]
+  },
+  "L12m_ajcc": {
+    "landmark_months": 12.0,
+    "n_groups": 3,
+    "chi2": 0.8055887705712703,
+    "dof": 1,
+    "p": 0.3694276543206295,
+    "groups": [
+      {
+        "group": 0,
+        "n": 88,
+        "pred_survival": 0.7262930421529858,
+        "obs_survival": 0.6922560690943045
+      },
+      {
+        "group": 1,
+        "n": 85,
+        "pred_survival": 0.8222580914269632,
+        "obs_survival": 0.8344111222249606
+      },
+      {
+        "group": 2,
+        "n": 169,
+        "pred_survival": 0.8832932846372079,
+        "obs_survival": 0.8945258262722586
+      }
+    ]
+  },
+  "L36m_combo": {
+    "landmark_months": 36.0,
+    "n_groups": 10,
+    "chi2": 5.893846512368952,
+    "dof": 8,
+    "p": 0.6591214209395383,
+    "groups": [
+      {
+        "group": 0,
+        "n": 35,
+        "pred_survival": 0.2049319532421139,
+        "obs_survival": 0.20138888888888884
+      },
+      {
+        "group": 1,
+        "n": 34,
+        "pred_survival": 0.43220298259630235,
+        "obs_survival": 0.46801467130631075
+      },
+      {
+        "group": 2,
+        "n": 34,
+        "pred_survival": 0.534360504627396,
+        "obs_survival": 0.41390763603109315
+      },
+      {
+        "group": 3,
+        "n": 34,
+        "pred_survival": 0.6171942281966446,
+        "obs_survival": 0.5506001010770618
+      },
+      {
+        "group": 4,
+        "n": 34,
+        "pred_survival": 0.6802413881170706,
+        "obs_survival": 0.6567542142018834
+      },
+      {
+        "group": 5,
+        "n": 34,
+        "pred_survival": 0.7298175543524507,
+        "obs_survival": 0.8178104575163396
+      },
+      {
+        "group": 6,
+        "n": 34,
+        "pred_survival": 0.7633992982775122,
+        "obs_survival": 0.75103021978022
+      },
+      {
+        "group": 7,
+        "n": 34,
+        "pred_survival": 0.8018819633299876,
+        "obs_survival": 0.869931350114417
+      },
+      {
+        "group": 8,
+        "n": 34,
+        "pred_survival": 0.8346672795512065,
+        "obs_survival": 0.875294117647059
+      },
+      {
+        "group": 9,
+        "n": 35,
+        "pred_survival": 0.8758907266074653,
+        "obs_survival": 0.8483109888179846
+      }
+    ]
+  },
+  "L36m_ajcc": {
+    "landmark_months": 36.0,
+    "n_groups": 3,
+    "chi2": 1.4642744818672166,
+    "dof": 1,
+    "p": 0.22625122870564984,
+    "groups": [
+      {
+        "group": 0,
+        "n": 88,
+        "pred_survival": 0.480640608359576,
+        "obs_survival": 0.4282868586030906
+      },
+      {
+        "group": 1,
+        "n": 85,
+        "pred_survival": 0.6377004611466787,
+        "obs_survival": 0.6627120268182247
+      },
+      {
+        "group": 2,
+        "n": 169,
+        "pred_survival": 0.7518019751316608,
+        "obs_survival": 0.7689996779129111
+      }
+    ]
+  },
+  "L60m_combo": {
+    "landmark_months": 60.0,
+    "n_groups": 10,
+    "chi2": 8.546896256539618,
+    "dof": 8,
+    "p": 0.3819470547476731,
+    "groups": [
+      {
+        "group": 0,
+        "n": 35,
+        "pred_survival": 0.07243881539015737,
+        "obs_survival": 0.10069444444444443
+      },
+      {
+        "group": 1,
+        "n": 34,
+        "pred_survival": 0.22959440180378957,
+        "obs_survival": 0.3120097808708738
+      },
+      {
+        "group": 2,
+        "n": 34,
+        "pred_survival": 0.33204939193283284,
+        "obs_survival": 0.31043072702331986
+      },
+      {
+        "group": 3,
+        "n": 34,
+        "pred_survival": 0.4276909513325801,
+        "obs_survival": 0.4129500758077964
+      },
+      {
+        "group": 4,
+        "n": 34,
+        "pred_survival": 0.5074587389040643,
+        "obs_survival": 0.5351330634237567
+      },
+      {
+        "group": 5,
+        "n": 34,
+        "pred_survival": 0.5742783187431694,
+        "obs_survival": 0.7155841503267972
+      },
+      {
+        "group": 6,
+        "n": 34,
+        "pred_survival": 0.6216521807071809,
+        "obs_survival": 0.48280514128728436
+      },
+      {
+        "group": 7,
+        "n": 34,
+        "pred_survival": 0.677873717660175,
+        "obs_survival": 0.608951945080092
+      },
+      {
+        "group": 8,
+        "n": 34,
+        "pred_survival": 0.7274348289289252,
+        "obs_survival": 0.7352470588235294
+      },
+      {
+        "group": 9,
+        "n": 35,
+        "pred_survival": 0.7919818674610829,
+        "obs_survival": 0.7540542122826528
+      }
+    ]
+  },
+  "L60m_ajcc": {
+    "landmark_months": 60.0,
+    "n_groups": 3,
+    "chi2": 1.07821996605201,
+    "dof": 1,
+    "p": 0.299096103246111,
+    "groups": [
+      {
+        "group": 0,
+        "n": 88,
+        "pred_survival": 0.3155341539597613,
+        "obs_survival": 0.2951884810064377
+      },
+      {
+        "group": 1,
+        "n": 85,
+        "pred_survival": 0.49138690267747004,
+        "obs_survival": 0.5405651042281989
+      },
+      {
+        "group": 2,
+        "n": 169,
+        "pred_survival": 0.6372727699552125,
+        "obs_survival": 0.6263628535924016
+      }
+    ]
+  }
+}
