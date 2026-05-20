@@ -80,7 +80,7 @@ The prompt is the protocol: a disclosure standard for clinician-investigators us
 %% -------------------------------------------------------------------------
 \section{Why disclosure needs a new minimum unit}\label{sec:opening}
 
-In February 2026, a multi-institution team published in \textit{Nature} the Co-Scientist multi-agent system\citep{coscientist2026}, demonstrating that an LLM-driven workflow can autonomously formulate hypotheses, design experiments and revise its own outputs against external feedback. The accompanying multi-agent infrastructure paper\citep{coscientist2026b} formalises the architecture. The two papers together mark the moment at which agentic LLM use entered the centre of the biomedical-publishing conversation rather than its edges.
+In May 2026 a Google DeepMind team published in \textit{Nature} the Co-Scientist multi-agent system\citep{coscientist2026}, demonstrating that an LLM-driven workflow can autonomously generate, critique and refine biomedical research hypotheses, with three of its proposed acute-myeloid-leukaemia drug-repurposing candidates validated \textit{in vitro}. Two months earlier, the Sakana AI team's end-to-end automation pipeline\citep{luSakana2026} produced a manuscript that passed first-round workshop peer review at a top-tier machine-learning conference, the first AI-authored paper to do so under blind review. \textit{Nature}'s accompanying editorial called explicitly for institutions, funders and publishers to respond\citep{natureEditorial2026}. The 2026 question is no longer whether autonomous agentic research is feasible; it is what the published unit should look like when one occurs.
 
 Meanwhile, a clinician with no large-lab affiliation, no privileged compute and no co-authors can in 2026 assemble a workflow that performs every Co-Scientist task end-to-end on commodity tooling. The workflow takes a single domain prompt, scans the public literature, picks an under-mined dataset, drafts an analysis pipeline, executes it, drafts a manuscript matched to a target journal, iterates against four reviewer-subagent personas until unanimous acceptance, and stages a tagged release. The present article and its associated repository are the empirical existence proof of that claim.
 
@@ -92,7 +92,7 @@ Three failure modes motivate current policy. Each survives in 2026. None is addr
 
 \textbf{Authorship inflation.} Listing an LLM as a co-author short-circuits the ICMJE accountability requirement\citep{icmje2024}. Current policy correctly prohibits this. The proposal here does not contest it.
 
-\textbf{Scientific hallucination.} Fabricated citations, invented effect sizes and plausible-but-incorrect claims appear when an LLM produces a literature review or a methods section under loose supervision. Lu et al's\citep{sakana2024} Sakana AI Scientist demonstrated that the failure mode is real and reproducible. Current policy responds by prohibiting the activity. This is a category error: prohibiting the activity does not prevent its undeclared occurrence; it incentivises camouflage.
+\textbf{Scientific hallucination.} Fabricated citations, invented effect sizes and plausible-but-incorrect claims appear when an LLM produces a literature review or a methods section under loose supervision. The Sakana group's authors enumerated this failure mode explicitly in their Nature paper's Limitations section\citep{luSakana2026}. Current Lancet policy responds by prohibiting the activity. This is a category error: prohibiting the activity does not prevent its undeclared occurrence; it incentivises camouflage. Disclosure 2.0 makes the activity visible, which is the precondition for catching the hallucinations the current policy fears.
 
 \textbf{Undocumented intervention.} The reader of a 2026 methods section cannot tell which sentences are human-authored, which are LLM-drafted-then-edited, and which are LLM-drafted-and-pasted. Current policy responds by mandating a single-sentence acknowledgement. This is necessary but radically insufficient: it specifies that a tool was used without specifying how, with what prompts, with what tool envelope, against what data, and with what human-vs-AI boundary at each editing pass.
 
@@ -151,6 +151,8 @@ The reading instruction for the reviewer is not to evaluate whether the case stu
 
 \textbf{``The current policy is fine if everyone just complies.''} The policy as written makes the workflow most clinician-investigators are using in 2026 declare itself in violation. The realistic equilibrium under such a policy is either non-compliance or non-use; both outcomes are worse than the proposed update.
 
+\textbf{``AI is your copilot, not the pilot.''} A vigorous and well-implemented school argues that the right response to LLM scientific reasoning is to embed it in a human-supervised pipeline with explicit integrity gates. The Academic Research Skills toolkit\citep{ars2026}, a Claude Code plugin with over 15\,000 GitHub stars by May 2026, operationalises this position with a ten-stage orchestrator, claim-level citation audits, and an opt-in calibration mode that measures its own false-negative and false-positive rates. We do not refute this position; we propose that ``operator-sovereign autonomy'' and ``copilot-supervised'' are two legitimate equilibria with different cost-of-error profiles, and that Disclosure 2.0 is the disclosure layer that both should share. The current Lancet policy serves neither equilibrium well.
+
 \section{Recommendations to The Lancet Digital Health and the wider community}\label{sec:reco}
 
 Three concrete recommendations follow.
@@ -159,7 +161,7 @@ Three concrete recommendations follow.
 
 \textbf{Define a machine-readable manifest format.} The six items lend themselves to a small, schemafied YAML or JSON document committed at the repository root and validated at submission time by Editorial Manager or its successor. A reference schema accompanies this Viewpoint at \texttt{docs/disclosure2-schema.json}.
 
-\textbf{Permit reviewer subagents on the operator's side, subject to the same disclosure rules as on the editor's side.} Editor-side reviewer subagents have been piloted by journal groups in 2025\citep{landiged2025}; operator-side reviewer subagents are the symmetric case. The disclosure manifest captures both.
+\textbf{Permit reviewer subagents on the operator's side, subject to the same disclosure rules.} The proposed manifest captures author-side reviewer subagents in the same machine-readable structure that a future editor-side pilot would use; symmetric disclosure is a necessary condition for any future editor-side reviewer-AI deployment.
 
 \section{Limitations}\label{sec:limits}
 
