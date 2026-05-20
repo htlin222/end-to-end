@@ -1,0 +1,50 @@
+cff-version: 1.2.0
+message: >-
+  If you use this repository, cite the Viewpoint manuscript as the
+  primary reference and the repository as the supporting artefact via
+  its Zenodo DOI.
+title: >-
+  end-to-end — The prompt is the protocol: a disclosure standard for
+  clinician-investigators using agentic large language models
+abstract: >-
+  Submission package for a Viewpoint to The Lancet Digital Health and
+  its substrate. Contains the manuscript LaTeX sources, the
+  orchestration prompts that produced the manuscript, the supporting
+  case-study analysis (HCC overall-survival stratification beyond AJCC
+  pathologic stage on TCGA-LIHC with held-out GEO external validation),
+  the verbatim reviewer-subagent transcripts, the Layer-2 audit log,
+  and the Layer-3 preregistration.
+authors:
+  - family-names: Lin
+    given-names: Hsieh-Ting
+    orcid: 'https://orcid.org/0009-0002-3974-4528'
+    affiliation: >-
+      Department of Hematology and Medical Oncology, Koo Foundation Sun
+      Yat-Sen Cancer Center, Taipei, Taiwan
+    email: mail@hsiehting.com
+type: software
+license: MIT
+keywords:
+  - generative AI
+  - large language models
+  - editorial policy
+  - disclosure standards
+  - clinician-investigator
+  - reproducibility
+  - hepatocellular carcinoma
+  - preregistration
+  - claude code
+preferred-citation:
+  type: article
+  title: >-
+    The prompt is the protocol: a disclosure standard for clinician-
+    investigators using agentic large language models
+  authors:
+    - family-names: Lin
+      given-names: Hsieh-Ting
+      orcid: 'https://orcid.org/0009-0002-3974-4528'
+  journal: The Lancet Digital Health
+  year: 2026
+  notes: >-
+    Submitted; DOI and volume/issue assigned upon acceptance. Update
+    this entry at acceptance.
