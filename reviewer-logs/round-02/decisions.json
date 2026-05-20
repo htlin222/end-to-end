@@ -1,0 +1,43 @@
+[
+  {
+    "reviewer": "methods",
+    "round": 2,
+    "verdict": "accept",
+    "comments": [
+      {"id": 1, "severity": "medium", "summary": "Signature instability (median Jaccard 0.20) deserves a Limitations sentence: gene identity is fold-dependent; the score's utility reflects a transcriptomic-program signal rather than a specific 50-gene panel."},
+      {"id": 2, "severity": "low",    "summary": "State that the time-dependent AUC implementation is a landmark-based heuristic, not Uno's IPCW."}
+    ],
+    "round1_comments_status": "all resolved or deferred to tag boundary (#9)"
+  },
+  {
+    "reviewer": "clinical",
+    "round": 2,
+    "verdict": "accept",
+    "comments": [
+      {"id": 1, "severity": "medium", "summary": "Discussion should note that DCA's clinical-utility implication is narrow: combo net benefit exceeds treat-all only at decision thresholds > 0.20; the score is not appropriate for transplant-eligibility decisions."},
+      {"id": 2, "severity": "low",    "summary": "Translate IDI = 0.18 into plain clinical language: 'predicted 5-y mortality of events exceeds non-events by an additional 18 percentage points under AJCC + TRS vs AJCC alone'."}
+    ],
+    "round1_comments_status": "all 9 resolved"
+  },
+  {
+    "reviewer": "biostat",
+    "round": 2,
+    "verdict": "accept",
+    "comments": [
+      {"id": 1, "severity": "low", "summary": "Optional: add integrated Brier score at 5 y as a complementary TRIPOD-aligned metric (would require scikit-survival)."},
+      {"id": 2, "severity": "low", "summary": "State that Uno C tau=60m is the 5-y landmark and that the C is robust to tau in {36, 60, 84}."}
+    ],
+    "round1_comments_status": "all 10 resolved"
+  },
+  {
+    "reviewer": "editor",
+    "round": 2,
+    "verdict": "accept",
+    "comments": [
+      {"id": 1, "severity": "low", "summary": "Cover letter should explicitly cite the reproducibility-check script (99_reexec_check.py) and the tagged release."},
+      {"id": 2, "severity": "low", "summary": "Include a filled-out TRIPOD checklist as supplementary material in the submission package."},
+      {"id": 3, "severity": "low", "summary": "Verify AMA-style author-initial citation rendering on the final PDF."}
+    ],
+    "round1_comments_status": "9 resolved; #5 (tag placeholder) deferred to tagging time"
+  }
+]

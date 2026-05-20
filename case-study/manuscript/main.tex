@@ -174,25 +174,15 @@ in the Data and Code Availability section).
 RNA-seq STAR-counts and the harmonised clinical attribute table for
 TCGA-LIHC primary HCC tumour samples (GDC sample type code 01) were
 downloaded from the NCI Genomic Data Commons public API
-\citep{grossman2016toward} on 2026-05-21. Where TCGA recorded multiple
-\texttt{diagnoses} rows per case (typically primary plus recurrence),
-the diagnosis whose \texttt{ajcc\_pathologic\_stage} field was non-null
-was retained preferentially. Where multiple primary-tumour aliquots
-existed per case, the lexicographic-minimum sample submitter id was
-retained as the single representative aliquot for that case. After
-filtering to primary tumour samples and removing patients with
+\citep{grossman2016toward} on 2026-05-21. Multi-row diagnoses per
+case were resolved by preferring the stage-bearing row; multi-aliquot
+cases by retaining the lexicographic-minimum sample submitter id.
+After filtering to primary tumour samples and removing patients with
 missing or invalid OS time, the analytic set had $n =~366$ patients
 with OS information. AJCC pathologic stage was recoded to a 1-4
-integer covariate.
-
-\textbf{Aetiology data.} The GDC \texttt{/cases} endpoint exposes
-\texttt{exposures.alcohol\_history} and
-\texttt{exposures.cigarettes\_per\_day} but does not expose viral
-aetiology (HBV / HCV) at a granularity usable for analysis; the
-viral-aetiology supplementary fields are nested under the BCR XML
-clinical supplement and were not pulled. Aetiology subgroup analyses
-are therefore not reported in this case study and are explicitly
-acknowledged in Limitations.
+integer covariate. Viral-aetiology fields (HBV, HCV) are not exposed
+at usable granularity by the GDC \texttt{/cases} endpoint; aetiology
+subgroup analyses are accordingly not reported.
 
 \textbf{Non-reserved external cohort: GSE10143.}
 After a documented selection step that auditioned five originally
@@ -224,29 +214,20 @@ cohort normalisation was applied.
 \subsection{Feature selection (locked, prespecified)}
 
 In the development cohort, each gene was tested by a vectorised
-univariable Cox \emph{score test} against OS. The score test is
-asymptotically equivalent to the Cox-MLE Wald test under H0
-(Cox 1972; Klein \& Moeschberger 2003); we adopted the score-test
-form because it admits a single vectorised pass across genes,
-reducing the bootstrap-loop wall clock by roughly two orders of
-magnitude relative to per-gene MLE fits. Ties at event days were
-handled with Breslow's convention (the cumulative-sum-over-risk-set
-form of the score statistic); a spot-check on a 50-gene random sample
-confirmed Breslow and Efron tie handling agreed to the third decimal
-on the score-test $Z$.
+univariable Cox \emph{score test} against OS\citep{cox1972regression}.
+The score test is asymptotically equivalent to the Cox-MLE Wald test
+under H0 and admits a single vectorised pass across genes; ties at
+event days are handled with Breslow's convention.
 
 Genes with Benjamini-Hochberg-corrected $p<0.05$ were retained; if
 more than 50 survived, the top 50 by $|Z|$ of the score statistic
-were kept. The 50-gene cap is a documented amendment from prereg-v1
-(200) to prereg-v3 (50) based on a computational-tractability failure
-mode (\texttt{case-study/docs/failure-mode-02-bootstrap-runtime.md});
-the cap was committed before the bootstrap re-ran. Genes were
-standardised to zero mean and unit SD per gene; the per-gene
-standardisation parameters $\mu_g, \sigma_g$ are computed
-\emph{on the training-fold subset only}, and the same $\mu_g, \sigma_g$
-are then applied to standardise the held-out (original) sample before
-applying the bootstrap-fitted Cox coefficients. This ensures no
-held-out-sample-derived parameter enters the bootstrap fit.
+were kept. The 50-gene cap was amended from prereg-v1 (200) to
+prereg-v3 (50) on computational-tractability grounds
+(\texttt{case-study/docs/failure-mode-02-bootstrap-runtime.md}); the
+cap was committed before the bootstrap re-ran. Genes were standardised
+to zero mean and unit SD per gene; the per-gene $\mu_g, \sigma_g$ are
+computed \emph{on the training-fold subset only} and then applied to
+standardise the held-out sample before scoring.
 
 \subsection{Model (locked, prespecified)}
 
@@ -269,20 +250,15 @@ a sensitivity check at 5-year follow-up (see Results §Robustness).
 
 We applied the Harrell-Lee-Mark optimism
 correction\citep{harrell1996multivariable}: 1000 case-bootstrap
-iterations, with the \emph{full pipeline} (univariable screen + L1-
-penalised Cox fit) refit on each bootstrap sample. The bootstrap CI
-is computed from the \emph{paired-optimism} estimator: per iteration
-we fit both an AJCC-alone Cox and an AJCC + \HCCRTS Cox on the
-bootstrap sample, evaluate each on both the bootstrap sample and the
-original sample, and record per-iteration optimism for each model.
-The bootstrap distribution of the corrected $\Delta$C is
+iterations with the \emph{full pipeline} (screen + L1-penalised Cox)
+refit per iteration. The \emph{paired-optimism} estimator refits both
+an AJCC-alone Cox and an AJCC + \HCCRTS Cox per iteration; the
+bootstrap distribution of the corrected $\Delta$C is
 $\Delta C_{\text{apparent}} - (\text{opt}_{\text{combo}}^{(b)}
-- \text{opt}_{\text{AJCC}}^{(b)})$; the reported 95\% CI is the
-2.5--97.5 percentile of that distribution. A round-1 reviewer comment
-(see \texttt{case-study/docs/failure-mode-04-bootstrap-estimator.md})
-flagged that the round-1 estimator held the AJCC-alone term as a
-fixed apparent value, which underestimated the CI width; the
-paired-optimism estimator above corrects this.
+- \text{opt}_{\text{AJCC}}^{(b)})$ and the 95\% CI is the 2.5--97.5
+percentile. The round-1 estimator held the AJCC-alone term fixed
+(\texttt{case-study/docs/failure-mode-04-bootstrap-estimator.md});
+the paired-optimism estimator is the headline.
 
 \textbf{Sample-size note.} For a Pencina-D'Agostino added-variable
 $\Delta$C-index test at $\alpha = 0.05$, $n = 366$ with $130$ OS events
