@@ -4,12 +4,12 @@ Regenerated from `git log` by `scripts/regenerate_ledger.py`. Re-run after every
 
 ## Summary
 
-- Total commits: **23**
-- AI-co-authored commits: **23**
+- Total commits: **29**
+- AI-co-authored commits: **29**
 - Operator-only commits: **0**
 - Tags: (none yet)
 - First commit: 2026-05-20T16:17:31+00:00
-- Latest commit: 2026-05-20T17:51:05+00:00
+- Latest commit: 2026-05-20T18:00:23+00:00
 
 ## Chronological narrative
 
@@ -38,6 +38,12 @@ Regenerated from `git log` by `scripts/regenerate_ledger.py`. Re-run after every
 | 21 | 2026-05-20 17:37 | `209e75d` | Layer 1 | AI-co-authored | manuscript: replace Figure 1 placeholder with deterministic git-log-derived artefact ledger |
 | 22 | 2026-05-20 17:39 | `3c43693` | Reviewer | AI-co-authored | docs+scripts: ship Disclosure 2.0 schema and ledger generator (resolves reviewer-flagged hallucinated artefacts) |
 | 23 | 2026-05-20 17:51 | `da4ddce` | Viewpoint | AI-co-authored | manuscript: v0.4 — full revision addressing 44 Round 1 reviewer comments |
+| 24 | 2026-05-20 17:51 | `0810331` | Viewpoint | AI-co-authored | chore: regenerate Figure 1 ledger and docs/ledger.md after v0.4 revision |
+| 25 | 2026-05-20 17:52 | `5fde223` | Reviewer | AI-co-authored | reviewer-logs: add Round 1 response-to-reviewers cross-reference table |
+| 26 | 2026-05-20 17:54 | `79fe4ca` | Docs | AI-co-authored | docs: add procedural-vs-technical enforcement subsection and overwritable-artefact carve-out |
+| 27 | 2026-05-20 17:57 | `69c479e` | Reviewer | AI-co-authored | scripts: add release_check.sh preflight for tagged-release readiness |
+| 28 | 2026-05-20 17:59 | `c7b6586` | Viewpoint | AI-co-authored | v0.4.1: address R2 minors (word-count consistency, Layer~N hyphenation, residual failure modes in Limitations, schema toolEnvelope coupling) |
+| 29 | 2026-05-20 18:00 | `49d4766` | Reviewer | AI-co-authored | reviewer-logs: Round 2 response-to-reviewers + bring all R2 reviewer outputs into repo |
 
 ## Tags
 
