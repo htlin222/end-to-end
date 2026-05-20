@@ -96,6 +96,46 @@ These rules are binding for all contributors (human and AI).
    `docs/prereg.md` are reported as exploratory and cannot be promoted to
    the headline finding.
 
+### Procedural vs technical enforcement (Round 1 methodology comment 3)
+
+A reviewer rightly observed that the four rules above are mostly
+behavioural rather than mechanically enforceable. The honest map is:
+
+| Rule | Enforcement |
+|------|-------------|
+| 1. No claim screening | Procedural; operator-trust dependent. The published artefact ledger lets a third party check whether late commits add or remove claims, but a single-operator pipeline cannot self-prove it never screened. |
+| 2. No history rewriting | Mechanically enforceable via GitHub branch protection on `main` (forbid force-push, forbid history rewrites, require linear history). This is the one rule for which a technical guarantee is feasible; the operator commits to enabling branch protection at the `viewpoint-v1.0.0` tag and to documenting the configuration in `docs/branch-protection.md`. |
+| 3. Failure preservation | Procedural. The repository preserves what is committed; nothing prevents an operator from not committing a particular failed run. The mitigation is that the operator-supplied orchestration prompts forbid uncommitted state at session end (Layer 1 kickoff prompt explicitly requires "commit after every substantive change"). |
+| 4. No post-hoc instrumentation | Procedural; the preregistration commit's SHA is the immutable anchor. Adding outcomes after Layer 3 runs is detectable by diffing the prereg's commit content; promoting exploratory results to primary is detectable by comparing the manuscript's reported outcomes to the preregistration. |
+
+The Viewpoint Section~5 ``A single operator cannot audit himself''
+counter-argument names the seal as testimonial, not cryptographic, and
+proposes a session-launch attestation
+(`reviewer-logs/audit/session-launch.json`) as the minimum operational
+evidence. Both the design doc and the Viewpoint acknowledge this is
+short of cryptographic enforcement and would benefit from third-party
+re-audit through the public release.
+
+### Intentionally-overwritable artefacts (Round 1 methodology comment 11)
+
+A small number of pipeline-side artefacts are designed to be
+overwritten on the next pipeline run rather than preserved:
+
+- `case-study/data/results/cohort-selection.json` — recomputed
+  deterministically from the analysis scripts.
+- `case-study/data/results/*.tsv` and `*.json` cache files produced
+  by `case-study/analysis/01_prepare_data.py` and downstream scripts.
+
+These are listed in `case-study/data/results/MANIFEST.md` (when Layer 1
+ships it). The carve-out is operationally necessary because the
+analysis scripts are idempotent and re-running them recomputes
+intermediate state; preserving every intermediate would inflate the
+release bundle without adding audit value. The honesty contract's
+``failure preservation'' rule applies to reviewer transcripts, audit
+findings, and operator-vs-AI commit boundaries, not to deterministic
+intermediates that the audit re-execution layer recomputes on a clean
+clone.
+
 ## Repository as artefact ledger
 
 `docs/ledger.md` is the chronological narrative that backs Figure 1 of the
