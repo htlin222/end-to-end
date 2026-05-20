@@ -121,9 +121,56 @@
       "ci_hi": 0.14096862776831104,
       "n_bootstrap_iters": 1000,
       "reject_h0": false
+    },
+    "S3_calibration_1y": {
+      "landmark_months": 12.0,
+      "n": 284,
+      "slope": 1.0932379734481423,
+      "intercept": -1.9684423059181875
+    },
+    "S4_calibration_3y": {
+      "landmark_months": 36.0,
+      "n": 249,
+      "slope": 1.6084453362733546,
+      "intercept": -0.7907102277168473
+    },
+    "S5_calibration_5y": {
+      "landmark_months": 60.0,
+      "n": 150,
+      "slope": 1.9458324015920805,
+      "intercept": 0.9416542653974393
+    },
+    "S6_decision_curve_net_benefit_5y": {
+      "n": 333,
+      "net_benefit": {
+        "thr_0.1": {
+          "model": 0.23923923923923923,
+          "treat_all": 0.23923923923923923,
+          "treat_none": 0.0,
+          "model_minus_treat_all": 0.0
+        },
+        "thr_0.2": {
+          "model": 0.14414414414414414,
+          "treat_all": 0.14414414414414414,
+          "treat_none": 0.0,
+          "model_minus_treat_all": 0.0
+        },
+        "thr_0.3": {
+          "model": 0.09652509652509653,
+          "treat_all": 0.021879021879021854,
+          "treat_none": 0.0,
+          "model_minus_treat_all": 0.07464607464607467
+        }
+      }
+    },
+    "S7_idi_5y": {
+      "n": 333,
+      "idi": -0.00014492779399988276,
+      "events": 105,
+      "nonevents": 228
     }
   },
   "layer1_risk_score_source": "case-study/data/results/tcga_model_coefs.tsv",
   "layer1_release_tag": "case-study-v1.0.0",
-  "completed_utc": "2026-05-20T19:23:34Z"
+  "completed_utc": "2026-05-20T19:58:37Z"
 }

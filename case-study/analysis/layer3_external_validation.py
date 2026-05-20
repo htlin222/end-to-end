@@ -361,6 +361,82 @@ def _delta_c(df: pd.DataFrame, score_col: str, time_col: str = "os_time", event_
     return {"n": int(len(d)), "c_baseline": c_b, "c_combined": c_c, "delta_c": c_c - c_b}
 
 
+def _calibration_slope(df: pd.DataFrame, score_col: str, landmark_months: float) -> dict:
+    """Calibration slope at a landmark via logistic regression of observed status on predicted hazard."""
+    from sklearn.linear_model import LogisticRegression
+    d = df.dropna(subset=["os_time", "os_event", "ajcc_stage_num", score_col]).copy()
+    if len(d) < 20:
+        return {"n": int(len(d)), "slope": None, "intercept": None}
+    cph = CoxPHFitter(penalizer=0.01).fit(d[["os_time", "os_event", "ajcc_stage_num", score_col]], "os_time", "os_event")
+    risk = cph.predict_partial_hazard(d[["ajcc_stage_num", score_col]]).values
+    # Discrete observed event-by-landmark indicator (1 if event before landmark, 0 if censored beyond)
+    d["obs"] = ((d["os_time"] <= landmark_months) & (d["os_event"] == 1)).astype(int)
+    # Censored before landmark and never had event: exclude from calibration
+    keep = ~((d["os_time"] < landmark_months) & (d["os_event"] == 0))
+    if keep.sum() < 20:
+        return {"n": int(keep.sum()), "slope": None, "intercept": None}
+    X = np.log(risk[keep.values].reshape(-1, 1))  # linear predictor
+    y = d.loc[keep, "obs"].values
+    try:
+        lr = LogisticRegression(penalty=None, solver="lbfgs", max_iter=2000).fit(X, y)
+        return {"n": int(keep.sum()), "slope": float(lr.coef_[0, 0]), "intercept": float(lr.intercept_[0])}
+    except Exception as exc:
+        return {"n": int(keep.sum()), "slope": None, "intercept": None, "error": str(exc)}
+
+
+def _decision_curve_net_benefit(df: pd.DataFrame, score_col: str, landmark_months: float = 60.0,
+                                 thresholds: list[float] | None = None) -> dict:
+    """Vickers-Elkin decision-curve net benefit at landmark, for model vs treat-all/none."""
+    if thresholds is None:
+        thresholds = [0.10, 0.20, 0.30]
+    d = df.dropna(subset=["os_time", "os_event", "ajcc_stage_num", score_col]).copy()
+    if len(d) < 30:
+        return {"n": int(len(d)), "net_benefit": {}}
+    cph = CoxPHFitter(penalizer=0.01).fit(d[["os_time", "os_event", "ajcc_stage_num", score_col]], "os_time", "os_event")
+    # 5-year survival probability from Cox; risk = 1 - S(60)
+    surv = cph.predict_survival_function(d[["ajcc_stage_num", score_col]], times=[landmark_months])
+    # surv is a DataFrame with index = times, columns = sample index
+    p_event = 1 - surv.values.flatten()
+    # Observed event status at landmark
+    d["obs"] = ((d["os_time"] <= landmark_months) & (d["os_event"] == 1)).astype(int)
+    n = len(d)
+    nb = {}
+    for thr in thresholds:
+        pred_pos = (p_event >= thr)
+        tp = int((pred_pos & (d["obs"].values == 1)).sum())
+        fp = int((pred_pos & (d["obs"].values == 0)).sum())
+        net_benefit_model = (tp / n) - (fp / n) * (thr / (1 - thr))
+        prev = float(d["obs"].mean())
+        net_benefit_all = prev - (1 - prev) * (thr / (1 - thr))
+        nb[f"thr_{thr}"] = {
+            "model": float(net_benefit_model),
+            "treat_all": float(net_benefit_all),
+            "treat_none": 0.0,
+            "model_minus_treat_all": float(net_benefit_model - net_benefit_all),
+        }
+    return {"n": int(n), "net_benefit": nb}
+
+
+def _idi(df: pd.DataFrame, score_col: str, landmark_months: float = 60.0) -> dict:
+    """Pencina IDI of AJCC + score vs AJCC alone at landmark."""
+    d = df.dropna(subset=["os_time", "os_event", "ajcc_stage_num", score_col]).copy()
+    if len(d) < 20:
+        return {"n": int(len(d)), "idi": None}
+    cph_b = CoxPHFitter(penalizer=0.01).fit(d[["os_time", "os_event", "ajcc_stage_num"]], "os_time", "os_event")
+    cph_c = CoxPHFitter(penalizer=0.01).fit(d[["os_time", "os_event", "ajcc_stage_num", score_col]], "os_time", "os_event")
+    surv_b = cph_b.predict_survival_function(d[["ajcc_stage_num"]], times=[landmark_months]).values.flatten()
+    surv_c = cph_c.predict_survival_function(d[["ajcc_stage_num", score_col]], times=[landmark_months]).values.flatten()
+    p_b = 1 - surv_b
+    p_c = 1 - surv_c
+    obs = ((d["os_time"] <= landmark_months) & (d["os_event"] == 1)).astype(int).values
+    events = obs == 1
+    nonevents = obs == 0
+    if events.sum() < 5 or nonevents.sum() < 5:
+        return {"n": int(len(d)), "idi": None}
+    idi = (p_c[events].mean() - p_b[events].mean()) - (p_c[nonevents].mean() - p_b[nonevents].mean())
+    return {"n": int(len(d)), "idi": float(idi), "events": int(events.sum()), "nonevents": int(nonevents.sum())}
+
+
 def _bootstrap_delta_c(df: pd.DataFrame, score_col: str,
                         time_col: str = "os_time", event_col: str = "os_event",
                         n_boot: int = N_BOOTSTRAP, seed: int = SEED) -> dict:
@@ -540,13 +616,37 @@ def main() -> None:
     primary_decision = "positive" if primary['reject_h0'] else "null"
 
     # Cohort-specific secondaries
-    print("\n=== Cohort-specific delta_c ===")
-    secondaries = {}
+    print("\n=== Cohort-specific delta_c (S1/S2) ===")
+    secondaries: dict = {}
     for df_c in cohort_dfs:
         cname = df_c["cohort"].iloc[0]
         sec = _bootstrap_delta_c(df_c, "score")
         secondaries[f"S_{cname}_delta_c"] = sec
         print(f"  {cname}: delta_c = {sec['point']['delta_c']} CI=[{sec['ci_lo']:.4f}, {sec['ci_hi']:.4f}] n={sec['point']['n']}")
+
+    # Preregistered secondaries S3-S7 on the pooled cohort
+    print("\n=== Calibration slope at 1/3/5 y (S3/S4/S5) ===")
+    for landmark, sid in [(12.0, "S3_calibration_1y"), (36.0, "S4_calibration_3y"), (60.0, "S5_calibration_5y")]:
+        cal = _calibration_slope(pooled, "score", landmark)
+        secondaries[sid] = {"landmark_months": landmark, **cal}
+        slope = cal.get("slope")
+        slope_str = f"{slope:.3f}" if isinstance(slope, float) else "n/a"
+        print(f"  {sid}: slope = {slope_str}  n_used = {cal.get('n')}")
+
+    print("\n=== Decision-curve net benefit (S6) at 5-year thresholds {0.1, 0.2, 0.3} ===")
+    dca = _decision_curve_net_benefit(pooled, "score", landmark_months=60.0)
+    secondaries["S6_decision_curve_net_benefit_5y"] = dca
+    for thr_key, val in dca.get("net_benefit", {}).items():
+        print(f"  {thr_key}: model={val['model']:.4f}  treat_all={val['treat_all']:.4f}  delta={val['model_minus_treat_all']:.4f}")
+
+    print("\n=== Integrated Discrimination Improvement (S7) at 5y ===")
+    idi = _idi(pooled, "score", landmark_months=60.0)
+    secondaries["S7_idi_5y"] = idi
+    idi_val = idi.get("idi")
+    if isinstance(idi_val, float):
+        print(f"  IDI = {idi_val:.4f}  events={idi.get('events')}  nonevents={idi.get('nonevents')}")
+    else:
+        print(f"  IDI not computable (n={idi.get('n')})")
 
     # Output JSON
     payload = {
