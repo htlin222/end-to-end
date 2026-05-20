@@ -124,7 +124,7 @@ Figure~\ref{fig:policygap} maps each of twelve common activities onto the curren
 
 \section{Domain-portability case study: HCC OS stratification}\label{sec:case}
 
-To establish that the workflow is not a methodological self-portrait, the supporting case study runs the pipeline on a domain outside the operator's clinical specialty. The operator is a board-certified medical oncologist whose published work is in hematologic malignancies\citep{linehs2024,lintom2026}. The case study is on overall-survival stratification of hepatocellular carcinoma using TCGA-LIHC\citep{tcgalihc2017} and external validation on the GEO cohorts \texttt{GSE14520}\citep{wang2010} and \texttt{GSE76427}\citep{grinchuk2018}.
+To establish that the workflow is not a methodological self-portrait, the supporting case study runs the pipeline on a domain outside the operator's clinical specialty. The operator is a board-certified medical oncologist whose published work is in hematologic malignancies\citep{linehs2024,lintom2026}. The case study is on overall-survival stratification of hepatocellular carcinoma using TCGA-LIHC\citep{tcgalihc2017} and external validation on the GEO cohorts \texttt{GSE14520}\citep{roessler2010} and \texttt{GSE76427}\citep{grinchuk2018}.
 
 The pipeline received exactly one domain prompt (\textit{``Use TCGA-LIHC plus public GEO cohorts to refine OS stratification of HCC beyond AJCC pathologic stage, in a fully autonomous Claude Code session''}) and produced: an analysis plan; a risk-score formula; a draft manuscript targeting a clinical-genomics journal of its own choice; four reviewer-subagent rounds (methods, clinical, biostatistics, target-journal editor) until unanimous acceptance; a tagged \texttt{case-study-v1.0.0} release.
 
