@@ -1,0 +1,47 @@
+{
+  "round": 2,
+  "manuscript_version_commit": "5fde2234b24b5c4e483bf5ba1ff72310f03e8694",
+  "reviewers": [
+    {
+      "reviewer": "policy",
+      "verdict": "minor-revision",
+      "comments": [
+        {"id": 1, "severity": "low", "summary": "Word-count inconsistency: main.tex declares 2,310 body words; cover-letter.md declares 2,281. Re-run texcount once and propagate a single number to both files before submission.", "round1_id": null},
+        {"id": 2, "severity": "low", "summary": "references.bib retains verification-pending notes for lintom2026 and linehs2024; operator-step at submission release.", "round1_id": 8},
+        {"id": 3, "severity": "low", "summary": "JOURNAL.md Generative-AI disclosure section now embeds an interpretive sentence about bilateral lifting; ensure this working-interpretation prose does not bleed into Editorial Manager submission metadata.", "round1_id": null}
+      ]
+    },
+    {
+      "reviewer": "clinician",
+      "round": 2,
+      "verdict": "minor-revision",
+      "date": "2026-05-21",
+      "round1_comments_closed": [1, 2, 4, 5, 6, 7, 8],
+      "round1_comments_closed_with_condition": [3],
+      "round1_comments_open": [],
+      "new_comments": [
+        {"id": "N1", "severity": "low", "summary": "Hyphenation/tilde harmonisation across manuscript, cover letter and disclosure documents (Layer~1 vs Layer 1; AI-vs-operator). Editorial copy-edit pass before submission."},
+        {"id": "N2", "severity": "low", "summary": "Section 4 paragraph 2 mentions 'a clinical-genomics journal of its own choice' without naming the journal the Layer-1 pipeline selected. Replace with the actual journal name plus a citation to the case-study manuscript or its preprint."},
+        {"id": "N3", "severity": "low", "summary": "docs/ai-usage-disclosure.md correctly lists an operator-in-the-loop gate at commit acceptance and tag push; Section 4 implies the only human step is Layer 3. Add one clause acknowledging the operator-gated release tag so the manuscript matches the disclosure document."}
+      ],
+      "acceptance_conditions_for_round3": [
+        "At release tag, the Layer-3 conditional sentence at manuscript/main.tex line 144 must be collapsed to the actual branch (positive or null) with the real Delta C value and bootstrap CI substituted for the placeholders hat-delta, L, U. This is the C3 close-out gate.",
+        "N1, N2, N3 addressed in a final copy-edit pass."
+      ],
+      "external_check": {
+        "url": "https://lin.hsiehting.com/cv/",
+        "retrieved": "2026-05-21",
+        "findings": "Hematology & Medical Oncology Fellow at Koo Foundation Sun Yat-Sen Cancer Center since 2023-08. Board-certified Internal Medicine (TSIM) and Medical Oncology (Taiwan Oncology Society). Four-paper record: HFNO in cancer patients, G-CSF timing in CIN, HSCT in T-cell lymphoma, theory-of-mind in LLM poker agents. Manuscript wording 'haematology and medical oncology fellow whose published clinical work is in hematologic malignancies and supportive care' is calibrated to the CV."
+      },
+      "files_inspected": [
+        "manuscript/main.tex",
+        "manuscript/cover-letter.md",
+        "docs/ai-usage-disclosure.md",
+        "docs/prereg.md",
+        "reviewer-logs/viewpoint-round-01/clinician.md",
+        "reviewer-logs/viewpoint-round-01/response-to-reviewers.md",
+        "reviewer-logs/viewpoint-round-01/decisions.json"
+      ]
+    }
+  ]
+}
