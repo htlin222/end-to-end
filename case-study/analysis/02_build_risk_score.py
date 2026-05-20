@@ -317,6 +317,8 @@ def _bootstrap_optimism(
     c_boot_ajcc = []
     c_boot_trs = []
     for b in range(n_iter):
+        if (b + 1) % 50 == 0:
+            print(f"  bootstrap iter {b+1}/{n_iter}", flush=True)
         idx = rng.integers(0, n, size=n)
         boot_cases = [cases[i] for i in idx]
         # Refit feature selection on bootstrap sample
@@ -464,7 +466,9 @@ def _permutation_null_delta_c(
     stage = clin["stage_num"].values.astype(float)
     mask_stage = ~np.isnan(stage)
     null_deltas = []
-    for _ in range(n_iter):
+    for b in range(n_iter):
+        if (b + 1) % 100 == 0:
+            print(f"  permutation iter {b+1}/{n_iter}", flush=True)
         perm = rng.permutation(n)
         t_p = t[perm]
         e_p = e[perm]
