@@ -1,0 +1,182 @@
+{
+  "round": 1,
+  "manuscript_version_commit": "c694f073ba1d802541718b8449cad02698d9b4cd",
+  "reviewers": [
+    {
+      "reviewer": "clinician",
+      "round": 1,
+      "verdict": "major-revision",
+      "comments": [
+        {
+          "id": 1,
+          "severity": "high",
+          "summary": "HCC case study framed as deliberate domain-portability evidence reads as opportunistic; operator is a haematology-oncology fellow per CV, not the 'board-certified medical oncologist whose published work is in hematologic malignancies' the manuscript implies. Rewrite Section 4 para 1 and Section 1 para 3 to own the cross-specialty choice with the actual mechanism (TCGA-LIHC MIT-redistributable; cross-domain mismatch is the sharper test)."
+        },
+        {
+          "id": 2,
+          "severity": "high",
+          "summary": "Disclosure 2.0 six-item manifest is calibrated for an operator already on git+Zenodo+sealed-subagent infrastructure; the named target population (clinician-investigators outside big-tech labs) has different baseline tooling. Add an equity-of-implementation paragraph in Section 5 and a tiered minimum-viable manifest (prompts + model id + commit hash + tagged release) in Section 6."
+        },
+        {
+          "id": 3,
+          "severity": "high",
+          "summary": "Negative-result commitment is rhetorical until verified. Line 140 still carries the '<<HEADLINE:layer3_primary>>' placeholder and the surrounding prose presupposes a positive result. Do not submit until Layer 3 has executed, the headline sentence carries the real Delta C-index and CI, and Section 4 para 3-4, Section 7 and Section 8 have been rewritten conditional on the actual sign."
+        },
+        {
+          "id": 4,
+          "severity": "medium",
+          "summary": "Risk-stratification case study without a stated clinical decision. Section 4 para 5 should explicitly state the case study is illustrative of the workflow and is not intended to support any HCC clinical decision (surveillance interval, adjuvant therapy, transplant eligibility). Reinforce in Section 7."
+        },
+        {
+          "id": 5,
+          "severity": "medium",
+          "summary": "Tone calibration: local swings into techno-manifesto register that misfit Lancet DH editorial audience. Specific lines: set-notation in Section 1, 'operator-sovereign autonomy' in Section 5, breathless Sakana framing in Section 1, and the 'whatever the editorial decision, the artefact stands' closer in Section 8. Line-edit toward digital-health editorial register."
+        },
+        {
+          "id": 6,
+          "severity": "medium",
+          "summary": "Workflow description in Section 1 para 2 and Section 4 para 2 elides operator-initiated restarts and conflates domain vs orchestration prompts. Clarify the 'one domain prompt' wording and acknowledge that realistic workflows include restarts (the repo's own failure-mode-01 commit is evidence)."
+        },
+        {
+          "id": 7,
+          "severity": "low",
+          "summary": "Single LLM-related prior publication (theory-of-mind in poker agents, arXiv 2026) is thin grounding; not overclaimed in the manuscript, but a brief mention in the cover letter under 'Generative-AI use' would strengthen the bona fide claim."
+        },
+        {
+          "id": 8,
+          "severity": "low",
+          "summary": "'No AI-generated figures' commitment should be made trivially checkable by naming the figure-generation script paths (e.g., figures/fig1_ledger.py, figures/fig2_policy_gap.py) directly in the Acknowledgements paragraph."
+        }
+      ]
+    },
+    {
+      "reviewer": "policy",
+      "round": 1,
+      "verdict": "major-revision",
+      "comments": [
+        {
+          "id": 1,
+          "severity": "blocker",
+          "summary": "Policy-text mis-quotation in three load-bearing places: (1a) Section 1 paraphrases Lancet permitted uses as 'language editing, grammar repair and prose polishing', but the live policy wording is the narrower 'readability and language improvements only'; (1b) the prohibited-uses sentence ('write literature reviews ... create new content') is paraphrased loosely as 'producing literature reviews ... new scientific content' and the separate AI-images prohibition is collapsed into the same bullet; (1c) JOURNAL.md claims disclosure must appear in two places (Methods + Acknowledgements) but the live policy is a single-location 'Disclosure goes in the acknowledgments' rule. Quote the policy verbatim with a retrieval-date footnote; separate the image-generation prohibition; reconcile the AMEE Guide No.192 richer-disclosure characterisation against the live page on submission day."
+        },
+        {
+          "id": 2,
+          "severity": "high",
+          "summary": "Section 6 symmetry argument omits the Lancet group's current prohibition on reviewer use of generative AI ('reviewers should refrain from using generative AI or AI-assisted technologies to assist in the scientific review of papers'). The symmetry the manuscript proposes therefore today means both sides prohibited, not editor-side-permitted vs author-side-prohibited. Reframe Section 6 to acknowledge the actual two-sided prohibition and recast Disclosure 2.0 as 'lift the author-side prohibition, then re-evaluate the editor-side prohibition under the same disclosure regime'."
+        },
+        {
+          "id": 3,
+          "severity": "high",
+          "summary": "Implementability gap: Section 6 cites docs/disclosure2-schema.json as a reference schema but that file is not present in the repository at the cited path. Editorial Manager has no current hook for repository-linked manifests; the Viewpoint must either (a) commit the schema, (b) name one concrete Editorial Manager configuration the journal could enable now (PDF attachment validated against a Zenodo DOI, Crossref metadata extension, or 90-day single-journal pilot), or (c) downgrade the recommendation to a research agenda."
+        },
+        {
+          "id": 4,
+          "severity": "high",
+          "summary": "Equity dimension absent. A Lancet Digital Health editor will ask what Disclosure 2.0 demands of submitters without git/Zenodo infrastructure, paid Anthropic subscription, or local compute. Add an explicit equity paragraph (a) naming the burden, (b) proposing a tiered or minimum-viable manifest (prompts + model id + commit hash + tagged release as a floor), and (c) offering the operator's repository as a forkable worked example."
+        },
+        {
+          "id": 5,
+          "severity": "high",
+          "summary": "Self-undermining demonstration: Section 5 cites 'reviewer-logs/round-01/methods.md' as evidence of a hallucinated citation preserved per Disclosure 2.0, but that directory exists and is currently empty at commit c694f073. The Viewpoint's strongest move (we are produced under this standard) breaks the moment an editor clicks the link. Fix by populating round-01 with real transcripts pre-submission, by removing the specific claim and rephrasing as class-level, or by delaying submission until the case-study reviewer rounds have actually run."
+        },
+        {
+          "id": 6,
+          "severity": "medium",
+          "summary": "Authorship-and-accountability framing is correct (Disclosure 2.0 does not weaken the ICMJE exclusion) but undersold. Add one sentence in Section 2 or 6 stating explicitly that making the manifest visible is the strongest possible reinforcement of the ICMJE authorship exclusion, pre-empting the 'Disclosure 2.0 is a path toward AI authorship' objection."
+        },
+        {
+          "id": 7,
+          "severity": "medium",
+          "summary": "Disclosure 2.0 item 5 (audit log) conflates three distinct operations with different reliability profiles: re-execution, citation verification, and headline-statistic re-derivation. Split into sub-items or explicitly state that all three are required for compliance. As written, future submitters can discharge only the easy one and claim full compliance."
+        },
+        {
+          "id": 8,
+          "severity": "medium",
+          "summary": "References.bib contains three unresolved entries (linehs2024 author/volume incomplete; lintom2026 arXiv id placeholder; repoprereg SHA placeholder) and the manuscript body still contains an unfilled <<HEADLINE:layer3_primary>> macro. Cannot go out for review with placeholders in the reference list and the body."
+        },
+        {
+          "id": 9,
+          "severity": "medium",
+          "summary": "Section 1's 'Read literally ... read sympathetically ...' framing risks a desk-editor response of 'we read our own policy sympathetically; you are arguing against a strawman'. Pre-empt by naming the three specific permitted uses and the three specific harms the prohibited-use list targets, conceding the policy's intent is sound while arguing its 2026 mechanism is mis-calibrated."
+        },
+        {
+          "id": 10,
+          "severity": "low",
+          "summary": "Add the AMEE Guide No.192 (Tandfonline 2025) and one-sentence cross-journal comparators (NEJM, Nature Portfolio, JAMA, BMJ) to broaden the audience and demonstrate the proposed Disclosure 2.0 is compatible with ICMJE and major non-Lancet policies."
+        },
+        {
+          "id": 11,
+          "severity": "low",
+          "summary": "The 'operator-sovereign autonomy vs copilot-supervised' framing in Section 5 is welcome and the ars2026 comparator is well-chosen, but a GitHub release alone is a soft anchor for a publishing-policy argument; add one peer-reviewed companion citation on human-in-the-loop AI for scientific writing."
+        },
+        {
+          "id": 12,
+          "severity": "low",
+          "summary": "'Distributional reproducibility' in Section 5 is currently a phrase, not a metric. Specify the concordance threshold for the 99_reexec_check.py: e.g., selected claim and statistical method must match across all three runs, headline effect size must agree within bootstrap-95% overlap."
+        }
+      ]
+    },
+    {
+      "reviewer": "methodology",
+      "round": 1,
+      "verdict": "major-revision",
+      "comments": [
+        {
+          "id": 1,
+          "severity": "blocker",
+          "summary": "Distributional-reproducibility claim names case-study/analysis/99_reexec_check.py as the falsifier; the file does not exist in the working tree and the path is also absent from case-study/README.md's re-execution recipe. Define the falsifier numerically (n runs, concordance metric on selected sub-claim, statistical method and headline effect size, tolerance against bootstrap CI overlap) and commit the script before viewpoint-v1.0.0, or downgrade the Section 5 claim to 'single-run reproducibility with operator-described variability bounds'."
+        },
+        {
+          "id": 2,
+          "severity": "high",
+          "summary": "Three-layer separation is enforced only by prompt text. The repo has no .githooks/, no branch-protection config, no pre-receive hook, and 'read-only Bash' for Layer 2 is a string in a prompt rather than a kernel-level restriction. Either install branch protection plus a forbid-cross-layer-edit hook and document it in docs/design.md, or acknowledge in Section 5/Limitations that the seal is procedural rather than technical."
+        },
+        {
+          "id": 3,
+          "severity": "high",
+          "summary": "Honesty contract rules in docs/design.md are mostly behavioural. Only rule 2 (no history rewriting) is potentially mechanically enforceable, and the repo currently configures no enforcement. The prereg-v2 supersession after failure-mode-01 is honourable but illustrates how the contract relies on operator trust; the data-results note 'will be overwritten on the next pipeline run' contradicts rule 3 without a written carve-out. Add a 'procedural-vs-technical enforcement' subsection."
+        },
+        {
+          "id": 4,
+          "severity": "high",
+          "summary": "Citation-hallucination defence is single-pronged. prompts/02-layer2-audit.md checks DOI/title resolution only; it does not encode in-text claim-to-citation alignment, author-list verification, or PMID-DOI agreement. wang2010 carries a 'verify final author list at submission' note, grinchuk2018 is 'to be re-verified', lintom2026 arXiv id is a placeholder, and repoprereg holds a <<PREREG_COMMIT_SHA>> placeholder. Extend the audit prompt and resolve all placeholders before tag."
+        },
+        {
+          "id": 5,
+          "severity": "blocker",
+          "summary": "Artefact ledger described in docs/design.md as deterministically regenerable from git log plus reviewer-logs/*/summary.md, but docs/ledger.md does not exist and no generator script is committed (only build_fig2.py is in manuscript/figures/; the ledger PDF is checked in without its build script). Before tag, commit docs/ledger.md, the generator (e.g., scripts/build_ledger.py), and add the invocation to manuscript/Makefile; Layer 2 should diff committed ledger against re-generated ledger."
+        },
+        {
+          "id": 6,
+          "severity": "medium",
+          "summary": "Model-deprecation is named once in Limitations and dropped. Add a graceful-degradation paragraph naming: (a) what counts as 'Disclosure 2.0 second-best' reproduction when claude-opus-4-7 is retired; (b) that 'snapshot date' is best-effort and does not detect server-side hidden updates to the same model id; (c) a stub cross-vendor recipe for reproducers with only GPT-5 / Gemini access."
+        },
+        {
+          "id": 7,
+          "severity": "medium",
+          "summary": "Section 2's hallucination paragraph cites only the Sakana/Lu et al. Nature 2026 self-reported limitations. The corpus-scale Zhao et al. 2026 citation-hallucination audit (named in the methodology reviewer's persona prompt as the empirical anchor) is missing from references.bib. Either add the citation, or explicitly declare its absence with the reason — the 30-reference Lancet Viewpoint ceiling can absorb one more entry."
+        },
+        {
+          "id": 8,
+          "severity": "medium",
+          "summary": "Section 5 line 150 cites 'reviewer-logs/round-01/methods.md' as evidence of a preserved hallucinated citation; reviewer-logs/round-01/ is currently empty in the working tree. Either populate the round before viewpoint-v1.0.0 or rephrase as class-level. Additionally, add a Limitations sentence: distributional reproducibility applies to the analytic pipeline, not to the reviewer-subagent comments, which are preserved verbatim but not re-runnable."
+        },
+        {
+          "id": 9,
+          "severity": "medium",
+          "summary": "Section 6 references docs/disclosure2-schema.json as a reference schema; the file does not exist (/usr/bin/find docs -name 'disclosure2-schema*' returns nothing). Commit a minimal JSON/YAML schema covering the six manifest items before tag, or restate Section 6 as 'will be released as a companion artefact'."
+        },
+        {
+          "id": 10,
+          "severity": "medium",
+          "summary": "The 'sealed Layer 2' rebuttal in Section 5 is the load-bearing answer to 'a single operator cannot audit himself'. The seal is testimonial: nothing in the repository proves that Layer 2 ran in a session disjoint from Layer 1. Add a session-launch attestation (reviewer-logs/audit/session-launch.json containing Claude Code session id, working-directory hash, and a checksum of the Layer-1 commit range) and acknowledge the seal as testimonial rather than cryptographic."
+        },
+        {
+          "id": 11,
+          "severity": "medium",
+          "summary": "Manuscript does not name the residual failure modes that survive the manifest. The methodology review names seven; the most consequential is failure mode 5 — the audit subagent's own hallucinations (Layer 2 runs the same model class as Layer 1, so a near-match Crossref hit could mask a fabrication and the audit is not externally re-audited). Add a 'failure modes the manifest does not catch' paragraph to Limitations or Section 5 owning at least: reviewer-AI collusion, prompt-text Unicode drift, operator memory leakage into Layer 3, selective failure preservation, audit-side hallucinations, tool-envelope drift, and Viewpoint-prose AI-vs-operator boundary granularity."
+        }
+      ]
+    }
+  ]
+}

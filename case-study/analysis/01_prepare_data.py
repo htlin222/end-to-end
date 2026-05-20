@@ -159,20 +159,30 @@ def _gdc_clinical_bcr_xml_filter(project: str = "TCGA-LIHC") -> dict:
 
 
 def _gdc_clinical_via_api(project: str = "TCGA-LIHC") -> pd.DataFrame:
-    """Pull clinical case attributes via /cases endpoint (no XML required)."""
+    """Pull clinical case attributes via /cases endpoint (no XML required).
+
+    Note: in the current GDC data dictionary, ``vital_status``,
+    ``days_to_death``, and ``gender``/``race`` live under
+    ``demographic``; only stage and follow-up live under ``diagnoses``.
+    A case may have multiple ``diagnoses`` rows (primary and recurrence);
+    we keep the diagnosis whose ``ajcc_pathologic_stage`` is non-null
+    preferentially. We also fall back to the maximum
+    ``days_to_follow_up`` across the ``follow_ups`` array if
+    ``diagnoses.days_to_last_follow_up`` is missing.
+    """
     fields = [
         "submitter_id",
-        "diagnoses.tumor_stage",
         "diagnoses.ajcc_pathologic_stage",
         "diagnoses.ajcc_pathologic_t",
         "diagnoses.ajcc_pathologic_n",
         "diagnoses.ajcc_pathologic_m",
         "diagnoses.age_at_diagnosis",
         "diagnoses.days_to_last_follow_up",
-        "diagnoses.days_to_death",
-        "diagnoses.vital_status",
+        "demographic.vital_status",
+        "demographic.days_to_death",
         "demographic.gender",
         "demographic.race",
+        "follow_ups.days_to_follow_up",
         "exposures.alcohol_history",
         "exposures.cigarettes_per_day",
     ]
@@ -190,18 +200,34 @@ def _gdc_clinical_via_api(project: str = "TCGA-LIHC") -> pd.DataFrame:
     hits = r.json()["data"]["hits"]
     rows = []
     for h in hits:
-        diag = (h.get("diagnoses") or [{}])[0]
+        diags = h.get("diagnoses") or []
+        # Prefer the diagnosis row that has a stage
+        diag_with_stage = next(
+            (d for d in diags if d.get("ajcc_pathologic_stage")),
+            diags[0] if diags else {},
+        )
         demo = h.get("demographic") or {}
+        # Max days_to_follow_up across the follow_ups array (some cases
+        # have only follow_ups.days_to_follow_up, not diagnoses.days_to_last_follow_up)
+        fups = h.get("follow_ups") or []
+        fup_max = max(
+            (f.get("days_to_follow_up") for f in fups if f.get("days_to_follow_up") is not None),
+            default=None,
+        )
         rows.append({
             "case_submitter_id": h.get("submitter_id"),
-            "ajcc_pathologic_stage": diag.get("ajcc_pathologic_stage"),
-            "ajcc_pathologic_t": diag.get("ajcc_pathologic_t"),
-            "ajcc_pathologic_n": diag.get("ajcc_pathologic_n"),
-            "ajcc_pathologic_m": diag.get("ajcc_pathologic_m"),
-            "age_at_diagnosis_days": diag.get("age_at_diagnosis"),
-            "days_to_last_follow_up": diag.get("days_to_last_follow_up"),
-            "days_to_death": diag.get("days_to_death"),
-            "vital_status": diag.get("vital_status"),
+            "ajcc_pathologic_stage": diag_with_stage.get("ajcc_pathologic_stage"),
+            "ajcc_pathologic_t": diag_with_stage.get("ajcc_pathologic_t"),
+            "ajcc_pathologic_n": diag_with_stage.get("ajcc_pathologic_n"),
+            "ajcc_pathologic_m": diag_with_stage.get("ajcc_pathologic_m"),
+            "age_at_diagnosis_days": diag_with_stage.get("age_at_diagnosis"),
+            "days_to_last_follow_up": (
+                diag_with_stage.get("days_to_last_follow_up")
+                if diag_with_stage.get("days_to_last_follow_up") is not None
+                else fup_max
+            ),
+            "days_to_death": demo.get("days_to_death"),
+            "vital_status": demo.get("vital_status"),
             "gender": demo.get("gender"),
             "race": demo.get("race"),
         })
