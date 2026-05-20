@@ -84,7 +84,7 @@ The author declares no competing interests.
 All code, prompts, intermediate artefacts, reviewer-subagent
 transcripts, audit log and the supporting case-study manuscript are
 publicly archived at
-\url{https://github.com/<<USER>>/end-to-end} under the MIT licence,
+\url{https://github.com/htlin222/end-to-end} under the MIT licence,
 with the exact submission state tagged \texttt{viewpoint-v1.0.0}.
 Public datasets used in the supporting case study (TCGA-LIHC, GSE14520,
 GSE76427) are available from the original repositories cited in
@@ -98,10 +98,10 @@ Viewpoint itself does not report human-subjects data.
 
 ## Related links
 
-- GitHub repository: \url{https://github.com/<<USER>>/end-to-end}
+- GitHub repository: \url{https://github.com/htlin222/end-to-end}
 - Persistent code DOI (Zenodo): `<<INSERT after Zenodo mint>>`
-- AI usage disclosure: \url{https://github.com/<<USER>>/end-to-end/blob/main/docs/ai-usage-disclosure.md}
-- Layer-3 preregistration: \url{https://github.com/<<USER>>/end-to-end/blob/main/docs/prereg.md}
+- AI usage disclosure: \url{https://github.com/htlin222/end-to-end/blob/main/docs/ai-usage-disclosure.md}
+- Layer-3 preregistration: \url{https://github.com/htlin222/end-to-end/blob/main/docs/prereg.md}
 
 ## Submission timing
 

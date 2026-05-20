@@ -116,7 +116,7 @@ Acceptable language for this submission:
 
 > All code, prompts, intermediate artefacts, reviewer-subagent transcripts,
 > and the case-study manuscript are publicly archived at
-> `https://github.com/<user>/end-to-end` under the MIT licence, with the
+> `https://github.com/htlin222/end-to-end` under the MIT licence, with the
 > exact submission state tagged `viewpoint-v1.0.0`. Public datasets used in
 > the supporting case study (TCGA-LIHC, GSE14520, GSE76427) are available
 > from the original repositories cited in `case-study/manuscript/references.bib`.

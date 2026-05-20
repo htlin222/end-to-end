@@ -59,7 +59,7 @@ both an argument and a working example.
 | References            | `<<INSERT reference count at submission>>` (target <= 30)     |
 | Display items         | 2 (Figure 1, Figure 2)                                        |
 | Preprint              | medRxiv DOI `<<INSERT medRxiv DOI>>` posted `<<INSERT date>>` |
-| Repository            | `https://github.com/<<USER>>/end-to-end` (tag `viewpoint-v1.0.0`) |
+| Repository            | `https://github.com/htlin222/end-to-end` (tag `viewpoint-v1.0.0`) |
 | Persistent code DOI   | Zenodo `<<INSERT Zenodo DOI from GitHub-Zenodo integration>>` |
 
 ## Originality and exclusivity
