@@ -92,13 +92,21 @@ usage in the form *JCO CCI*'s author instructions require.
 
 ## Reproducibility statement
 
-A clean clone, `uv sync`, and sequential execution of
+The manuscript ships with a tagged GitHub release
+(`case-study-v1.0.0`) containing every analysis script, every
+reviewer-round transcript, every documented failure-mode file, the
+manuscript LaTeX source, and the compiled artefacts. A clean clone,
+`uv sync`, and sequential execution of
 `case-study/analysis/01_prepare_data.py` through
-`case-study/analysis/04_figures.py` reproduce every number in the
-manuscript within the tolerance band documented in
-`case-study/analysis/99_reexec_check.py`. The committed
-`case-study/data/results/` artefacts pass that check at the
-`case-study-v1.0.0` release tag.
+`case-study/analysis/04_figures.py` and
+`case-study/analysis/05_dca_idi_calibration.py` reproduce every
+number in the manuscript. The reproducibility-check script
+`case-study/analysis/99_reexec_check.py` asserts that the committed
+`case-study/data/results/` JSON scalars and numeric tables match
+the pipeline's re-execution within prespecified tolerances
+(deterministic fields 1e-6; bootstrap-derived fields 5e-2); the
+committed artefacts pass the check at the `case-study-v1.0.0`
+release tag.
 
 ## Pre-registration
 
