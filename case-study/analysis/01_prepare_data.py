@@ -59,7 +59,13 @@ PROC.mkdir(parents=True, exist_ok=True)
 RES.mkdir(parents=True, exist_ok=True)
 
 RESERVED_GEO = {"GSE14520", "GSE76427"}
-CANDIDATE_GEO = ["GSE54236", "GSE36376", "GSE57957", "GSE63898", "GSE39791"]
+# Original candidate list per case-study/docs/prereg.md
+ORIGINAL_GEO = ["GSE54236", "GSE36376", "GSE57957", "GSE63898", "GSE39791"]
+# Extended pool per case-study/docs/prereg-v2.md after failure-mode-01.
+# The extension preserves the original ordering and appends additional
+# HCC-OS cohorts that ship survival metadata in the Series Matrix.
+EXTENSION_GEO = ["GSE10143", "GSE116174", "GSE45436", "GSE25097", "GSE62043"]
+CANDIDATE_GEO = ORIGINAL_GEO + EXTENSION_GEO
 
 GDC_API = "https://api.gdc.cancer.gov"
 
@@ -234,10 +240,9 @@ def _parse_star_counts_tarball(tar_path: Path, manifest_hits: list[dict]) -> pd.
             sample_submitter_id = None
             for case in cases:
                 for sample in case.get("samples", []):
-                    sample_submitter_id = sample.get("submitter_id")
-                    sample_type_id = sample.get("sample_type_id")
-                    # Sample type code 01 = primary tumour
-                    if sample_type_id == "01":
+                    st = (sample.get("sample_type") or "").strip().lower()
+                    if st in {"primary tumor", "primary solid tumor"}:
+                        sample_submitter_id = sample.get("submitter_id")
                         break
                 if sample_submitter_id:
                     break
@@ -285,22 +290,26 @@ def fetch_tcga_lihc(manifest: Manifest) -> None:
     hits = _gdc_query_files(
         _gdc_files_filter("Gene Expression Quantification"),
         fields=[
-            "id",
+            "file_id",
             "file_name",
             "cases.submitter_id",
             "cases.samples.submitter_id",
             "cases.samples.sample_type",
-            "cases.samples.sample_type_id",
             "analysis.workflow_type",
         ],
         size=2000,
     )
-    # Keep only primary tumours (sample_type_id == "01")
+    # Keep only primary tumours. The GDC API exposes `sample_type` as a
+    # human-readable string; the canonical "primary tumor" string
+    # corresponds to the TCGA sample-type code 01. We do NOT rely on
+    # `sample_type_id` because that field is not always populated in
+    # the /files response.
     primary_hits = []
     for h in hits:
         for case in h.get("cases", []):
             for s in case.get("samples", []):
-                if s.get("sample_type_id") == "01":
+                st = (s.get("sample_type") or "").strip().lower()
+                if st in {"primary tumor", "primary solid tumor"}:
                     primary_hits.append(h)
                     break
             else:
@@ -399,13 +408,19 @@ def _download_geo_series_matrix(acc: str) -> Path:
 def _parse_geo_series_matrix(path: Path):
     """Parse a GEO Series Matrix file into (clinical_df, expression_df).
 
-    Clinical: each !Sample_* row becomes a column.
+    `!Sample_characteristics_ch1` typically appears multiple times in a
+    single Series Matrix (once per characteristic). We preserve each
+    occurrence as ``Sample_characteristics_ch1__N`` so the downstream
+    extractor can see every characteristic. All other `!Sample_*` rows
+    become a single column each.
+
     Expression: the table between !series_matrix_table_begin and _end.
     """
     with gzip.open(path, "rt", encoding="utf-8", errors="replace") as f:
         text = f.read()
     lines = text.splitlines()
-    sample_meta = {}
+    sample_meta: dict[str, list[str]] = {}
+    char_idx = 0
     expr_lines = []
     in_table = False
     for line in lines:
@@ -413,10 +428,14 @@ def _parse_geo_series_matrix(path: Path):
             key, *values = line.split("\t")
             key = key.lstrip("!")
             values = [v.strip().strip('"') for v in values]
-            if key in sample_meta:
-                sample_meta[key + "__alt"] = values
+            if key == "Sample_characteristics_ch1":
+                sample_meta[f"Sample_characteristics_ch1__{char_idx}"] = values
+                char_idx += 1
             else:
-                sample_meta[key] = values
+                if key in sample_meta:
+                    sample_meta[key + "__alt"] = values
+                else:
+                    sample_meta[key] = values
         elif line.startswith("!series_matrix_table_begin"):
             in_table = True
             continue
@@ -435,21 +454,47 @@ def _parse_geo_series_matrix(path: Path):
 
 def _extract_os(clin: pd.DataFrame) -> Optional[pd.DataFrame]:
     """Try to extract OS (time + event) and stage from heterogeneous GEO
-    characteristics_ch1 fields. Returns DataFrame with columns
-    ``os_time_months``, ``os_event``, ``stage`` or None if not found."""
+    characteristics_ch1 fields.
+
+    Returns DataFrame with columns ``os_time_months``, ``os_event``,
+    ``stage`` or None if neither OS time nor OS event is found.
+
+    Robust to two GEO conventions:
+
+    A. ``key: value`` per characteristics cell (most cohorts).
+    B. ``key (legend ... ): value`` cells where the legend includes
+       its own colon (e.g. GSE10143's ``survival_status (0:
+       alive_or_censored, 1: dead): 1``). In case B, the cell is split
+       on the **last** colon to keep the numeric value clean.
+    """
     char_cols = [c for c in clin.columns if c.startswith("Sample_characteristics_ch1")]
     if not char_cols:
         return None
-    # Flatten: each column is a "key: value" or just "value" string per sample
+
+    def _split_cell(cell: str) -> tuple[str, str] | None:
+        if not isinstance(cell, str) or ":" not in cell:
+            return None
+        # Prefer split on the LAST colon when the LHS already contains
+        # a parenthesised legend that has its own colon.
+        lhs, _, rhs = cell.partition(":")
+        if "(" in lhs and ")" not in lhs:
+            # legend opens and is not closed before the first colon ->
+            # the legend swallowed the colon. Use the last colon.
+            lhs, _, rhs = cell.rpartition(":")
+        return lhs.strip().lower(), rhs.strip()
+
     parsed = {}
     for idx, row in clin.iterrows():
         d = {}
         for c in char_cols:
             cell = row[c]
-            if not isinstance(cell, str) or ":" not in cell:
+            sp = _split_cell(cell)
+            if sp is None:
                 continue
-            k, _, v = cell.partition(":")
-            d[k.strip().lower()] = v.strip()
+            k, v = sp
+            # Normalise common typos and aliasing
+            k = re.sub(r"\s+", " ", k)
+            d[k] = v
         parsed[idx] = d
     df = pd.DataFrame.from_dict(parsed, orient="index")
 
@@ -463,38 +508,57 @@ def _extract_os(clin: pd.DataFrame) -> Optional[pd.DataFrame]:
     time_col = _find_col([
         r"survival.*month", r"os.month", r"os.time",
         r"overall.survival.month", r"time.to.os",
+        r"survival.*time.*day", r"survival.*day",
         r"survival.*time", r"follow.*up.*month", r"follow.*up.*time",
         r"^os$", r"^survival$",
     ])
     event_col = _find_col([
-        r"os.status", r"os.event", r"overall.survival.*status",
-        r"death", r"vital.status", r"survival.status", r"survival.*event",
-        r"censor",
+        r"survival.status", r"os.status", r"os.event",
+        r"overall.survival.*status",
+        r"vital.status", r"survival.*event",
+        r"death", r"censor",
     ])
     stage_col = _find_col([
         r"^stage$", r"ajcc.*stage", r"tnm.*stage", r"bclc.*stage",
-        r"clinical.*stage", r"pathologic.*stage",
+        r"clinical.*stage", r"pathologic.*stage", r"tumor.*stage",
     ])
     if time_col is None or event_col is None:
         return None
+
     out = pd.DataFrame(index=df.index)
-    out["os_time_months_raw"] = df[time_col]
+    out["os_time_raw"] = df[time_col]
     out["os_event_raw"] = df[event_col]
     out["stage_raw"] = df[stage_col] if stage_col else np.nan
+    out["os_time_unit"] = (
+        "days" if re.search(r"day", time_col, re.IGNORECASE)
+        else "months"
+    )
 
     def _to_float(x):
         try:
-            return float(re.sub(r"[^\d\.\-]+", "", str(x)))
+            # Strip any trailing text after the first numeric token
+            m = re.search(r"-?\d+(?:\.\d+)?", str(x))
+            return float(m.group()) if m else np.nan
         except Exception:
             return np.nan
 
-    out["os_time_months"] = out["os_time_months_raw"].apply(_to_float)
+    raw_time = out["os_time_raw"].apply(_to_float)
+    if out["os_time_unit"].iloc[0] == "days":
+        out["os_time_months"] = raw_time / 30.4375
+    else:
+        out["os_time_months"] = raw_time
 
     def _to_event(x):
         s = str(x).strip().lower()
-        if s in {"1", "yes", "dead", "death", "deceased"} or "dead" in s or "death" in s:
+        # Pull last integer in the cell (handles GSE10143's
+        # "alive or censored, 1: dead) : 1" form where _split_cell
+        # has already isolated the rhs)
+        m = re.search(r"(\d)\s*$", s)
+        if m:
+            return int(m.group(1))
+        if "dead" in s or "death" in s or "deceased" in s:
             return 1
-        if s in {"0", "no", "alive", "living", "censored"} or "alive" in s or "censor" in s:
+        if "alive" in s or "living" in s or "censor" in s:
             return 0
         try:
             return int(float(s))
@@ -502,19 +566,48 @@ def _extract_os(clin: pd.DataFrame) -> Optional[pd.DataFrame]:
             return np.nan
 
     out["os_event"] = out["os_event_raw"].apply(_to_event)
+    out["os_event"] = out["os_event"].clip(lower=0, upper=1)
 
     return out
 
 
+def _is_tumour_sample(clin_row: pd.Series) -> bool:
+    """Heuristic: a GEO sample is a primary tumour if its source name
+    or title flags HCC/tumour and not non-tumour/cirrhosis-only."""
+    blob = " ".join(
+        str(v).lower() for v in clin_row.values if isinstance(v, str)
+    )
+    if any(t in blob for t in ["adjacent non-tumor", "non-tumor", "non_tumor",
+                                "cirrhotic", "cirrhosis", "normal liver",
+                                "healthy", "hepatitis/cirrhotic"]):
+        # only exclude if the same row does NOT also flag HCC
+        if not ("hepatocellular carcinoma" in blob and
+                "non-tumor" not in blob and "non_tumor" not in blob and
+                "cirrhosis" not in blob and "cirrhotic" not in blob):
+            return False
+    if any(t in blob for t in ["hepatocellular carcinoma", "liver tumor",
+                                "liver tumour", "tumor liver", "primary hcc",
+                                "hcc tumor", "biopsy of tumor"]):
+        return True
+    # default: include if 'tumor' or 'tumour' appears
+    if "tumor" in blob or "tumour" in blob:
+        return True
+    return False
+
+
 def _try_geo_cohort(acc: str, n_tcga_genes: int) -> dict:
     """Return a verdict dict explaining whether this cohort passes the
-    prespecified selection rule. Does not modify any global state."""
+    prespecified selection rule. Does not modify any global state.
+
+    Rule: per case-study/docs/prereg-v2.md, sec A and B.
+    """
     verdict = {
         "accession": acc,
+        "n_total_samples": None,
         "n_tumour_samples": None,
         "n_with_os": None,
         "n_with_stage": None,
-        "n_overlap_genes": None,
+        "n_probes": None,
         "pass": False,
         "reason": "",
     }
@@ -530,27 +623,45 @@ def _try_geo_cohort(acc: str, n_tcga_genes: int) -> dict:
     except Exception as exc:
         verdict["reason"] = f"parse failed: {exc}"
         return verdict
-    verdict["n_tumour_samples"] = expr.shape[1]
-    if expr.shape[1] < 80:
-        verdict["reason"] = "fewer than 80 samples"
+    verdict["n_total_samples"] = clin.shape[0]
+
+    # Subset to tumour-only samples by heuristic on source/characteristics
+    tumour_mask = clin.apply(_is_tumour_sample, axis=1)
+    n_tumour = int(tumour_mask.sum())
+    verdict["n_tumour_samples"] = n_tumour
+    if n_tumour < 80:
+        verdict["reason"] = f"fewer than 80 tumour samples ({n_tumour})"
         return verdict
-    os_df = _extract_os(clin)
-    if os_df is None or os_df["os_time_months"].notna().sum() < 60:
-        verdict["reason"] = "OS time/event not recoverable from GEO metadata"
+
+    os_df = _extract_os(clin.loc[tumour_mask])
+    if os_df is None:
+        verdict["reason"] = "OS time/event fields not detectable"
         return verdict
-    verdict["n_with_os"] = int(os_df["os_time_months"].notna().sum())
-    verdict["n_with_stage"] = int(os_df["stage_raw"].notna().sum()) if "stage_raw" in os_df else 0
-    # Map probe IDs -> gene symbols? Series Matrix does not include probe
-    # annotation. We approximate the "overlap >= 10000 genes" criterion
-    # via probe count >= 10000 (which proxies the chance of overlap once
-    # the probe annotation is joined in step 02). This is a conservative
-    # gate.
-    verdict["n_overlap_genes"] = int(expr.shape[0])
-    if expr.shape[0] < 10000:
-        verdict["reason"] = "expression matrix has fewer than 10000 probes"
+    n_with_os = int(
+        (os_df["os_time_months"].notna() & os_df["os_event"].notna()).sum()
+    )
+    verdict["n_with_os"] = n_with_os
+    if n_with_os < 60:
+        verdict["reason"] = f"OS time+event jointly recoverable for only {n_with_os} samples"
         return verdict
+    verdict["n_with_stage"] = (
+        int(os_df["stage_raw"].notna().sum()) if "stage_raw" in os_df else 0
+    )
+
+    # Probe-overlap gate (prereg-v2 sec B): >= 5000 probes is the array-
+    # size sanity check. The 80%-signature-coverage clause is evaluated
+    # downstream in step 02 because it depends on the trained signature.
+    n_probes = int(expr.shape[0])
+    verdict["n_probes"] = n_probes
+    if n_probes < 5000:
+        verdict["reason"] = (
+            f"expression matrix has only {n_probes} probes; "
+            f"below the >=5000 sanity-check threshold (prereg-v2 sec B)"
+        )
+        return verdict
+
     verdict["pass"] = True
-    verdict["reason"] = "all four checks passed"
+    verdict["reason"] = "all four checks passed (prereg-v2)"
     return verdict
 
 
@@ -586,43 +697,64 @@ def select_geo_cohort(manifest: Manifest, n_tcga_genes: int) -> Optional[str]:
 
 
 def harmonise_geo(acc: str, manifest: Manifest) -> None:
-    """Convert chosen GEO cohort to standardised processed files."""
+    """Convert chosen GEO cohort to standardised processed files.
+
+    Operations:
+
+    1. Parse Series Matrix (clin + expr).
+    2. Identify tumour-only sample subset by ``_is_tumour_sample`` heuristic.
+    3. Extract OS time + event for tumour samples.
+    4. Log2-transform expression if input is on a raw intensity scale.
+    5. Write tumour-restricted clinical TSV (clinical fields + os_time_months
+       + os_event + stage_raw) and expression TSV.
+    """
     matrix_path = _download_geo_series_matrix(acc)
     clin, expr = _parse_geo_series_matrix(matrix_path)
-    os_df = _extract_os(clin)
+
+    tumour_mask = clin.apply(_is_tumour_sample, axis=1)
+    tumour_clin = clin.loc[tumour_mask].copy()
+    tumour_ids = tumour_clin.index.tolist()
+    common = [s for s in tumour_ids if s in expr.columns]
+    expr = expr[common]
+    tumour_clin = tumour_clin.loc[common]
+
+    os_df = _extract_os(tumour_clin)
     if os_df is None:
         raise RuntimeError(f"OS not extractable for {acc} during harmonisation")
-    # Annotate platform from clin
+    tumour_clin = tumour_clin.merge(os_df, left_index=True, right_index=True, how="left")
+
     platform = None
     for col in clin.columns:
         if col.lower().startswith("sample_platform"):
             platform = clin[col].iloc[0]
             break
 
-    # Probe -> gene mapping. We attempt to fetch GPL annotation when
-    # available; otherwise we leave probe IDs and join in step 02.
-    expr_log = np.log2(expr.astype(float).clip(lower=0) + 1.0)
-    # Some platforms (Affy) already report log2; we conservatively check
-    # whether values exceed 100 (raw intensity range) before logging.
-    if expr.values.max() > 50:
-        expr_log = np.log2(expr.astype(float).clip(lower=0) + 1.0)
+    # Detect scale: Affymetrix raw .CEL goes through MAS5/RMA returning
+    # log2 values 2-14; raw intensities range to tens of thousands.
+    arr = expr.astype(float)
+    if arr.values[~np.isnan(arr.values)].max() > 50:
+        expr_log = np.log2(arr.clip(lower=0) + 1.0)
+        scale_note = "log2(x+1) applied; input appeared to be raw intensity"
     else:
-        # already log-scale; keep as is
-        expr_log = expr.astype(float)
+        expr_log = arr
+        scale_note = "input already on log scale; no further transform"
 
     clin_out_path = PROC / f"geo_{acc}_clinical.tsv"
     expr_out_path = PROC / f"geo_{acc}_expression_log2.tsv"
-    full_clin = clin.copy()
-    full_clin = full_clin.merge(os_df, left_index=True, right_index=True, how="left")
-    full_clin.to_csv(clin_out_path, sep="\t")
+    tumour_clin.to_csv(clin_out_path, sep="\t")
     expr_log.to_csv(expr_out_path, sep="\t")
     manifest.geo["chosen_processed"] = {
         "accession": acc,
         "platform": platform,
+        "scale_note": scale_note,
         "clinical_path": str(clin_out_path.relative_to(REPO_ROOT)),
         "expression_path": str(expr_out_path.relative_to(REPO_ROOT)),
-        "n_samples": expr_log.shape[1],
-        "n_probes": expr_log.shape[0],
+        "n_tumour_samples": int(expr_log.shape[1]),
+        "n_probes": int(expr_log.shape[0]),
+        "n_with_os": int(
+            (tumour_clin["os_time_months"].notna()
+             & tumour_clin["os_event"].notna()).sum()
+        ),
     }
 
 

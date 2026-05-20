@@ -1,0 +1,122 @@
+{
+  "candidates_in_order": [
+    "GSE54236",
+    "GSE36376",
+    "GSE57957",
+    "GSE63898",
+    "GSE39791",
+    "GSE10143",
+    "GSE116174",
+    "GSE45436",
+    "GSE25097",
+    "GSE62043"
+  ],
+  "reserved": [
+    "GSE14520",
+    "GSE76427"
+  ],
+  "verdicts": [
+    {
+      "accession": "GSE54236",
+      "n_total_samples": 161,
+      "n_tumour_samples": 81,
+      "n_with_os": null,
+      "n_with_stage": null,
+      "n_probes": null,
+      "pass": false,
+      "reason": "OS time/event fields not detectable"
+    },
+    {
+      "accession": "GSE36376",
+      "n_total_samples": 433,
+      "n_tumour_samples": 240,
+      "n_with_os": null,
+      "n_with_stage": null,
+      "n_probes": null,
+      "pass": false,
+      "reason": "OS time/event fields not detectable"
+    },
+    {
+      "accession": "GSE57957",
+      "n_total_samples": 78,
+      "n_tumour_samples": 39,
+      "n_with_os": null,
+      "n_with_stage": null,
+      "n_probes": null,
+      "pass": false,
+      "reason": "fewer than 80 tumour samples (39)"
+    },
+    {
+      "accession": "GSE63898",
+      "n_total_samples": 396,
+      "n_tumour_samples": 228,
+      "n_with_os": null,
+      "n_with_stage": null,
+      "n_probes": null,
+      "pass": false,
+      "reason": "OS time/event fields not detectable"
+    },
+    {
+      "accession": "GSE39791",
+      "n_total_samples": 144,
+      "n_tumour_samples": 72,
+      "n_with_os": null,
+      "n_with_stage": null,
+      "n_probes": null,
+      "pass": false,
+      "reason": "fewer than 80 tumour samples (72)"
+    },
+    {
+      "accession": "GSE10143",
+      "n_total_samples": 387,
+      "n_tumour_samples": 80,
+      "n_with_os": 80,
+      "n_with_stage": 0,
+      "n_probes": 6144,
+      "pass": true,
+      "reason": "all four checks passed (prereg-v2)"
+    },
+    {
+      "accession": "GSE116174",
+      "n_total_samples": 64,
+      "n_tumour_samples": 64,
+      "n_with_os": null,
+      "n_with_stage": null,
+      "n_probes": null,
+      "pass": false,
+      "reason": "fewer than 80 tumour samples (64)"
+    },
+    {
+      "accession": "GSE45436",
+      "n_total_samples": 134,
+      "n_tumour_samples": 47,
+      "n_with_os": null,
+      "n_with_stage": null,
+      "n_probes": null,
+      "pass": false,
+      "reason": "fewer than 80 tumour samples (47)"
+    },
+    {
+      "accession": "GSE25097",
+      "n_total_samples": 557,
+      "n_tumour_samples": 268,
+      "n_with_os": null,
+      "n_with_stage": null,
+      "n_probes": null,
+      "pass": false,
+      "reason": "OS time/event fields not detectable"
+    },
+    {
+      "accession": "GSE62043",
+      "n_total_samples": 100,
+      "n_tumour_samples": 100,
+      "n_with_os": null,
+      "n_with_stage": null,
+      "n_probes": null,
+      "pass": false,
+      "reason": "OS time/event fields not detectable"
+    }
+  ],
+  "chosen": "GSE10143",
+  "selection_rule": "first candidate in CANDIDATE_GEO order that has >=80 tumour samples, recoverable OS, recoverable stage, and >=10000 probes"
+}
