@@ -1,0 +1,129 @@
+{
+  "preregistration_anchor_commit": "88d6d15",
+  "preregistration_path": "docs/prereg.md",
+  "seed": 20260521,
+  "n_bootstrap": 1000,
+  "delta_c_threshold": 0.03,
+  "alpha": 0.05,
+  "cohorts": {
+    "GSE14520": {
+      "n_with_complete_data": 219,
+      "clin_columns": [
+        "tissue",
+        "disease state",
+        "individual",
+        "tumour",
+        "LCS ID",
+        "ID",
+        "Tissue Type",
+        "Predicted risk Metastasis Signature",
+        "Agilent_GSM",
+        "CGH_survival_group",
+        "Gender",
+        "Age",
+        "HBV viral status",
+        "ALT(>/<=50U/L)",
+        "Main Tumor Size (>/<=5 cm)",
+        "Multinodular",
+        "Cirrhosis",
+        "TNM staging",
+        "BCLC staging",
+        "CLIP staging",
+        "AFP (>/<=300ng/ml)",
+        "Survival status",
+        "Survival months",
+        "Recurr status",
+        "Recurr months"
+      ]
+    },
+    "GSE76427": {
+      "n_with_complete_data": 114,
+      "clin_columns": [
+        "diagnosis",
+        "patient id",
+        "tissue",
+        "event_os",
+        "duryears_os",
+        "event_rfs",
+        "duryears_rfs",
+        "age (years)",
+        "gender (1=m, 2=f)",
+        "bclc_staging",
+        "tnm_staging_clinical",
+        "tumour"
+      ]
+    }
+  },
+  "coverage": {
+    "GSE14520": {
+      "n_signature_genes": 50,
+      "n_present": 40,
+      "coverage": 0.8,
+      "missing_genes": [
+        "CEBPZOS",
+        "GAS2L3",
+        "GRPEL2",
+        "KIAA1841",
+        "MEX3A",
+        "PIGU",
+        "RBM45",
+        "SGO2",
+        "TAF3",
+        "YARS1"
+      ]
+    },
+    "GSE76427": {
+      "n_signature_genes": 50,
+      "n_present": 48,
+      "coverage": 0.96,
+      "missing_genes": [
+        "CEBPZOS",
+        "YARS1"
+      ]
+    }
+  },
+  "pooled_n": 333,
+  "pooled_events": 107,
+  "primary_outcome": {
+    "point": {
+      "n": 333,
+      "c_baseline": 0.6688370881625212,
+      "c_combined": 0.675001085210748,
+      "delta_c": 0.006163997048226788
+    },
+    "ci_lo": -0.008032237679967788,
+    "ci_hi": 0.029794465294883173,
+    "n_bootstrap_iters": 1000,
+    "reject_h0": false
+  },
+  "primary_decision": "null",
+  "secondaries": {
+    "S_GSE14520_delta_c": {
+      "point": {
+        "n": 219,
+        "c_baseline": 0.6733111849390919,
+        "c_combined": 0.6891842008121077,
+        "delta_c": 0.015873015873015817
+      },
+      "ci_lo": -0.009868122549498039,
+      "ci_hi": 0.04729387358958388,
+      "n_bootstrap_iters": 1000,
+      "reject_h0": false
+    },
+    "S_GSE76427_delta_c": {
+      "point": {
+        "n": 114,
+        "c_baseline": 0.6392961876832844,
+        "c_combined": 0.6649560117302052,
+        "delta_c": 0.0256598240469208
+      },
+      "ci_lo": -0.01962985967160862,
+      "ci_hi": 0.14096862776831104,
+      "n_bootstrap_iters": 1000,
+      "reject_h0": false
+    }
+  },
+  "layer1_risk_score_source": "case-study/data/results/tcga_model_coefs.tsv",
+  "layer1_release_tag": "case-study-v1.0.0",
+  "completed_utc": "2026-05-20T19:23:34Z"
+}

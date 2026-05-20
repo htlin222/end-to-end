@@ -13,4 +13,5 @@ dependencies = [
     "statsmodels>=0.14,<0.15",
     "lifelines>=0.30.3",
     "requests>=2.34.2",
+    "geoparse>=2.0.4",
 ]
