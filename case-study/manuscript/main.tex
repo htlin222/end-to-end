@@ -246,51 +246,63 @@ the human author's responsibility.
 \section{Results}
 
 \textbf{Cohort summary.} The TCGA-LIHC analytic set comprised
-$n =~366$ patients with primary HCC and OS information; 130 OS events
-occurred during follow-up. Median follow-up was approximately
-26 months. AJCC pathologic stage I/II accounted for the majority of
-patients with non-missing stage; stage III/IV represented a smaller
-fraction.
+$n = 366$ patients with primary HCC and OS information; 130 OS events
+occurred during follow-up. AJCC pathologic stage I/II accounted for
+the majority of patients with non-missing stage (254 of 342 with
+stage); stage III/IV represented 88 patients (47 events). The
+external Layer-1 cohort (GSE10143; Hoshida \emph{et al.} NEJM 2008)
+contained 80 HCC tumour samples with 32 OS events.
 
 \textbf{Primary outcome.}
 The apparent C-index of AJCC pathologic stage alone was 0.60; the
-apparent C-index of the additive model AJCC + \HCCRTS was 0.72 (full
-numbers in Table~1 and \texttt{tcga\_bootstrap\_metrics.json}). The
-apparent $\Delta$C-index was approximately 0.12. After Harrell-Lee-Mark
-optimism correction over 1000 bootstrap iterations, the corrected
-$\Delta$C-index was approximately \emph{[INSERT FROM JSON]} with 95\%
-bootstrap CI \emph{[lo, hi]}. The primary hypothesis $\Delta C \geq 0.02$
-with CI lower bound > 0 is \emph{[INSERT FROM JSON]}.
+apparent C-index of the additive model AJCC + \HCCRTS was 0.72. The
+apparent $\Delta$C-index was 0.117. After Harrell-Lee-Mark optimism
+correction over 999 successful bootstrap iterations (1000 attempted),
+the optimism-corrected $\Delta$C-index was 0.060 with 95\% bootstrap
+percentile CI [0.085, 0.137]. The preregistered primary hypothesis
+$\Delta C \geq 0.02$ with CI lower bound $> 0$ is supported on the
+development cohort.
 
 \textbf{Secondary outcomes.}
-L1: 4-strata log-rank across HCC-TRS quartiles in TCGA-LIHC was highly
-significant ($\chi^2 \approx 69$, $p < 10^{-14}$; Figure~1). L3:
-time-dependent AUCs at 1, 3, 5 years were $\approx 0.80, 0.77, 0.79$.
-L4: calibration slope was $\approx 0.76$, indicating mild over-
-fitting in the apparent fit (expected; the optimism-corrected
-estimate is the primary outcome). L5: Schoenfeld global $p$ for
-\HCCRTS was \emph{[INSERT FROM JSON]}, $\geq 0.05$ indicating the
-proportional-hazards assumption is not violated for the score
-covariate at the global level. L7: the permutation null distribution
-for $\Delta$C-index had mean $\approx 0$, with permutation $p$ \emph{[INSERT
-FROM JSON]}.
+L1: the 4-strata log-rank across \HCCRTS quartiles in TCGA-LIHC was
+$\chi^2 = 66.5$, $p = 2.4 \times 10^{-14}$ (Figure~1). L3: time-
+dependent AUCs at 1, 3, 5 years were 0.78, 0.76, 0.81 (Figure~3
+left). L4: the calibration slope of standardised \HCCRTS in a
+univariable Cox was 0.70 (Figure~3 right; ideal slope = 1, modest
+over-fit at the apparent fit, which the optimism-corrected primary
+endpoint corrects for). L5: the global Schoenfeld $p$ for \HCCRTS was
+0.38, supporting the proportional-hazards assumption at the global
+level. L7: the permutation null distribution for $\Delta$C-index had
+$p = 0.018$ (1000 permutations; 35 with non-trivial screen-passing
+signal, 965 with implied-zero null delta since the FDR screen
+returned zero genes under shuffled outcomes). At the Bonferroni
+threshold of $\alpha/7 = 0.0071$ across the prespecified seven-
+secondary family, L7 is not significant.
 
 \textbf{External cohort (GSE10143).}
-After probe-to-gene mapping and intersect-restricted rebuilding of
-\HCCRTS (per prereg-v2 Section B, triggered when signature coverage
-in the external cohort fell below 80\%), the TCGA-locked \HCCRTS was
-applied to the 80 GSE10143 HCC tumour samples (32 OS events). The
-C-index in GSE10143 was \emph{[INSERT FROM JSON]} with 95\% bootstrap
-CI \emph{[lo, hi]}; the median-split log-rank $p$ was \emph{[INSERT
-FROM JSON]}.
+After probe-to-gene mapping (GPL5474; 6{,}144 probes $\to$ 6{,}100
+unique gene symbols) the original 50-gene \HCCRTS had a coverage of
+21 / 50 = 42\% in GSE10143; per prereg-v2 Section B, the score was
+rebuilt on the platform intersection. The intersect-rebuilt 50-gene
+set was applied to GSE10143. The external C-index was 0.47 (95\%
+bootstrap CI 0.36 - 0.58; $n = 80$, 32 events); the median-split log-
+rank $p$ was 0.13. The external CI brackets 0.5 (chance
+discrimination); under the prereg's median-split direction definition,
+GSE10143 does \emph{not} support directional replication of the
+TCGA-LIHC training signal.
 
 \textbf{Robustness.}
-Stage-adjusted Cox (\texttt{robustness\_metrics.json}) shows that
-\HCCRTS remains an independent prognostic factor for OS after
-adjustment for AJCC stage (HR for one-SD increase in \HCCRTS is
-\emph{[INSERT FROM JSON]}, $p$ \emph{[INSERT FROM JSON]}). In a 5-
-fold cross-validation, the mean C-index of the combo model
-(\texttt{cv\_metrics.json}) was \emph{[INSERT FROM JSON]}.
+Stage-adjusted Cox shows \HCCRTS remains an independent prognostic
+factor for OS after adjustment for AJCC stage: the HR for a one-SD
+increase in \HCCRTS is 6.66 (95\% CI 3.86 - 11.52, $p = 1.1 \times
+10^{-11}$); the HR for one stage-unit increase in AJCC adjusted for
+\HCCRTS is 1.38 ($p = 0.003$). In a prespecified stratified subgroup
+analysis, \HCCRTS retained its independent effect in both stage I/II
+(HR 7.60, 95\% CI 3.69 - 15.64, $p = 3.8 \times 10^{-8}$) and stage
+III/IV (HR 7.26, 95\% CI 3.07 - 17.17, $p = 6.3 \times 10^{-6}$;
+Figure~2). A 5-fold cross-validation of the additive AJCC + \HCCRTS
+model yielded a mean C-index of 0.706 (SD 0.057), compared with 0.600
+(SD 0.094) for AJCC alone.
 
 \section{Discussion}
 
