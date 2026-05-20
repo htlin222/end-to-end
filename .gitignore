@@ -17,14 +17,24 @@ manuscript/*.synctex.gz
 manuscript/*.toc
 
 # Raw data (regenerable from documented URLs)
-data/raw/*
-!data/raw/.gitkeep
+case-study/data/raw/*
+!case-study/data/raw/.gitkeep
 
 # Processed artefacts (regenerable)
-data/processed/*.tsv
-data/processed/*.txt
-data/processed/*.csv
-data/results/*.npz
+case-study/data/processed/*.tsv
+case-study/data/processed/*.txt
+case-study/data/processed/*.csv
+case-study/results/*.npz
+case-study/results/*.parquet
+case-study/results-cache/
+
+# Editor / OS noise
+*.swp
+.idea/
+.vscode/
+
+# Reviewer-log scratch (final logs land under reviewer-logs/round-XX/)
+reviewer-logs/scratch/
 
 # Large supplementary files
 *.xlsx
