@@ -42,6 +42,154 @@
         "reviewer-logs/viewpoint-round-01/response-to-reviewers.md",
         "reviewer-logs/viewpoint-round-01/decisions.json"
       ]
+    },
+    {
+      "reviewer": "methodology",
+      "round": 2,
+      "verdict": "minor-revision",
+      "date": "2026-05-21",
+      "manuscript_content_commit": "da4ddce",
+      "round_1_comments_closed": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+      "round_1_comments_open": [
+        {
+          "id": 11,
+          "severity": "medium",
+          "status": "deferred",
+          "summary": "Failure-preservation carve-out for intentionally-overwritable artefacts (cohort-selection.json 'will be overwritten on the next pipeline run'); deferred by operator to next docs/design.md update; not surfaced in manuscript Limitations."
+        }
+      ],
+      "new_comments_round_2": [
+        {
+          "id": "M-1",
+          "severity": "low",
+          "summary": "docs/disclosure2-schema.json does not constrain toolEnvelope keys to be a subset of models[].name; a producer could declare two models and a tool envelope keyed by neither, and the schema would accept it. Add a description or validation rule coupling the two."
+        },
+        {
+          "id": "M-2",
+          "severity": "low",
+          "summary": "docs/ledger.md lags HEAD by two commits (committed at 0810331, current HEAD 5fde223). Regeneration is deterministic (verified via two consecutive `uv run python scripts/regenerate_ledger.py` runs producing byte-identical output). Operator should wire the regeneration into the release-tag Makefile target so the tagged release ships a current ledger."
+        },
+        {
+          "id": "M-3",
+          "severity": "low",
+          "summary": "Manuscript Limitations now names four of the seven Round 1 residual failure modes (procedural enforcement, audit-subagent hallucination, model deprecation, reviewer-loop non-determinism). Reviewer-AI collusion and selective failure preservation across runs that were never committed are not surfaced; one Limitations sentence would close this."
+        }
+      ],
+      "verification_notes": [
+        "Ran `uv run python scripts/regenerate_ledger.py` twice on the working tree at HEAD `5fde223`. Both runs produced byte-identical output (verified by diff -u, exit 0). Output: 25 commits, 0 tags.",
+        "Verified `case-study/analysis/99_reexec_check.py` is absent from the working tree (find returns no hits). The manuscript Section 5 acknowledges this and downgrades the distributional-reproducibility claim conditional on the script's absence — the correct honesty move.",
+        "Verified `docs/disclosure2-schema.json` exists (160 lines, JSON Schema draft 2020-12) and covers all six manifest items plus optional audit/reviewerSubagents/preregistration/honestyContract blocks.",
+        "Verified `docs/ledger.md` exists (45 lines, 23 commits at the snapshot commit `0810331`).",
+        "Verified `scripts/regenerate_ledger.py` exists (152 lines), uses git log --reverse, classifies by path prefix, has no time-of-day inputs, and is deterministic for a given commit range.",
+        "Verified Zhao et al. 2026 citation is present in references.bib as `zhaoHallucinations2026` and cited in main.tex at sections 1 and 2 with the 146,932-hallucination figure.",
+        "Verified manuscript Section 3 item 5 splits the audit log into 5a (re-execution), 5b (citation veracity including in-text claim-to-source alignment plus DOI plus author list plus journal plus year), and 5c (headline-statistic rederivation), with the explicit clause 'Partial discharge of (5a) alone does not satisfy item 5'.",
+        "Verified manuscript Section 5 declares the Layer-2 seal as testimonial rather than cryptographic and names `reviewer-logs/audit/session-launch.json` as the minimum operational evidence.",
+        "Verified manuscript Limitations names: testimonial three-layer separation, branch-protection-only enforcement of no-history-rewriting, reviewer-loop non-determinism, model-deprecation graceful degradation, operator prior-knowledge in Layer-3 thresholds.",
+        "Verified `git log --oneline` shows 25 commits; the most recent is `5fde223 reviewer-logs: add Round 1 response-to-reviewers cross-reference table`; the v0.4 manuscript revision commit is `da4ddce manuscript: v0.4 — full revision addressing 44 Round 1 reviewer comments`."
+      ],
+      "acceptance_criteria_assessment": {
+        "distributional_reproducibility_falsifiable": true,
+        "distributional_reproducibility_notes": "Section 5 specifies n=3 runs, concordance on selected sub-claim and statistical method, and headline effect size within original bootstrap 95% CI. Downgrade path is explicit when the implementing script is not shipped.",
+        "layer_separation_enforced_procedurally_or_technically_with_explicit_naming": true,
+        "layer_separation_notes": "Section 5 names the seal as 'testimonial rather than cryptographic' with session-launch attestation file path; Limitations restates that the separation is procedural and testimonial.",
+        "manifest_residual_blind_spots_named_in_manuscript_text": "partial",
+        "manifest_residual_blind_spots_notes": "Four of the seven Round 1 blind spots are in Limitations; reviewer-AI collusion and uncommitted-run selective preservation are not. Sufficient for minor-revision; an additional sentence would clear `accept`."
+      },
+      "ledger_regenerates_deterministically": true,
+      "files_inspected": [
+        "manuscript/main.tex",
+        "docs/design.md",
+        "docs/prereg.md",
+        "docs/ai-usage-disclosure.md",
+        "docs/disclosure2-schema.json",
+        "docs/ledger.md",
+        "scripts/regenerate_ledger.py",
+        "manuscript/figures/build_fig1.py",
+        "manuscript/figures/build_fig2.py",
+        "reviewer-logs/viewpoint-round-01/methodology.md",
+        "reviewer-logs/viewpoint-round-01/response-to-reviewers.md",
+        "reviewer-logs/viewpoint-round-01/decisions.json"
+      ]
+    },
+    {
+      "reviewer": "editor",
+      "round": 2,
+      "verdict": "minor-revision",
+      "recommendation": "send-out-for-external-peer-review",
+      "date": "2026-05-21",
+      "confidence": 0.86,
+      "scope_verdict": "In scope for Lancet Digital Health; would now send out for external peer review conditional on four operator-step items at submission. Zero blocking issues survive at the manuscript level.",
+      "round1_comments_closed": [1, 2, 4, 5, 6, 7, 8, 10, 11],
+      "round1_comments_closed_with_condition": [3],
+      "round1_comments_operator_step": ["1_cover_letter_subset", 9, 12, 13],
+      "round1_comments_open": [],
+      "new_comments_round_2": [
+        {"id": "N1", "severity": "low", "summary": "Title-page word count says 2310; cover letter and texcount say 2281. Correct title page to 2281 (the Lancet IFA body-word definition excludes Key Messages box and front-matter declarations)."},
+        {"id": "N2", "severity": "low", "summary": "April 2026 Lancet DH editorial 'The rise of the agentic AI colleague' was surfaced via WebSearch snippet in Round 1 but full text was 403-gated; v0.4 §1 covers it implicitly under 'Both deployment-side editorials'. Recommended operator-level re-search; if the editorial exists, add one in-text citation alongside zouAgentic2025; if it does not, no edit needed."},
+        {"id": "N3", "severity": "low", "summary": "Acknowledgements paragraph at 181 words is dense; consider a single paragraph break between the human-responsibility sentence and the limitations-encountered sentence to aid copy-edit scan. Pure suggestion, not required."}
+      ],
+      "operator_step_items_for_submission_day": [
+        "Fill cover-letter date, medRxiv DOI, Zenodo DOI, four reviewer names with affiliation and ORCID",
+        "Re-verify live Lancet Digital Health IFA ceiling on submission day (live PDF returned HTTP 403 again on 2026-05-21; ceiling re-verification has been deferred to operator for three consecutive checks)",
+        "Confirm or remove the April 2026 Lancet DH editorial citation (N2)",
+        "Correct title-page body word count from 2310 to 2281 (N1)"
+      ],
+      "format_compliance": {
+        "body_word_count": 2281,
+        "reference_count": 14,
+        "display_items": 2,
+        "title_chars": 122,
+        "running_title_chars": 45,
+        "key_messages_bullets": 4,
+        "key_messages_contribution_first": true,
+        "search_strategy_panel_present": true,
+        "ai_disclosure_acknowledgements_present": true,
+        "ai_disclosure_methods_equivalent_present": true,
+        "no_ai_author_statement_present": true,
+        "limitations_encountered_statement_present": true,
+        "postal_address_present": true,
+        "role_of_funding_source_explicit": true,
+        "reporting_guideline_declared": "TRIPOD 2015 + STROBE",
+        "declarations_present": ["contributors", "competing_interests", "data_sharing", "acknowledgements", "role_of_funding_source"],
+        "declarations_missing": [],
+        "placeholders_unresolved_in_body": [],
+        "placeholders_unresolved_in_cover_letter": ["INSERT_date", "INSERT_medRxiv_DOI", "INSERT_Zenodo_DOI", "INSERT_reviewer_1..4"]
+      },
+      "live_ifa_verification": {
+        "attempted_2026_05_21": true,
+        "urls_attempted": [
+          "https://www.thelancet.com/pb-assets/Lancet/authors/tldh-info-for-authors.pdf",
+          "https://www.thelancet.com/lancet-digital-health/information-for-authors"
+        ],
+        "result": "HTTP_403_on_all_urls",
+        "ceiling_re_verification_remains_operator_step": true,
+        "risk": "If live PDF shows 1500/20 ceiling (matching Lancet main title Viewpoint format) rather than the operator-asserted 2500/30, a 30% structural cut is required."
+      },
+      "novelty_assessment": {
+        "verdict": "additive",
+        "self_demonstration_move_present_in_key_messages": true,
+        "key_messages_bullet_for_self_demonstration": 3,
+        "zou_topol_lancet_editorial_cited": true,
+        "april_2026_lancet_dh_editorial_explicitly_cited": false,
+        "april_2026_handling": "Implicit under 'Both deployment-side editorials' sentence in Section 1 paragraph 1; explicit citation recommended pending operator re-search"
+      },
+      "files_inspected": [
+        "manuscript/main.tex",
+        "manuscript/JOURNAL.md",
+        "manuscript/cover-letter.md",
+        "manuscript/references.bib",
+        "manuscript/figures/build_fig1.py",
+        "manuscript/figures/build_fig2.py",
+        "manuscript/figures/fig1-artifact-ledger.pdf",
+        "manuscript/figures/fig2-policy-gap.pdf",
+        "docs/disclosure2-schema.json",
+        "docs/ledger.md",
+        "docs/ai-usage-disclosure.md",
+        "prompts/04-viewpoint-reviewer-editor.md",
+        "reviewer-logs/viewpoint-round-01/editor.md",
+        "reviewer-logs/viewpoint-round-01/decisions.json",
+        "reviewer-logs/viewpoint-round-01/response-to-reviewers.md"
+      ]
     }
   ]
 }
