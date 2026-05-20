@@ -1,0 +1,32 @@
+{
+  "primary_estimate": {
+    "delta_c_apparent": 0.11689278271594428,
+    "delta_c_optimism_corrected": 0.05998260057005172,
+    "delta_c_95ci_lo": 0.08463615872070766,
+    "delta_c_95ci_hi": 0.13689235741929986,
+    "c_apparent_trs": 0.7136598964555954,
+    "c_apparent_ajcc": 0.599817122442904,
+    "c_apparent_combo": 0.7167099051588482,
+    "c_corrected_trs": 0.6567497143097027,
+    "n_bootstrap_iter_completed": 999
+  },
+  "external": {
+    "accession": "GSE10143",
+    "n_samples": 80,
+    "n_events": 32,
+    "external_signature_size": 50,
+    "external_signature_coverage_in_geo_pct": 100.0,
+    "original_signature_size": 50,
+    "original_signature_coverage_pct": 42.0,
+    "rebuilt_on_intersect": true,
+    "c_index": 0.47489663319551095,
+    "c_index_ci_lo": 0.36117915968732556,
+    "c_index_ci_hi": 0.5815433842916966,
+    "median_split_logrank_p": 0.12782158366973959,
+    "median_split_logrank_chi2": 2.318763666662262,
+    "median_threshold_value": -0.03941423234459408
+  },
+  "n_features_final": 50,
+  "n_tcga_cases_modeled": 366,
+  "n_tcga_with_stage": 342
+}
