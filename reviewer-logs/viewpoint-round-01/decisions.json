@@ -177,6 +177,114 @@
           "summary": "Manuscript does not name the residual failure modes that survive the manifest. The methodology review names seven; the most consequential is failure mode 5 — the audit subagent's own hallucinations (Layer 2 runs the same model class as Layer 1, so a near-match Crossref hit could mask a fabrication and the audit is not externally re-audited). Add a 'failure modes the manifest does not catch' paragraph to Limitations or Section 5 owning at least: reviewer-AI collusion, prompt-text Unicode drift, operator memory leakage into Layer 3, selective failure preservation, audit-side hallucinations, tool-envelope drift, and Viewpoint-prose AI-vs-operator boundary granularity."
         }
       ]
+    },
+    {
+      "reviewer": "editor",
+      "round": 1,
+      "verdict": "revise",
+      "confidence": 0.78,
+      "recommendation": "revise-first-then-send-out",
+      "scope_verdict": "In scope for Lancet Digital Health; adjacent to but not duplicative of the journal's 2024-2026 AI-policy editorials. Self-demonstration move (manuscript produced under the standard it proposes) is the novel asset.",
+      "comments": [
+        {
+          "id": 1,
+          "severity": "blocker",
+          "summary": "Body and cover letter contain unresolved placeholders that prevent triage: main.tex lines 60 (<<WORDCOUNT>>), 61 (<<REFCOUNT>>), 140 (<<HEADLINE:layer3_primary>>); cover-letter.md has <<INSERT...>> placeholders for date, word/ref counts, medRxiv DOI, Zenodo DOI and all four reviewer names. Fill before resubmission. Live counts are 2173 body words and 11 references."
+        },
+        {
+          "id": 2,
+          "severity": "high",
+          "summary": "Methods-equivalent AI disclosure is missing from the Search-strategy panel. Lancet group policy requires AI disclosure at the Methods-equivalent location AND in Acknowledgements; for a Viewpoint without Methods, the operative equivalent is the Search-strategy panel. Current panel says nothing about AI assistance and will be flagged by the automated AI-policy check. Add one sentence naming the tool, version, vendor and the per-step log location."
+        },
+        {
+          "id": 3,
+          "severity": "high",
+          "summary": "Novelty positioning against the journal's immediately-adjacent April 2026 editorial ('The rise of the agentic AI colleague', Lancet Digital Health) and Zou's February 2026 Lancet piece ('The rise of agentic AI teammates in medicine') is absent. The reader will think the territory is already covered. Add a 100-150-word positioning paragraph at the end of Section 1 distinguishing clinical-deployment agentic-AI commentary (those pieces) from author-side manuscript-preparation disclosure (this Viewpoint)."
+        },
+        {
+          "id": 4,
+          "severity": "high",
+          "summary": "Acknowledgements paragraph is missing the 'limitations encountered' element required by Lancet wording and does not explicitly state 'no AI tool is listed as an author'. Add both."
+        },
+        {
+          "id": 5,
+          "severity": "medium",
+          "summary": "Key Messages bullets misorder the contribution. The strongest claim (this manuscript is itself produced under Disclosure 2.0) is bullet 4; the weakest setup (Co-Scientist exists, vendor-locked) is bullet 1. Reorder so the contribution lands in bullets 1-2 and the setup drops to bullet 3."
+        },
+        {
+          "id": 6,
+          "severity": "medium",
+          "summary": "Title-page metadata incomplete: corresponding-author postal address absent (JOURNAL.md flags this as a placeholder line); 'Role of the funding source' declaration not explicit. Add both."
+        },
+        {
+          "id": 7,
+          "severity": "medium",
+          "summary": "Reporting-guideline declaration (TRIPOD 2015 + STROBE for the case-study component) is in JOURNAL.md but absent from the manuscript body. Add a one-sentence declaration to Section 4 or the Limitations section."
+        },
+        {
+          "id": 8,
+          "severity": "medium",
+          "summary": "Cover-letter positioning paragraph ('the reviewer who accepts endorses the methodology; the reviewer who rejects must do so on grounds the repository itself disproves') reads adversarial. Soften the dichotomy."
+        },
+        {
+          "id": 9,
+          "severity": "medium",
+          "summary": "Word-count ceiling (2500 body / 30 refs) is operator-asserted from JOURNAL.md but not corroborated by the cached Lancet IFA summaries (the Lancet main title's Viewpoint is 1500/20 per the February 2026 IFA). The live Lancet Digital Health IFA was 403-gated on 2026-05-21; verify on submission day. If actual ceiling is 1500/20 this requires a 30% structural revision."
+        },
+        {
+          "id": 10,
+          "severity": "low",
+          "summary": "Section 5 (Failure modes) at 367 words is the longest section; the 'AI is your copilot' counter-argument can drop the 15000-GitHub-stars statistic and the toolkit feature enumeration without losing argumentative content (saves ~50 words)."
+        },
+        {
+          "id": 11,
+          "severity": "low",
+          "summary": "Bibliography style: \\bibliographystyle{vancouver} ships with TeX Live but is not the Lancet-house vancouver-superscript variant. Visually verify the proofed PDF shows superscript numerics and ranges; swap to a vancouver-superscript.bst if not."
+        },
+        {
+          "id": 12,
+          "severity": "low",
+          "summary": "Data sharing block should add a Zenodo concept-DOI (in addition to the GitHub tag) to give the repository a persistent identifier independent of GitHub."
+        },
+        {
+          "id": 13,
+          "severity": "low",
+          "summary": "Reviewer-suggestion slots in cover letter are tagged by expertise but unnamed. Populate with named reviewers (geographically diverse, conflict-screened against Anthropic/Google/OpenAI/Sakana and the Koo Foundation, at least one with prior Lancet-group publication)."
+        }
+      ],
+      "format_compliance": {
+        "body_word_count": 2173,
+        "reference_count": 11,
+        "display_items": 2,
+        "title_chars": 122,
+        "running_title_chars": 45,
+        "key_messages_bullets": 4,
+        "search_strategy_panel_present": true,
+        "ai_disclosure_acknowledgements_present": true,
+        "ai_disclosure_methods_equivalent_present": false,
+        "declarations_present": ["contributors", "competing_interests", "data_sharing", "acknowledgements"],
+        "declarations_missing": ["role_of_funding_source_explicit"],
+        "placeholders_unresolved": ["<<WORDCOUNT>>", "<<REFCOUNT>>", "<<HEADLINE:layer3_primary>>", "cover_letter:<<INSERT_date>>", "cover_letter:<<INSERT_word_count>>", "cover_letter:<<INSERT_ref_count>>", "cover_letter:<<INSERT_medRxiv_DOI>>", "cover_letter:<<INSERT_Zenodo_DOI>>", "cover_letter:<<INSERT_reviewer_1..4>>", "cover_letter:<<USER>>"]
+      },
+      "novelty_assessment": {
+        "verdict": "additive",
+        "back_catalogue_overlap": [
+          "Generative AI: ensuring transparency and emphasising human intelligence and accountability (Lancet main, 2024)",
+          "Responsible and evidence-based AI: 5 years on (Lancet DH, 2024)",
+          "Rapid generative AI rollout in health care (Lancet DH, 2025)",
+          "Navigating the landscape of medical AI reporting guidelines (Lancet DH, 2025)",
+          "Evidence and responsibility of AI use in mental health care (Lancet DH, 2025)",
+          "The rise of agentic AI teammates in medicine (Zou, Lancet main, Feb 2026)",
+          "The rise of the agentic AI colleague (Lancet DH editorial, April 2026; title surfaced via WebSearch, full citation to be confirmed)"
+        ],
+        "non_overlap": "Six-item Disclosure 2.0 manifest as the published unit, and the self-demonstration move (manuscript produced under the proposed standard) do not appear in the surfaced back-catalogue pieces."
+      },
+      "verification_notes": [
+        "Live Lancet Digital Health Information for Authors PDF returned HTTP 403 on 2026-05-21; reliance on cached search summaries and the operator's JOURNAL.md.",
+        "All Lancet editorial URLs returned HTTP 403; back-catalogue assessment based on WebSearch result snippets, not full text.",
+        "Word counts derived from texcount -inc -sum on manuscript/main.tex (2173 body + 68 headers + 110 captions = 2353 sum).",
+        "Reference count derived from grep -c '^@' on manuscript/references.bib (12 keys; lintom2026 is a self-cite placeholder slated for removal-or-completion, leaving 11 effective references)."
+      ]
     }
   ]
 }

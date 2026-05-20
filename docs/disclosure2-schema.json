@@ -1,0 +1,160 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/htlin222/end-to-end/blob/main/docs/disclosure2-schema.json",
+  "title": "Disclosure 2.0 manifest",
+  "description": "Machine-readable disclosure manifest for an agentic-LLM-assisted biomedical manuscript submission. The schema captures the six-item disclosure unit proposed in the Viewpoint at manuscript/main.tex (Section 3). The minimum viable manifest (Section 6 recommendation 2) is the subset marked `required` here; the full manifest extends with the `audit` and `reviewerSubagents` blocks.",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "manuscriptTitle",
+    "submissionVenue",
+    "operator",
+    "models",
+    "toolEnvelope",
+    "repository",
+    "release"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "const": "disclosure2-1.0.0"
+    },
+    "manuscriptTitle": {"type": "string", "minLength": 1},
+    "submissionVenue": {
+      "type": "object",
+      "required": ["journal", "articleType"],
+      "properties": {
+        "journal": {"type": "string"},
+        "articleType": {"type": "string"},
+        "submissionDate": {"type": "string", "format": "date"},
+        "preprintDoi": {"type": "string"}
+      }
+    },
+    "operator": {
+      "type": "object",
+      "required": ["name", "orcid", "affiliation"],
+      "properties": {
+        "name": {"type": "string"},
+        "orcid": {"type": "string", "pattern": "^[0-9]{4}-[0-9]{4}-[0-9]{4}-[0-9]{3}[0-9X]$"},
+        "affiliation": {"type": "string"},
+        "role": {"type": "string"},
+        "email": {"type": "string", "format": "email"}
+      }
+    },
+    "models": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["vendor", "name", "version", "snapshotDate"],
+        "properties": {
+          "vendor": {"type": "string"},
+          "name": {"type": "string"},
+          "version": {"type": "string"},
+          "snapshotDate": {"type": "string", "format": "date"},
+          "samplingParameters": {"type": "object"},
+          "purposes": {
+            "type": "array",
+            "items": {"type": "string", "enum": [
+              "language-editing",
+              "argument-development",
+              "methodology-drafting",
+              "literature-scoping",
+              "claim-selection",
+              "manuscript-drafting",
+              "reviewer-subagent",
+              "audit-subagent",
+              "figure-code-generation",
+              "data-analysis"
+            ]}
+          }
+        }
+      }
+    },
+    "toolEnvelope": {
+      "type": "object",
+      "description": "The list of tools each model was permitted to invoke. The combination of model identifier and tool envelope is the reproducibility unit.",
+      "additionalProperties": {
+        "type": "array",
+        "items": {"type": "string"}
+      }
+    },
+    "repository": {
+      "type": "object",
+      "required": ["url", "commitSha", "licence"],
+      "properties": {
+        "url": {"type": "string", "format": "uri"},
+        "commitSha": {"type": "string", "pattern": "^[0-9a-f]{7,40}$"},
+        "branch": {"type": "string"},
+        "licence": {"type": "string"},
+        "visibility": {"type": "string", "enum": ["public", "private-at-submission-public-on-acceptance"]}
+      }
+    },
+    "release": {
+      "type": "object",
+      "required": ["tag", "url"],
+      "properties": {
+        "tag": {"type": "string", "pattern": "^v?[0-9]+\\.[0-9]+\\.[0-9]+$"},
+        "url": {"type": "string", "format": "uri"},
+        "zenodoDoi": {"type": "string"},
+        "artefacts": {
+          "type": "array",
+          "items": {"type": "string"}
+        }
+      }
+    },
+    "prompts": {
+      "type": "array",
+      "description": "Inventory of orchestration prompts committed verbatim under prompts/. Each entry is a relative repository path.",
+      "items": {"type": "string", "pattern": "^prompts/.+\\.md$"}
+    },
+    "reviewerSubagents": {
+      "type": "object",
+      "description": "Inventory of reviewer-subagent rounds, each with the personas dispatched and the verdicts returned.",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "personas": {"type": "array", "items": {"type": "string"}},
+          "verdicts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "enum": ["major-revision", "minor-revision", "accept", "reject"]
+            }
+          },
+          "logDirectory": {"type": "string"}
+        }
+      }
+    },
+    "audit": {
+      "type": "object",
+      "description": "Layer-2 audit outputs.",
+      "properties": {
+        "reExecution": {"type": "string"},
+        "citationVeracity": {"type": "string"},
+        "statisticalReproducibility": {"type": "string"},
+        "claimDataAlignment": {"type": "string"},
+        "consolidatedFindings": {"type": "string"}
+      }
+    },
+    "preregistration": {
+      "type": "object",
+      "description": "Layer-3 preregistration anchor.",
+      "required": ["file", "commitShaAtLock"],
+      "properties": {
+        "file": {"type": "string"},
+        "commitShaAtLock": {"type": "string"}
+      }
+    },
+    "honestyContract": {
+      "type": "object",
+      "description": "Procedural rules binding the operator and all subagents.",
+      "properties": {
+        "noClaimScreening": {"type": "boolean"},
+        "noHistoryRewriting": {"type": "boolean"},
+        "noPostHocInstrumentation": {"type": "boolean"},
+        "failurePreservation": {"type": "boolean"}
+      }
+    }
+  }
+}
