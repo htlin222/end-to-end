@@ -73,7 +73,7 @@
     },
     "toolEnvelope": {
       "type": "object",
-      "description": "The list of tools each model was permitted to invoke. The combination of model identifier and tool envelope is the reproducibility unit.",
+      "description": "The list of tools each model was permitted to invoke. The combination of model identifier and tool envelope is the reproducibility unit. Each key of this object MUST equal a `models[].name` value (i.e., the tool envelope is keyed by the model it applies to); validators SHOULD reject manifests whose toolEnvelope keys are not a subset of the models[].name values.",
       "additionalProperties": {
         "type": "array",
         "items": {"type": "string"}
