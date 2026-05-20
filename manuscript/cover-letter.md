@@ -55,7 +55,7 @@ both an argument and a working example.
 | Item                  | Value                                                         |
 |-----------------------|---------------------------------------------------------------|
 | Article type          | Viewpoint                                                     |
-| Body word count       | 2 428 (texcount, body sections only; under the 2 500 ceiling) |
+| Body word count       | 2 495 (texcount, body sections only; under the 2 500 ceiling) |
 | References            | 14 (Vancouver superscript-numeric; ceiling 30)                |
 | Display items         | 2 (Figure 1, artefact ledger; Figure 2, policy gap)           |
 | Preprint              | medRxiv DOI to be inserted after preprint posting             |
