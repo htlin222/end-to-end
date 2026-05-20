@@ -85,19 +85,26 @@ The Lancet group's current public policy as of 2026:
 1. **AI tools cannot be listed as authors.** AI cannot meet the ICMJE
    accountability requirement and must not be credited as such.
 2. **Disclosure is mandatory** when a generative-AI tool is used in the
-   preparation of a manuscript. The disclosure must appear in two places:
-   - **Methods section** (or equivalent for non-research articles): which
-     tool, version, vendor; what task it was used for; what human review or
-     editing was applied; any limitations encountered.
-   - **Acknowledgements**: a formatted statement, e.g., "The author
-     acknowledges the use of Anthropic Claude (Opus 4.7) via Claude Code for
-     manuscript drafting and revision. All scientific arguments, claim
-     selection, and final interpretation are the author's responsibility."
-3. **Permitted uses (current policy):** language editing, grammar repair,
-   prose polishing.
-4. **Prohibited uses (current policy):** generating scientific arguments,
-   drafting methodology descriptions, producing literature reviews, creating
-   new scientific content, generating images or figures.
+   preparation of a manuscript. The Lancet group's wording (per the live
+   editorial-policies page, retrieved 2026-05-21) places disclosure in
+   the **Acknowledgements** section in a formatted statement. For a
+   Viewpoint without a Methods section, an equivalent disclosure may be
+   placed in the Search-strategy panel to give the editorial copy-edit
+   pass a second visible anchor.
+3. **Permitted uses (current policy, verbatim):** "readability and
+   language improvements only" (illustrated by improving English, fixing
+   grammar, restructuring sentences for clarity and polishing prose).
+4. **Prohibited uses (current policy, verbatim):** "generate scientific
+   arguments, draft methodology descriptions, write literature reviews,
+   or create new content".
+5. **AI-generated images (separate provision):** "no images from
+   generative AI tools in any part of the manuscript".
+6. **Reviewer-side use (separate provision):** "reviewers should refrain
+   from using generative AI or AI-assisted technologies to assist in the
+   scientific review of papers" — current Lancet group policy prohibits
+   AI on the reviewer side as well as on the author side; the
+   Disclosure 2.0 proposal lifts both prohibitions in favour of
+   bilateral disclosure.
 
 ### Friction with this submission
 

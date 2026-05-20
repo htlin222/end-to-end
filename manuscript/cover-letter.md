@@ -42,9 +42,9 @@ subagent transcripts, audit log, tagged release\}. Critically, the
 manuscript and its supporting case study are themselves produced under
 exactly that standard: every artefact the standard would require is
 publicly archived at the GitHub repository linked in the manuscript's
-Data Sharing statement. The reviewer who accepts the Viewpoint endorses
-the methodology; the reviewer who rejects it must do so on grounds the
-repository itself disproves.
+Data Sharing statement. The reviewer's task is to adjudicate the policy
+argument; the repository disposes of any factual dispute about whether
+such a workflow exists.
 
 I have made no formal commitment to the standard's adoption beyond
 publishing the present submission under it. The submission is therefore
@@ -55,12 +55,21 @@ both an argument and a working example.
 | Item                  | Value                                                         |
 |-----------------------|---------------------------------------------------------------|
 | Article type          | Viewpoint                                                     |
-| Body word count       | `<<INSERT body word count at submission>>` (target <= 2 500)  |
-| References            | `<<INSERT reference count at submission>>` (target <= 30)     |
-| Display items         | 2 (Figure 1, Figure 2)                                        |
-| Preprint              | medRxiv DOI `<<INSERT medRxiv DOI>>` posted `<<INSERT date>>` |
+| Body word count       | 2 281 (texcount, body sections only; under the 2 500 ceiling) |
+| References            | 14 (Vancouver superscript-numeric; ceiling 30)                |
+| Display items         | 2 (Figure 1, artefact ledger; Figure 2, policy gap)           |
+| Preprint              | medRxiv DOI to be inserted after preprint posting             |
 | Repository            | `https://github.com/htlin222/end-to-end` (tag `viewpoint-v1.0.0`) |
-| Persistent code DOI   | Zenodo `<<INSERT Zenodo DOI from GitHub-Zenodo integration>>` |
+| Persistent code DOI   | Zenodo DOI to be inserted after GitHub-Zenodo deposit         |
+
+## Generative-AI background of the author
+
+My prior LLM-adjacent work (theory-of-mind-like behaviour in LLM poker
+agents, arXiv 2026, sole author) informs this Viewpoint's framing of
+agentic-LLM disclosure. My day job is as a haematology and medical
+oncology fellow; I am not an LLM researcher, and the present manuscript
+reflects a clinician-investigator's practical encounter with agentic
+tooling rather than a methods-paper contribution.
 
 ## Originality and exclusivity
 
@@ -92,7 +101,7 @@ I have no individuals to declare as preferred non-reviewers.
 The author declares no competing interests. The author does not hold
 equity, employment or paid advisory roles with Anthropic, Google, OpenAI,
 or any other company whose generative-AI tools are discussed in the
-manuscript. The author is a salaried medical oncologist at the Koo
+manuscript. The author is a salaried haematology and medical oncology fellow at the Koo
 Foundation Sun Yat-Sen Cancer Center, Taipei, Taiwan.
 
 ## Funding
