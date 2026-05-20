@@ -40,10 +40,12 @@ The Viewpoint passed four reviewer-subagent rounds (the operator-supplied origin
 
 | Round | Date | Policy | Clinician | Methodology | Editor | Commit at start of round |
 |-------|------|--------|-----------|-------------|--------|--------------------------|
-| 1     | 2026-05-21 | major-revision (12 comments) | major-revision (8 comments) | major-revision (11 comments) | revise-first (13 comments) | `c694f07` |
-| 2     | 2026-05-21 | minor-revision (3 new low) | minor-revision (3 new low) | minor-revision (3 new low) | minor-revision (3 new low, "send out now? Yes") | `da4ddce` |
-| 3     | 2026-05-21 | accept (pending verification) | accept (pending) | accept (pending) | accept (pending) | `c7b6586` |
-| 4     | YYYY-MM-DD | accept (pending) | accept (pending) | accept (pending) | accept (pending) | TBD |
+| 1 | 2026-05-21 | major-revision (12 comments) | major-revision (8) | major-revision (11) | revise-first (13) | `c694f07` |
+| 2 | 2026-05-21 | minor-revision (3 new low) | minor-revision (3 new low) | minor-revision (3 new low) | minor-revision ("send out now? Yes") | `da4ddce` |
+| 3 | 2026-05-21 | **accept** | **accept** | **accept** | **accept** | `c7b6586` |
+| 4 | 2026-05-21 | **accept** | **accept** | **accept** | **accept** (confirmation) | `98bd5eb` |
+
+**Outcome.** Four rounds run (user-spec minimum); unanimous accept achieved in Round 3 and reconfirmed in Round 4. Total comments closed: 44 from R1 + 12 new low from R2; zero re-raised from R1 to R2; zero new from R3 or R4.
 
 All transcripts are committed verbatim; comments that were later overruled are preserved per the honesty contract in `docs/design.md`. Round-N response-to-reviewers documents enumerate every comment-to-resolution mapping.
 

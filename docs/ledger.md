@@ -4,12 +4,12 @@ Regenerated from `git log` by `scripts/regenerate_ledger.py`. Re-run after every
 
 ## Summary
 
-- Total commits: **33**
-- AI-co-authored commits: **33**
+- Total commits: **35**
+- AI-co-authored commits: **35**
 - Operator-only commits: **0**
 - Tags: (none yet)
 - First commit: 2026-05-20T16:17:31+00:00
-- Latest commit: 2026-05-20T18:07:51+00:00
+- Latest commit: 2026-05-20T18:12:14+00:00
 
 ## Chronological narrative
 
@@ -48,6 +48,8 @@ Regenerated from `git log` by `scripts/regenerate_ledger.py`. Re-run after every
 | 31 | 2026-05-20 18:02 | `04c72e8` | Operator | AI-co-authored | docs: add RELEASE_NOTES.md template for viewpoint-v1.0.0 |
 | 32 | 2026-05-20 18:07 | `dd7b3e4` | Viewpoint | AI-co-authored | v0.4.2: R3 minor (word count 2281->2428 in title page + cover letter) + release_check.sh fixes |
 | 33 | 2026-05-20 18:07 | `4836c7a` | Reviewer | AI-co-authored | reviewer-logs: bring all four Round 3 reviewer transcripts and decisions.json into repo |
+| 34 | 2026-05-20 18:07 | `98bd5eb` | Viewpoint | AI-co-authored | chore: regenerate ledger + Figure 1 after R3 closure |
+| 35 | 2026-05-20 18:12 | `c805bb4` | Reviewer | AI-co-authored | reviewer-logs: bring all four Round 4 reviewer transcripts into repo + Round 4 closure |
 
 ## Tags
 
