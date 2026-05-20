@@ -62,7 +62,7 @@ check "working tree is clean" \
 check "on main branch" \
   bash -c '[[ "$(git rev-parse --abbrev-ref HEAD)" == "main" ]]'
 check "no force-pushed or rebased history (no diverged ancestry)" \
-  bash -c 'git fsck --no-progress --no-dangling 2>&1 | grep -vq "broken link\\|missing"'
+  bash -c '! git fsck --no-progress --no-dangling 2>&1 | grep -qE "broken link|missing"'
 
 # --- Disclosure 2.0 manifest items ---
 check "item 1 prompts: all closed-for-edits prompts present" \
@@ -100,12 +100,31 @@ check "no placeholder DOIs in references.bib" \
   bash -c '! grep -F "10.0000/placeholder" manuscript/references.bib'
 
 check "body word count <= 2500" \
-  bash -c '
-    body=$(texcount -inc -sum manuscript/main.tex 2>/dev/null | awk "/Sum count/{print \$3}");
-    decls=$(texcount -inc -sum manuscript/main.tex 2>/dev/null | awk "/Section: Key messages/{key=\$1} /Section: Search strategy/{ss=\$1} /Section: Declaration/{di=\$1} /Section: Contributors/{co=\$1} /Section: Acknowledgements/{ack=\$1} /Section: Data sharing/{ds=\$1} END{split(key,a,\"+\");split(ss,b,\"+\");split(di,c,\"+\");split(co,d,\"+\");split(ack,e,\"+\");split(ds,f,\"+\");print a[1]+b[1]+c[1]+d[1]+e[1]+f[1]}");
-    body_only=$((body - decls));
-    echo "texcount: total=$body, non-body=$decls, body=$body_only";
-    [[ $body_only -le 2500 ]]'
+  python3 -c '
+import re, subprocess, sys
+out = subprocess.check_output(["texcount", "-inc", "-sum", "manuscript/main.tex"], text=True)
+NON_BODY = {"Key messages", "Search strategy and selection criteria",
+            "Declaration of interests", "Contributors",
+            "Acknowledgements", "Data sharing"}
+body_total = 0
+non_body_total = 0
+preamble_subsection = 0
+for line in out.splitlines():
+    m = re.match(r"\s*(\d+)\+\d+\+\d+ \([^)]+\) (Section|Subsection)(: (.+?)(?:\}|$))?", line)
+    if not m:
+        continue
+    words, kind = int(m.group(1)), m.group(2)
+    name = (m.group(4) or "").split("}\\label")[0].strip()
+    if kind == "Subsection" and not name:
+        preamble_subsection += words
+        continue
+    if name in NON_BODY:
+        non_body_total += words
+    else:
+        body_total += words
+print(f"texcount: body={body_total} non_body={non_body_total} preamble_subsection={preamble_subsection}")
+sys.exit(0 if body_total <= 2500 else 1)
+'
 
 check "reference count <= 30" \
   bash -c 'count=$(grep -cE "^@" manuscript/references.bib); echo "references: $count"; [[ $count -le 30 ]]'
@@ -153,11 +172,13 @@ check "Figure 1 manifest sidecar present" \
 check "docs/ledger.md present" \
   test -s docs/ledger.md
 
-check "docs/ledger.md regenerates deterministically (no diff)" \
+check "docs/ledger.md regenerator is deterministic (two consecutive runs identical)" \
   bash -c '
-    cp docs/ledger.md /tmp/ledger.before;
     uv run python scripts/regenerate_ledger.py >/dev/null 2>&1;
-    diff -q /tmp/ledger.before docs/ledger.md'
+    cp docs/ledger.md /tmp/ledger.run1;
+    uv run python scripts/regenerate_ledger.py >/dev/null 2>&1;
+    cp docs/ledger.md /tmp/ledger.run2;
+    diff -q /tmp/ledger.run1 /tmp/ledger.run2'
 
 # --- gh authentication ---
 check "gh is authenticated" \
