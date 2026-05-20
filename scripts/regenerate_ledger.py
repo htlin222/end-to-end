@@ -72,9 +72,14 @@ def _path_signature(paths: list[str]) -> str:
 
 
 def tag_rows() -> list[tuple[str, datetime]]:
+    """Return (tag_name, creatordate) pairs.
+
+    git for-each-ref does not interpret %xNN escapes the way git log
+    does, so we use a literal tab as the separator.
+    """
     raw = subprocess.check_output(
         ["git", "-C", str(REPO_ROOT), "for-each-ref",
-         "--format=%(refname:short)%x1f%(creatordate:iso-strict)",
+         "--format=%(refname:short)\t%(creatordate:iso-strict)",
          "refs/tags"],
         text=True,
     )
@@ -82,8 +87,14 @@ def tag_rows() -> list[tuple[str, datetime]]:
     for line in raw.splitlines():
         if not line.strip():
             continue
-        name, date_s = line.split("\x1f", 1)
-        out.append((name, datetime.fromisoformat(date_s).astimezone(timezone.utc)))
+        parts = line.split("\t", 1)
+        if len(parts) != 2:
+            continue
+        name, date_s = parts
+        try:
+            out.append((name, datetime.fromisoformat(date_s).astimezone(timezone.utc)))
+        except ValueError:
+            continue
     return out
 
 

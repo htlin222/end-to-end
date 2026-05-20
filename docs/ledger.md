@@ -4,12 +4,12 @@ Regenerated from `git log` by `scripts/regenerate_ledger.py`. Re-run after every
 
 ## Summary
 
-- Total commits: **35**
-- AI-co-authored commits: **35**
+- Total commits: **52**
+- AI-co-authored commits: **52**
 - Operator-only commits: **0**
-- Tags: (none yet)
+- Tags: case-study-v1.0.0, viewpoint-v1.0.0
 - First commit: 2026-05-20T16:17:31+00:00
-- Latest commit: 2026-05-20T18:12:14+00:00
+- Latest commit: 2026-05-20T19:52:20+00:00
 
 ## Chronological narrative
 
@@ -50,8 +50,26 @@ Regenerated from `git log` by `scripts/regenerate_ledger.py`. Re-run after every
 | 33 | 2026-05-20 18:07 | `4836c7a` | Reviewer | AI-co-authored | reviewer-logs: bring all four Round 3 reviewer transcripts and decisions.json into repo |
 | 34 | 2026-05-20 18:07 | `98bd5eb` | Viewpoint | AI-co-authored | chore: regenerate ledger + Figure 1 after R3 closure |
 | 35 | 2026-05-20 18:12 | `c805bb4` | Reviewer | AI-co-authored | reviewer-logs: bring all four Round 4 reviewer transcripts into repo + Round 4 closure |
+| 36 | 2026-05-20 18:12 | `60a8c7f` | Viewpoint | AI-co-authored | release: finalise RELEASE_NOTES.md and regenerate ledger + Figure 1 at viewpoint-v1.0.0 boundary |
+| 37 | 2026-05-20 18:14 | `94b65de` | Layer 1 | AI-co-authored | chore: gitignore release/ staging dir + record viewpoint-v1.0.0 tag |
+| 38 | 2026-05-20 18:30 | `d7edc1f` | Layer 1 | AI-co-authored | case-study: prereg-v3 amendment caps signature at 50 genes (failure-mode-02) |
+| 39 | 2026-05-20 18:41 | `816cb92` | Layer 1 | AI-co-authored | case-study: treat screen-zero permutations as null delta=0 (failure-mode-03) |
+| 40 | 2026-05-20 18:42 | `ec93b6d` | Layer 1 | AI-co-authored | case-study: commit Layer-1 analytic artefacts (TCGA-LIHC + GSE10143) |
+| 41 | 2026-05-20 18:42 | `ef68872` | Layer 1 | AI-co-authored | case-study: commit four manuscript figures (KM, forest, AUC, external KM) |
+| 42 | 2026-05-20 18:42 | `fd825bd` | Layer 1 | AI-co-authored | case-study: add 99_reexec_check.py + manuscript references.bib + cover letter |
+| 43 | 2026-05-20 18:50 | `cf5d224` | Reviewer | AI-co-authored | reviewer-logs/round-01: four reviewer transcripts + summary + decisions.json |
+| 44 | 2026-05-20 19:00 | `585be81` | Layer 1 | AI-co-authored | case-study: round-02 revision (paired-optimism + DCA + IDI + calibration) |
+| 45 | 2026-05-20 19:04 | `d7b9918` | Layer 1 | AI-co-authored | case-study: round-02 data artefacts (paired-optimism CI + DCA + IDI + calibration) |
+| 46 | 2026-05-20 19:09 | `a87586c` | Layer 1 | AI-co-authored | reviewer-logs: Round 2 (case-study) — unanimous accept |
+| 47 | 2026-05-20 19:12 | `612846a` | Layer 1 | AI-co-authored | case-study: post-tag polish from Layer 1 v2 (reproducibility tolerance + Uno IPCW caveat) |
+| 48 | 2026-05-20 19:46 | `59a48dc` | Layer 2 | AI-co-authored | reviewer-logs/audit: Layer-2 four per-axis transcripts |
+| 49 | 2026-05-20 19:46 | `109a432` | Layer 2 | AI-co-authored | reviewer-logs/audit: consolidated findings.md (12 findings, 1 blocker) |
+| 50 | 2026-05-20 19:48 | `ecf8475` | Layer 1 | AI-co-authored | case-study: Layer 3 external validation — preregistered NULL result |
+| 51 | 2026-05-20 19:50 | `5ffd6df` | Viewpoint | AI-co-authored | manuscript: v0.5 — Layer 3 NULL headline + Layer 2 audit reference |
+| 52 | 2026-05-20 19:52 | `99d9cfe` | Operator | AI-co-authored | docs: update RELEASE_NOTES.md for viewpoint-v1.1.0 (post-Layer-3 + Layer-2-audit) |
 
 ## Tags
 
-None yet. The first tag will be `viewpoint-v1.0.0` at submission state.
+- **case-study-v1.0.0** — 2026-05-20T19:09:57+00:00
+- **viewpoint-v1.0.0** — 2026-05-20T18:12:37+00:00
 

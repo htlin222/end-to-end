@@ -86,7 +86,7 @@ def git_tags() -> list[tuple[str, datetime]]:
     """Return list of (tag_name, tag_date) tuples."""
     raw = subprocess.check_output(
         ["git", "-C", str(REPO_ROOT), "for-each-ref",
-         "--format=%(refname:short)%x1f%(creatordate:iso-strict)",
+         "--format=%(refname:short)\t%(creatordate:iso-strict)",
          "refs/tags"],
         text=True,
     )
@@ -94,8 +94,14 @@ def git_tags() -> list[tuple[str, datetime]]:
     for line in raw.splitlines():
         if not line.strip():
             continue
-        name, date = line.split("\x1f", 1)
-        out.append((name, datetime.fromisoformat(date).astimezone(timezone.utc)))
+        parts = line.split("\t", 1)
+        if len(parts) != 2:
+            continue
+        name, date = parts
+        try:
+            out.append((name, datetime.fromisoformat(date).astimezone(timezone.utc)))
+        except ValueError:
+            continue
     return out
 
 
