@@ -1,0 +1,30 @@
+\begin{thebibliography}{1}
+
+\bibitem{coscientist2026}
+Gottweis J, Weng WH, Daryin A, Tu T, Sirkovic P, Myaskovsky A, et~al.
+\newblock Accelerating scientific discovery with {Co-Scientist}.
+\newblock Nature. 2026.
+\newblock PMID 42156544.
+
+\bibitem{luSakana2026}
+Lu C, Lu C, Lange RT, Yamada Y, Hu S, Foerster J, et~al.
+\newblock Towards end-to-end automation of {AI} research.
+\newblock Nature. 2026;651(8107):914-9.
+\newblock PMID 41882133.
+
+\bibitem{lancetaipolicy2024}
+{The Lancet group}. Editorial policies: use of generative {AI} and large language models; 2024.
+\newblock Retrieved 2026-05-20. Stands in for the biomedical-journal AI-policy class; NEJM AI, JAMA Network, and Nature portfolio carry materially similar wording.
+\newblock \url{https://www.thelancet.com/editorial-policies}.
+
+\bibitem{ars2026}
+Imbad, {contributors}. Academic {Research} {Skills} for {Claude} {Code}: research, write, review, revise, finalize; 2026.
+\newblock Mature contemporaneous example of the human-in-the-loop agentic-research school cited in Section 3.
+\newblock GitHub release v3.9.2, \url{https://github.com/Imbad0202/academic-research-skills}.
+
+\bibitem{repoprereg}
+Lin HT. {Preregistration} of {Layer-3} external validation, end-to-end repository; 2026.
+\newblock Operator-confirmed SHA; repository tag \texttt{viewpoint-nejmai-v1.0.0}.
+\newblock GitHub commit \texttt{88d6d15}, file \texttt{docs/prereg.md}.
+
+\end{thebibliography}
