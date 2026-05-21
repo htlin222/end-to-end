@@ -1,4 +1,6 @@
 {
+  "scope": "case-study only (Viewpoint commits and tags excluded)",
+  "axis": "ordinal commit index (equal spacing per commit)",
   "generated_from_commit": "bf43c57",
   "total_commits": 23,
   "ai_co_authored_commits": 23,
@@ -12,6 +14,7 @@
     "59e7faf",
     "88d6d15",
     "cf5d224",
+    "a87586c",
     "59a48dc",
     "bf43c57"
   ],

@@ -1,10 +1,15 @@
-"""Build Figure 1 — the artefact ledger (compact swimlane).
+"""Build Figure 1 — case-study artefact ledger.
 
-Reads git log + tags. Each commit is a small marker in its layer
-swimlane on the time axis. No per-commit text (too dense at 50+
-commits); instead, a side legend explains the encoding and a small
-right-hand event panel lists the milestone commits (tagged releases
-+ first appearance of each layer).
+Each commit occupies an equal vertical slot (ordinal axis); long
+wall-clock gaps between commits do not produce empty bands and dense
+clusters do not collapse onto one row. Time labels appear only where
+they matter: at the first commit, at each tag, and at HEAD.
+
+Filtered to case-study scope only (the Viewpoint manuscript's own
+commits and tags are deliberately excluded). Five swimlanes:
+Operator (preregistration / fixes / tag pushes), Layer 1 (autonomous
+pipeline), Reviewer subagent (case-study reviewer rounds 1-N),
+Layer 2 (sealed audit), Layer 3 (external validation).
 """
 from __future__ import annotations
 
@@ -15,17 +20,25 @@ from pathlib import Path
 
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
+from matplotlib.patches import FancyBboxPatch
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 OUT = REPO_ROOT / "manuscript" / "figures" / "fig1-artifact-ledger.pdf"
 
 LAYER_ORDER = ["operator", "layer1", "review", "layer2", "layer3"]
 LAYER_LABEL = {
-    "operator": "Operator\n(prereg, fix, tag)",
-    "layer1": "Layer 1\n(pipeline)",
-    "review": "Reviewer\nsubagent",
-    "layer2": "Layer 2\n(audit)",
-    "layer3": "Layer 3\n(validation)",
+    "operator": "Operator",
+    "layer1": "Layer 1",
+    "review": "Reviewer",
+    "layer2": "Layer 2",
+    "layer3": "Layer 3",
+}
+LAYER_SUBLABEL = {
+    "operator": "prereg / fix / tag",
+    "layer1": "pipeline",
+    "review": "subagent",
+    "layer2": "audit",
+    "layer3": "validation",
 }
 LAYER_COLOR = {
     "operator": "#5a4fcf",
@@ -65,32 +78,21 @@ def git_log() -> list[dict]:
 
 
 def is_case_study_scope(commit: dict) -> bool:
-    """True if the commit is part of the case-study disclosure-2.0
-    manifest. The Viewpoint manuscript and its own reviewer loop are
-    intentionally excluded: this figure depicts the supporting case
-    study's process, not the meta-process of writing the Viewpoint."""
     paths = commit["paths"]
     case_study_prefixes = (
         "case-study/",
         "reviewer-logs/audit/",
-        "reviewer-logs/round-",  # case-study reviewer rounds (numeric)
+        "reviewer-logs/round-",
     )
     if any(any(p.startswith(prefix) for prefix in case_study_prefixes)
            for p in paths):
         return True
     if any(p == "docs/prereg.md" for p in paths):
-        return True  # Layer-3 preregistration anchor
+        return True
     return False
 
 
 def classify(commit: dict) -> str:
-    """Layer attribution within the case-study scope.
-
-    Layer 3 is checked before Layer 1 because Layer-3 commits live under
-    case-study/ paths (case-study/analysis/layer3_external_validation.py,
-    case-study/data/results/layer3_*.json) and would otherwise be swept
-    into Layer 1.
-    """
     paths = commit["paths"]
     subject = commit.get("subject", "").lower()
     if any("layer3" in p.lower() for p in paths) or "layer 3" in subject or "layer-3" in subject:
@@ -130,181 +132,246 @@ def git_tags() -> list[tuple[str, datetime, str]]:
     return sorted(out, key=lambda x: x[1])
 
 
-def select_milestones(commits: list[dict], tags: list[tuple[str, datetime, str]]) -> list[dict]:
-    """Pick the commits worth printing the subject of."""
-    by_hash = {c["hash"]: c for c in commits}
-    milestones: list[dict] = []
-    seen_layers: set[str] = set()
-    # First commit
-    if commits:
-        milestones.append({**commits[0], "label": "scaffold"})
-    # First commit per layer
-    for c in commits:
-        layer = classify(c)
-        if layer not in seen_layers and layer in {"layer1", "review", "layer2", "layer3"}:
-            milestones.append({**c, "label": f"first {LAYER_LABEL[layer].lower()}"})
-            seen_layers.add(layer)
-    # Tags
-    for name, dt, sha in tags:
-        c = by_hash.get(sha)
-        if c:
-            milestones.append({**c, "label": f"tag {name}"})
-    # Latest commit
-    if commits:
-        milestones.append({**commits[-1], "label": "HEAD"})
-    # Dedupe by hash, keep first occurrence's label
-    seen: set[str] = set()
-    dedup = []
-    for m in milestones:
-        if m["hash"] in seen:
-            continue
-        seen.add(m["hash"])
-        dedup.append(m)
-    return dedup
+def find_tag_commit_index(tag_date: datetime, commits: list[dict]) -> int | None:
+    """Return the ordinal index (0-based) of the commit closest to and
+    not after the tag date. Returns None if no such commit exists."""
+    best = None
+    for i, c in enumerate(commits):
+        if c["date"] <= tag_date:
+            best = i
+        else:
+            break
+    return best
 
 
 def main() -> None:
     all_commits = git_log()
     all_tags = git_tags()
-    # Filter to case-study scope only: this figure documents the
-    # supporting case study's Disclosure 2.0 manifest, not the Viewpoint's
-    # own commit history.
     commits = [c for c in all_commits if is_case_study_scope(c)]
-    case_study_tag_prefix = "case-study-"
-    tags = [t for t in all_tags if t[0].startswith(case_study_tag_prefix)]
+    tags = [t for t in all_tags if t[0].startswith("case-study-")]
     if not commits:
         raise SystemExit("no case-study commits found")
 
-    fig = plt.figure(figsize=(10.5, 6.5))
-    gs = fig.add_gridspec(1, 2, width_ratios=[1.6, 1.0], wspace=0.02)
+    n = len(commits)
+    n_ai = sum(1 for c in commits if c["ai_assisted"])
+    n_op = n - n_ai
+    # Ordinal y: index i -> y = -i/(n-1) (0 at top, -1 at bottom)
+    def y_of(i: int) -> float:
+        return -i / max(n - 1, 1)
+
+    # Cap figure height so 50-commit case studies don't produce a 16-inch
+    # banner; 8.5 inches is roughly Lancet-DH column-width-by-aspect.
+    fig_height = min(8.8, max(6.2, 0.28 * n))
+    fig = plt.figure(figsize=(11.0, fig_height))
+    # Reserve a header row for title+legend on top of each panel and a
+    # data row below; the explicit subplots_adjust call below pins the
+    # margins so the legend never collides with the panel titles.
+    gs = fig.add_gridspec(
+        1, 2,
+        width_ratios=[1.5, 1.0],
+        wspace=0.04,
+    )
     ax = fig.add_subplot(gs[0, 0])
     ax_evt = fig.add_subplot(gs[0, 1])
 
     swimlane_x = {name: i for i, name in enumerate(LAYER_ORDER)}
-    earliest = commits[0]["date"]
-    latest = commits[-1]["date"]
-    span = max((latest - earliest).total_seconds(), 1.0)
 
-    def y(date: datetime) -> float:
-        return -((date - earliest).total_seconds() / span)
+    # Subtle alternating row banding to help read across columns
+    for i in range(n):
+        if i % 2 == 0:
+            ax.axhspan(y_of(i) - 0.5 / max(n - 1, 1),
+                       y_of(i) + 0.5 / max(n - 1, 1),
+                       color="#f4f4f4", zorder=0, alpha=0.45)
 
-    # Swimlane background
+    # Swimlane backgrounds (vertical stripes)
     for name, x in swimlane_x.items():
-        ax.axvline(x, color="#e8e8e8", linewidth=8, zorder=0, solid_capstyle="butt", alpha=0.45)
-    # Headers above plot area
-    for name, x in swimlane_x.items():
-        ax.text(x, 0.06, LAYER_LABEL[name].replace(" (", "\n("), ha="center",
-                va="bottom", fontsize=8, fontweight="bold",
-                color=LAYER_COLOR[name])
+        ax.axvline(x, color=LAYER_COLOR[name], linewidth=14, zorder=1,
+                   solid_capstyle="butt", alpha=0.08)
 
-    # Commit dots
-    for c in commits:
+    # Headers (two-line)
+    header_y = 0.05
+    for name, x in swimlane_x.items():
+        ax.text(x, header_y, LAYER_LABEL[name], ha="center", va="bottom",
+                fontsize=10, fontweight="bold", color=LAYER_COLOR[name])
+        ax.text(x, header_y - 0.015, LAYER_SUBLABEL[name], ha="center",
+                va="top", fontsize=8, color=LAYER_COLOR[name], alpha=0.85)
+
+    # Tag horizontal dashed lines + right-anchored boxed labels
+    tag_y_positions: dict[str, float] = {}
+    for tag_name, tag_date, tag_sha in tags:
+        idx = find_tag_commit_index(tag_date, commits)
+        if idx is None:
+            continue
+        yt = y_of(idx)
+        tag_y_positions[tag_name] = yt
+        ax.axhline(yt, color="#222", linewidth=0.6, linestyle="--",
+                   alpha=0.55, zorder=2)
+        ax.text(len(LAYER_ORDER) - 0.45, yt + 0.012, tag_name, ha="right",
+                va="bottom", fontsize=8, color="#222", fontweight="bold",
+                bbox=dict(boxstyle="round,pad=0.22", fc="white", ec="#444",
+                          alpha=0.95, linewidth=0.5))
+
+    # Commit markers
+    for i, c in enumerate(commits):
         layer = classify(c)
         x = swimlane_x[layer]
         color = LAYER_COLOR[layer]
         marker = "o" if c["ai_assisted"] else "s"
-        ax.scatter(x, y(c["date"]), s=28, c=color, marker=marker,
-                   edgecolors="white", linewidths=0.6, zorder=3)
+        ax.scatter(x, y_of(i), s=42, c=color, marker=marker,
+                   edgecolors="white", linewidths=0.9, zorder=4)
 
-    # Tags as horizontal lines + right-edge labels
-    for name, dt, _sha in tags:
-        yt = y(dt)
-        ax.axhline(yt, color="#222", linewidth=0.5, linestyle="--",
-                   alpha=0.45, zorder=1)
-        ax.text(len(LAYER_ORDER) - 0.4, yt, name, ha="right", va="bottom",
-                fontsize=7, color="#222",
-                bbox=dict(boxstyle="round,pad=0.15", fc="white", ec="#888",
-                          alpha=0.85, linewidth=0.4))
+    # Time labels on the left axis: first, every tag, and last
+    left_x = -0.55
+    earliest = commits[0]["date"]
+    latest = commits[-1]["date"]
 
-    ax.set_xlim(-0.5, len(LAYER_ORDER) - 0.3)
-    ax.set_ylim(-1.04, 0.18)
+    def fmt_dt(dt: datetime) -> str:
+        return dt.astimezone(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
+
+    # Build label set: index -> date string
+    label_idx: dict[int, str] = {0: fmt_dt(earliest)}
+    label_idx[n - 1] = fmt_dt(latest)
+    for tag_name, tag_date, _sha in tags:
+        idx = find_tag_commit_index(tag_date, commits)
+        if idx is not None:
+            label_idx[idx] = fmt_dt(commits[idx]["date"])
+
+    for idx, txt in label_idx.items():
+        yt = y_of(idx)
+        ax.plot([left_x + 0.05, -0.35], [yt, yt],
+                color="#999", linewidth=0.4, alpha=0.6)
+        ax.text(left_x, yt, txt, ha="right", va="center", fontsize=7,
+                color="#444")
+
+    ax.set_xlim(-1.4, len(LAYER_ORDER) - 0.3)
+    ax.set_ylim(-1.04, 0.13)
     ax.set_xticks([])
     ax.set_yticks([])
     ax.set_frame_on(False)
     ax.set_title("Case-study Disclosure 2.0 artefact ledger",
-                 fontsize=12, loc="left", fontweight="bold")
+                 fontsize=13, loc="left", fontweight="bold", pad=8)
 
-    # Time labels at left
-    ax.text(-0.3, 0.0, earliest.strftime("%Y-%m-%d %H:%M"), ha="right",
-            va="center", fontsize=7, color="#555")
-    ax.text(-0.3, -1.0, latest.strftime("%Y-%m-%d %H:%M"), ha="right",
-            va="center", fontsize=7, color="#555")
-
-    # Legend
+    # Single figure-level legend at the very bottom, outside the panels,
+    # so it never collides with milestone text.
     legend_handles = [
-        mpatches.Patch(color=LAYER_COLOR[k], label=LAYER_LABEL[k])
+        mpatches.Patch(color=LAYER_COLOR[k], label=f"{LAYER_LABEL[k]} ({LAYER_SUBLABEL[k]})")
         for k in LAYER_ORDER
     ]
     legend_handles.append(plt.Line2D([0], [0], marker="o", color="w",
-                                     markerfacecolor="#888", markersize=7,
-                                     label="AI-co-authored commit"))
-    legend_handles.append(plt.Line2D([0], [0], marker="s", color="w",
-                                     markerfacecolor="#888", markersize=7,
-                                     label="operator-only commit"))
-    ax.legend(handles=legend_handles, loc="lower center",
-              bbox_to_anchor=(0.5, -0.18), fontsize=7, ncol=2,
-              frameon=False)
+                                     markerfacecolor="#888", markersize=8,
+                                     markeredgecolor="white", markeredgewidth=0.9,
+                                     label=f"AI-co-authored commit ({n_ai})"))
+    if n_op > 0:
+        legend_handles.append(plt.Line2D([0], [0], marker="s", color="w",
+                                         markerfacecolor="#888", markersize=8,
+                                         markeredgecolor="white", markeredgewidth=0.9,
+                                         label=f"operator-only commit ({n_op})"))
+    fig.legend(handles=legend_handles, loc="lower center",
+               bbox_to_anchor=(0.5, 0.0), ncol=len(legend_handles),
+               fontsize=8, frameon=False, columnspacing=1.4,
+               handletextpad=0.4)
 
-    # Right panel: milestone events
+    # ----- Right panel: milestone events -----
     ax_evt.axis("off")
     ax_evt.set_xlim(0, 1)
-    ax_evt.set_ylim(-1.04, 0.18)
+    ax_evt.set_ylim(-1.04, 0.13)
+    op_str = f"{n_op} operator-only" if n_op > 0 else "no operator-only commits"
     ax_evt.set_title(
-        f"Milestones  ({len(commits)} commits, {len(tags)} tags)",
-        fontsize=10, loc="left", fontweight="bold"
+        f"Milestones  ({n} commits: {n_ai} AI-co-authored, {op_str};\n"
+        f"{len(tags)} tagged releases)",
+        fontsize=10, loc="left", fontweight="bold", pad=8
     )
 
-    milestones = select_milestones(commits, tags)
-    # Stagger milestone labels vertically to avoid overlap when commits
-    # cluster in time (each label takes ~0.06 of normalised y).
-    min_gap = 0.075
+    milestones = []
+    seen_layers: set[str] = set()
+    # First commit
+    if commits:
+        milestones.append({**commits[0], "label": "scaffold (first case-study commit)", "idx": 0})
+    # First per layer
+    for i, c in enumerate(commits):
+        layer = classify(c)
+        if layer not in seen_layers and layer in {"layer1", "review", "layer2", "layer3"}:
+            milestones.append({**c, "label": f"first {LAYER_LABEL[layer]} ({LAYER_SUBLABEL[layer]})", "idx": i})
+            seen_layers.add(layer)
+    # Tags
+    by_hash = {c["hash"]: (i, c) for i, c in enumerate(commits)}
+    for tag_name, tag_date, tag_sha in tags:
+        if tag_sha in by_hash:
+            i, c = by_hash[tag_sha]
+            milestones.append({**c, "label": f"tag {tag_name}", "idx": i})
+        else:
+            idx = find_tag_commit_index(tag_date, commits)
+            if idx is not None:
+                c = commits[idx]
+                milestones.append({**c, "label": f"tag {tag_name} (at {c['hash']})", "idx": idx})
+    # HEAD only if it is NOT already represented by a tag at the same idx
+    tagged_idxs = {m["idx"] for m in milestones if m["label"].startswith("tag ")}
+    if (n - 1) not in tagged_idxs:
+        milestones.append({**commits[-1], "label": "HEAD", "idx": n - 1})
+    # Dedupe by idx; if multiple labels share the idx, merge them into one entry
+    by_idx: dict[int, dict] = {}
+    for m in milestones:
+        idx = m["idx"]
+        if idx in by_idx:
+            existing = by_idx[idx]
+            existing["label"] = f"{existing['label']}; {m['label']}"
+        else:
+            by_idx[idx] = dict(m)
+    milestones = sorted(by_idx.values(), key=lambda m: m["idx"])
+
+    # Stagger labels vertically if too close (in ordinal y)
+    min_gap = 0.085
     placed_y: list[float] = []
     for m in milestones:
-        layer = classify(m)
-        yt_raw = y(m["date"])
-        # Find a non-overlapping y close to yt_raw
+        yt_raw = y_of(m["idx"])
         yt = yt_raw
         while any(abs(yt - p) < min_gap for p in placed_y):
             yt -= 0.012
         placed_y.append(yt)
+        layer = classify(m)
         color = LAYER_COLOR[layer]
-        ax_evt.scatter(0.03, yt, s=24, c=color, marker="o" if m["ai_assisted"] else "s",
-                       edgecolors="white", linewidths=0.5, zorder=3)
+        marker = "o" if m["ai_assisted"] else "s"
+        ax_evt.scatter(0.025, yt, s=34, c=color, marker=marker,
+                       edgecolors="white", linewidths=0.7, zorder=3)
         text = f"{m['hash']}  {m['label']}"
-        ax_evt.text(0.08, yt, text, ha="left", va="center", fontsize=7.5,
-                    color="#222", fontweight="bold")
-        subject = m["subject"][:60] + ("…" if len(m["subject"]) > 60 else "")
-        ax_evt.text(0.08, yt - 0.028, subject, ha="left", va="top",
-                    fontsize=6.2, color="#555", style="italic")
-        # Track where the label landed so connection lines target it
+        ax_evt.text(0.07, yt + 0.005, text, ha="left", va="bottom",
+                    fontsize=8, color="#1a1a1a", fontweight="bold")
+        subject = m["subject"]
+        if len(subject) > 65:
+            subject = subject[:64] + "…"
+        ax_evt.text(0.07, yt - 0.005, subject, ha="left", va="top",
+                    fontsize=6.5, color="#555", style="italic")
         m["_label_y"] = yt
         m["_raw_y"] = yt_raw
 
-    # Connecting lines between ax and ax_evt for milestones.
-    # When the label was staggered downward, draw a subtle bent
-    # leader so the reader can trace label -> ledger position.
+    # Leader lines from left swimlane to right milestone label
     for m in milestones:
         layer = classify(m)
-        y_raw = m.get("_raw_y", y(m["date"]))
+        y_raw = m.get("_raw_y", y_of(m["idx"]))
         y_label = m.get("_label_y", y_raw)
-        ax.plot([swimlane_x[layer] + 0.15, len(LAYER_ORDER) - 0.2],
-                [y_raw, y_label], color="#cccccc", linewidth=0.4,
-                zorder=1, alpha=0.4)
+        ax.plot([swimlane_x[layer] + 0.18, len(LAYER_ORDER) - 0.25],
+                [y_raw, y_label], color="#bbbbbb", linewidth=0.5,
+                zorder=2, alpha=0.55)
 
-    fig.tight_layout(pad=0.5)
+    # Leave room at the bottom for the figure-level legend, and at the
+    # top for the section titles.
+    fig.subplots_adjust(left=0.10, right=0.99, top=0.91, bottom=0.07,
+                        wspace=0.04)
     OUT.parent.mkdir(parents=True, exist_ok=True)
     fig.savefig(OUT, bbox_inches="tight")
 
     sidecar = OUT.with_suffix(".manifest.json")
     sidecar.write_text(json.dumps({
+        "scope": "case-study only (Viewpoint commits and tags excluded)",
+        "axis": "ordinal commit index (equal spacing per commit)",
         "generated_from_commit": commits[-1]["hash"],
-        "total_commits": len(commits),
-        "ai_co_authored_commits": sum(1 for c in commits if c["ai_assisted"]),
-        "operator_only_commits": sum(1 for c in commits if not c["ai_assisted"]),
+        "total_commits": n,
+        "ai_co_authored_commits": n_ai,
+        "operator_only_commits": n_op,
         "tags": [t[0] for t in tags],
         "milestones_shown": [m["hash"] for m in milestones],
-        "earliest_commit": earliest.isoformat(),
-        "latest_commit": latest.isoformat(),
+        "earliest_commit": commits[0]["date"].isoformat(),
+        "latest_commit": commits[-1]["date"].isoformat(),
     }, indent=2))
     print(f"wrote {OUT}")
 
