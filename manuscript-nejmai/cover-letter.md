@@ -16,7 +16,7 @@ The repository [https://github.com/htlin222/end-to-end](https://github.com/htlin
 | Item                | Value                                                    |
 |---------------------|----------------------------------------------------------|
 | Article type        | Perspective                                              |
-| Body word count     | 1,076 (under 1,200 ceiling)                              |
+| Body word count     | 1,170 (under 1,200 ceiling)                              |
 | References          | 5/5                                                      |
 | Figures             | 1/1 (artefact ledger)                                    |
 | Abstract            | 1 sentence, present on title page                        |
