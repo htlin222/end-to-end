@@ -1,0 +1,64 @@
+\begin{thebibliography}{10}
+
+\bibitem{sendak2020}
+Sendak MP, Gao M, Brajer N, Balu S.
+\newblock Presenting machine learning model information to clinical end users with model facts labels.
+\newblock NPJ Digital Medicine. 2020;3(1):41.
+\newblock The mother paper for clinical-AI transparency labels; Disclosure 2.0 explicitly extends this lineage to agentic-LLM research. Verify final author list at submission (et al. policy after fifth author per Nature style).
+
+\bibitem{consortAI2020}
+Liu X, Cruz~Rivera S, Moher D, Calvert MJ, Denniston AK, {SPIRIT-AI and CONSORT-AI Working Group}.
+\newblock Reporting guidelines for clinical trial reports for interventions involving artificial intelligence: the {CONSORT-AI} extension.
+\newblock Nature Medicine. 2020;26(9):1364-74.
+\newblock Trial-level transparency standard for AI interventions; companion paper to SPIRIT-AI. Cited in Section 1 as part of the five-year transparency lineage Disclosure 2.0 extends.
+
+\bibitem{tripodAI2024}
+Collins GS, Moons KGM, Dhiman P, Riley RD, Beam AL, Van~Calster B, et~al.
+\newblock {TRIPOD+AI} statement: updated guidance for reporting clinical prediction models that use regression or machine learning methods.
+\newblock BMJ. 2024;385:e078378.
+\newblock PMID 38636956; the canonical reporting framework for AI prediction-model studies. Cited in Section 1 as the immediate predecessor of Disclosure 2.0.
+
+\bibitem{coscientist2026}
+Gottweis J, Weng WH, Daryin A, Tu T, Sirkovic P, Myaskovsky A, et~al.
+\newblock Accelerating scientific discovery with {Co-Scientist}.
+\newblock Nature. 2026.
+\newblock PMID 42156544; verified PubMed 2026-05-21.
+
+\bibitem{luSakana2026}
+Lu C, Lu C, Lange RT, Yamada Y, Hu S, Foerster J, et~al.
+\newblock Towards end-to-end automation of {AI} research.
+\newblock Nature. 2026;651(8107):914-9.
+\newblock PMID 41882133.
+
+\bibitem{zouAgentic2025}
+Zou J, Topol EJ.
+\newblock The rise of agentic {AI} teammates in medicine.
+\newblock The Lancet. 2025;405(10477):457.
+\newblock PMID 39922663.
+
+\bibitem{natureEditorial2026}
+{{\em Nature} editors}. {AI} scientists are changing research --- institutions, funders and publishers must respond; 2026.
+\newblock Published online 2026-03-25; the companion editorial to the AI Scientist Nature paper.
+\newblock Nature editorial.
+
+\bibitem{lancetaipolicy2024}
+{The Lancet group}. Editorial policies: use of generative {AI} and large language models; 2024.
+\newblock Retrieved 2026-05-20. Stands in for the biomedical-journal AI-policy class; NEJM AI, JAMA Network and Nature portfolio carry materially similar wording.
+\newblock \url{https://www.thelancet.com/editorial-policies}.
+
+\bibitem{zhaoHallucinations2026}
+Zhao Z, {co-authors}. {LLM} hallucinations in the wild: large-scale evidence from non-existent citations; 2026.
+\newblock Corpus-scale audit of 111M references; 146,932 hallucinated citations in 2025. Full author list to confirm at submission.
+\newblock arXiv preprint.
+
+\bibitem{ars2026}
+Imbad, {contributors}. Academic {Research} {Skills} for {Claude} {Code}: research, write, review, revise, finalize; 2026.
+\newblock Contemporaneous example of the human-in-the-loop agentic-research school cited in Section 3.
+\newblock GitHub release v3.9.2, \url{https://github.com/Imbad0202/academic-research-skills}.
+
+\bibitem{repoprereg}
+Lin HT. {Preregistration} of {Layer-3} external validation, end-to-end repository; 2026.
+\newblock Operator-confirmed SHA; repository tag \texttt{viewpoint-npjdm-v1.0.0}.
+\newblock GitHub commit \texttt{88d6d15}, file \texttt{docs/prereg.md}.
+
+\end{thebibliography}
