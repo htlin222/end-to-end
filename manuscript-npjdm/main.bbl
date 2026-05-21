@@ -4,7 +4,7 @@
 Sendak MP, Gao M, Brajer N, Balu S.
 \newblock Presenting machine learning model information to clinical end users with model facts labels.
 \newblock NPJ Digital Medicine. 2020;3(1):41.
-\newblock The mother paper for clinical-AI transparency labels; Disclosure 2.0 explicitly extends this lineage to agentic-LLM research. Verify final author list at submission (et al. policy after fifth author per Nature style).
+\newblock The clinical-deployment operationalisation of Mitchell et al. 2019 Model Cards; Disclosure 2.0 explicitly extends this lineage to agentic-LLM research. Verify final author list at submission (et al. policy after fifth author per Nature style).
 
 \bibitem{consortAI2020}
 Liu X, Cruz~Rivera S, Moher D, Calvert MJ, Denniston AK, {SPIRIT-AI and CONSORT-AI Working Group}.
@@ -29,6 +29,12 @@ Lu C, Lu C, Lange RT, Yamada Y, Hu S, Foerster J, et~al.
 \newblock Towards end-to-end automation of {AI} research.
 \newblock Nature. 2026;651(8107):914-9.
 \newblock PMID 41882133.
+
+\bibitem{mitchell2019}
+Mitchell M, Wu S, Zaldivar A, Barnes P, Vasserman L, Hutchinson B, et~al.
+\newblock Model Cards for Model Reporting.
+\newblock In: Proceedings of the Conference on Fairness, Accountability, and Transparency (FAT* '19); 2019. p. 220-9.
+\newblock Cited in Section 1 as the general-ML precursor that Sendak et al. 2020 operationalised for clinical deployment as Model Facts Labels.
 
 \bibitem{zouAgentic2025}
 Zou J, Topol EJ.

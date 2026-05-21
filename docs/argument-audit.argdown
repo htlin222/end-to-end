@@ -1,99 +1,103 @@
 ===
-title: Disclosure 2.0 — argument audit of viewpoint-nejmai-v1.0.1
+title: Disclosure 2.0 — argument audit of viewpoint-npjdm-v1.0.1
 model: { removeTagsFromText: true, mode: strict }
 ===
 
 # Main thesis
 
-[D2.0]: Biomedical journals should adopt Disclosure 2.0 as the published unit for AI-assisted manuscripts — the tuple of prompts, model identifier, tool envelope, commit history, reviewer-subagent transcripts, audit log, and tagged release at a persistent DOI.
-  + <Landscape>
-  + <Policy gap>
+[D2.0]: Disclosure 2.0 is the natural extension of the clinical-AI transparency lineage to agentic-LLM research; the published unit becomes a six-item manifest (prompts, model identifier, commit history, reviewer-subagent transcripts, audit log, tagged release) at a tagged DOI release.
+  + <Lineage>
+  + <Gap>
   + <Self-demo>
-  - <Bit determinism>
-  - <Self audit>
-  - <Reviewer hallucination>
-  - <Compliance OK>
-  - <Copilot school>
+  - <Determinism>
+  - <Self-audit>
+  - <Hallucinating reviewers>
   - <Equity>
   - <Audit hallucination>
-  - <Model deprecation>
+  - <Selective lineage>
+  - <Analogy stretch>
+  - <Model Cards precedence>
 
 # Supporting arguments
 
-<Landscape>: 2026 has crossed the autonomy threshold; the disclosure unit must catch up.
+<Lineage>: A five-year sequence of clinical-AI transparency standards establishes the disclosure-unit pattern; Disclosure 2.0 completes the sequence for the agentic-LLM class.
 
-(1) [CoScientist]: Google DeepMind's Co-Scientist (Nature 2026) generated and refined biomedical hypotheses, with AML drug-repurposing candidates validated in vitro.
-(2) [AIScientist]: Sakana AI's end-to-end pipeline (Nature 2026 651:914-919) produced a manuscript that passed first-round blind workshop peer review.
-(3) [Commodity]: A clinician without large-lab affiliation can in 2026 assemble an equivalent workflow on commodity tooling.
------
-(4) [D2.0]
-
-<Policy gap>: Current biomedical AI policies are calibrated for 2023 LLM use and structurally lag 2026 practice.
-
-(1) [Permitted]: Current policy permits "readability and language improvements only".
-(2) [Prohibited]: Current policy prohibits using AI to generate scientific arguments, draft methodology, write literature reviews, or create new content.
-(3) [Workflow does both]: A 2026 agentic workflow performs the prohibited acts as a matter of course; the 2023 permission lane does not contain it.
-(4) [Three harms]: Current policy protects against three real harms — authorship inflation, scientific hallucination, undocumented intervention — but prohibition without audit invites camouflage rather than mitigation.
+(1) [Sendak2020]: Model Facts Labels (Sendak et al. 2020) name the disclosure unit for a deployed clinical ML model.
+(2) [CONSORT-AI]: The 2020 CONSORT-AI / SPIRIT-AI extensions name it for AI-intervention RCTs.
+(3) [TRIPOD-AI]: TRIPOD+AI (Collins et al. 2024) names it for AI-enabled prediction-model reporting.
+(4) [Pattern]: Each standard atomises an artefact type (deployed model, trial, prediction model) and binds journal-side adoption to author-side compliance.
 -----
 (5) [D2.0]
 
-<Self-demo>: The Perspective itself is produced under Disclosure 2.0; every artefact the manifest requires is publicly archived; the supporting null and the audit findings are visible.
+<Gap>: The lineage's standards assume the disclosed unit is a model or a trial; agentic LLMs produce neither.
 
-(1) [Repo public]: The repository at htlin222/end-to-end is MIT-licensed and tagged at viewpoint-nejmai-v1.0.1.
-(2) [Null preserved]: The supporting case study returned a preregistered NULL on external validation (delta C-index 0.006 [-0.008, 0.030], n=333).
-(3) [Audit preserved]: Layer-2 audit filed 12 findings (1 blocker, 2 high, 9 lower) that the within-Layer-1 reviewer rounds did not catch; findings are committed verbatim.
-(4) [Visibility-as-remediation]: A regime that makes its own failure modes visible is the strongest available test of the disclosure standard.
+(1) [CoScientist]: Co-Scientist (Nature 2026) autonomously generates and refines biomedical hypotheses; AML drug-repurposing candidates were in vitro validated.
+(2) [AIScientist]: Sakana AI Scientist (Nature 2026) produced a manuscript that passed first-round blind workshop peer review.
+(3) [No artefact match]: Neither system produces a fixed predictive model with stable weights, nor a clinical trial.
+(4) [Policy lag]: Current biomedical-journal AI policies prohibit-by-default and ask for a single-sentence acknowledgement; prohibition without an audit surface invites camouflage.
 -----
 (5) [D2.0]
+
+<Self-demo>: The present Perspective is itself produced under Disclosure 2.0; the case study returned a preregistered NULL and the Layer-2 audit filed 12 substantive findings on the case-study manuscript.
+
+(1) [Repo public]: MIT-licensed repo at tag viewpoint-npjdm-v1.0.0; every manifest item present.
+(2) [Null preserved]: Layer 3 delta-C-index = 0.006 [-0.008, 0.030], primary hypothesis not rejected, n=333.
+(3) [Audit preserved]: Layer 2 filed 1 blocker + 2 high + 9 medium-low findings; within-Layer-1 reviewer rounds did not catch them.
+(4) [Findability is the test]: A standard that surfaces its own failure modes is the strongest available demonstration.
+(5) [Limits acknowledged]: Disclosure 2.0 does not eliminate failure modes — only makes them findable; single case study is not scale evidence.
+-----
+(6) [D2.0]
 
 # Counter-arguments and rebuttals
 
-<Bit determinism>: LLMs are not bit-deterministic; the prompt is not a protocol.
+<Determinism>: LLMs are not bit-deterministic; the prompt is not a protocol.
   - <Distributional reproducibility>
 
-<Distributional reproducibility>: The reproducibility claim is distributional, not bit-level — the substantive findings reproduce when the prompt is run against the same model id, snapshot date, and tool envelope.
+<Distributional reproducibility>: Same prompt + model id + snapshot + tool envelope must yield the same selected sub-claim and statistical method across three runs; the headline effect size within the original's bootstrap 95% interval.
 
-<Self audit>: A single operator cannot audit himself.
+<Self-audit>: A single operator cannot audit himself.
   - <Sealed Layer 2>
 
-<Sealed Layer 2>: Layer 2 is a sealed audit subagent dispatched as a separate Claude Code session; Layer 3 is preregistered before Layer 1 sees the data; reviewer subagents are persona-diversified; the entire repository is open to third-party re-audit.
+<Sealed Layer 2>: Layer 2 is dispatched as a sealed audit subagent; Layer 3 is preregistered before Layer 1 sees the data; reviewer personas are diversified; repository is open to third-party re-audit; seal is testimonial rather than cryptographic.
 
-<Reviewer hallucination>: Reviewer subagents will hallucinate the way the pipeline does.
+<Hallucinating reviewers>: Reviewer subagents hallucinate the way the pipeline does.
   - <Failure preservation>
 
-<Failure preservation>: Disclosure 2.0 preserves the hallucination verbatim and records resolution in subsequent commits, making the failure mode catchable rather than camouflaged.
+<Failure preservation>: The hallucination is preserved verbatim and the resolution lives in subsequent commits, making the failure mode catchable rather than camouflaged.
 
-<Compliance OK>: The current policy is fine if everyone just complies.
-  - <Non-compliance equilibrium>
-
-<Non-compliance equilibrium>: As written the policy declares the 2026 workflow in violation; the realistic equilibrium under such a policy is non-compliance or non-use, both worse than updating the mechanism.
-
-<Copilot school>: The right response to LLM scientific reasoning is to embed it in a human-supervised pipeline with explicit integrity gates (Academic Research Skills toolkit, 15,700+ GitHub stars).
-  - <Two equilibria>
-
-<Two equilibria>: Fully autonomous and copilot-supervised are two legitimate equilibria with different cost-of-error profiles; Disclosure 2.0 is the disclosure layer both should share.
-
-<Equity>: This proposal is for well-resourced submitters only — clinicians without git fluency or institutional compute cannot meet the manifest.
+<Equity>: This proposal is for well-resourced submitters only — clinicians without git fluency or institutional compute cannot meet the full manifest.
   - <Minimum viable manifest>
 
-<Minimum viable manifest>: The minimum viable manifest (prompts plus model identifier plus commit hash plus tagged release) covers the consequential audit surfaces at near-zero infrastructure cost and is the recommended on-ramp.
+<Minimum viable manifest>: Items 1, 2, 3, 6 of the manifest preserve the consequential audit surfaces at near-zero infrastructure cost.
 
-<Audit hallucination>: The audit subagent has its own hallucinations; Layer 2 runs the same model class as Layer 1.
-  - <Cross model audit>
+<Audit hallucination>: The audit subagent runs the same model class as Layer 1; Layer 2 hallucinates too.
+  - <Cross-model audit>
 
-<Cross model audit>: The manifest's models array supports cross-model audit (Layer 1 on one vendor, Layer 2 on another); same-vendor audits are equivalent to a single-rater study.
+<Cross-model audit>: Layer 1 on one vendor + Layer 2 on a different vendor is the proposed mitigation; the manifest's models array supports declaration; same-vendor audit treated as single-rater study.
 
-<Model deprecation>: The pinned model identifier has an end-of-life; reproducibility evaporates on deprecation.
-  - <Degradation policy>
+# New issues surfaced by the npj DM lineage reframe (patched in v1.0.1)
 
-<Degradation policy>: At end-of-life, manifest compliance requires either re-execution on a named successor model with a divergent-attestation badge, or freezing the artefact in the audit log; transcripts, code, and manuscripts survive deprecation.
+<Selective lineage>: The lineage selects Sendak 2020, CONSORT-AI 2020 and TRIPOD+AI 2024 but skips CLAIM 2024, DECIDE-AI 2022, STANDING Together 2024, and the WAME / ICMJE 2024 AI guidance.
+  - <Selection criteria>
+
+<Selection criteria>: Three standards are cited because each names a distinct artefact type (deployed model, trial, prediction model); the omitted standards are either imaging-modality-specific (CLAIM), decision-support-specific (DECIDE-AI), reporting-equity-specific (STANDING Together), or generic publication-ethics rather than artefact-disclosure (WAME / ICMJE). [PATCHED in v1.0.1 — one-sentence rationale added to Section 1.]
+
+<Analogy stretch>: Disclosure 2.0 items are claimed to be "analogous to" Model Facts Labels fields, but Model Facts Labels disclose deployment-time properties whereas Disclosure 2.0 discloses process-time properties — different temporal locus.
+  - <Temporal locus is the gap>
+
+<Temporal locus is the gap>: The temporal-locus mismatch IS the gap the Perspective identifies; the lineage's standards cover model-at-deployment (Model Facts Labels) and design-time (CONSORT-AI, TRIPOD+AI), but no standard covers process-as-it-runs. Disclosure 2.0 fills that locus. [PATCHED in v1.0.1 — temporal-locus distinction stated explicitly in Section 3.]
+
+<Model Cards precedence>: Mitchell et al. 2019 "Model Cards for Model Reporting" (FAccT) preceded Sendak 2020 by a year and is the actual mother paper of the lineage; not citing it weakens the historical claim.
+  - <Sendak operationalises Mitchell>
+
+<Sendak operationalises Mitchell>: Mitchell 2019 was a general ML framework; Sendak 2020 operationalised it for clinical deployment with a one-page Model Facts Label tied to a real implementation. [PATCHED in v1.0.1 — Mitchell 2019 added as ref #12 and Section 1 attributes Sendak as operationalisation.]
 
 # Concrete recommendation (pilot)
 
-[Pilot]: NEJM AI should pilot Disclosure 2.0 as an alternative submission track for AI-deep manuscripts.
+[Pilot]: npj Digital Medicine should pilot Disclosure 2.0 as an alternative submission track for AI-deep manuscripts; 5-10 submissions/quarter, 90 days, no Editorial Manager feature work needed.
   + [D2.0]
-  + <Editorial Manager fit>: A 90-day pilot needs no Editorial Manager feature work — authors upload a Disclosure 2.0 PDF manifest plus linked Zenodo DOI alongside the cover letter; the editorial office validates against a JSON schema.
-  + <Sample sufficient>: Five to ten Lancet DH or NEJM AI submissions per quarter are statistically sufficient to test triage-time and copy-edit impact.
+  + <Editorial Manager fit>: PDF manifest alongside cover letter + linked Zenodo DOI; editorial office validates against JSON schema.
+  + <Outcome metric>: Pilot success is whether the manifest is CONSULTED by reviewers, not just published.
 
 # Inferential map
 
@@ -102,4 +106,4 @@ model: { removeTagsFromText: true, mode: strict }
 (1) [D2.0]
 (2) [Pilot]
 -----
-(3) [Adoptable]: An editorial board can adopt Disclosure 2.0 at the cost of one quarterly pilot with no software development, no policy rewrite, and full backward compatibility with the current "readability only" lane.
+(3) [Adoptable]: An npj DM editorial board can run the pilot at the cost of one quarter, no software development, and full backward compatibility with the current "readability and language improvements only" lane.
