@@ -7,8 +7,8 @@ all the upstream work and committed.
 ## Current state
 
 - Repo public: https://github.com/htlin222/end-to-end ✓
-- NEJM AI Perspective manuscript: `manuscript-nejmai/main.pdf` (4 pages,
-  620 body words, 5 refs, 1 figure) at tag `viewpoint-nejmai-v1.0.0` ✓
+- NEJM AI Perspective manuscript: `manuscript-nejmai/main.pdf` (5 pages,
+  1,076 body words, 5 refs, 1 figure) at tag `viewpoint-nejmai-v1.0.1` ✓
 - Cover letter: `manuscript-nejmai/cover-letter.md` (4 `<<INSERT>>`
   placeholders for reviewer names + medRxiv DOI + Zenodo DOI + date) ✓
 - medRxiv submission metadata: `manuscript-nejmai/medrxiv-metadata.md` ✓
