@@ -19,16 +19,16 @@ import matplotlib.patches as mpatches
 REPO_ROOT = Path(__file__).resolve().parents[2]
 OUT = REPO_ROOT / "manuscript" / "figures" / "fig1-artifact-ledger.pdf"
 
-LAYER_ORDER = ["viewpoint", "layer1", "review", "layer2", "layer3"]
+LAYER_ORDER = ["operator", "layer1", "review", "layer2", "layer3"]
 LAYER_LABEL = {
-    "viewpoint": "Operator / Viewpoint",
-    "layer1": "Layer 1 (pipeline)",
-    "review": "Reviewer subagent",
-    "layer2": "Layer 2 (audit)",
-    "layer3": "Layer 3 (validation)",
+    "operator": "Operator\n(prereg, fix, tag)",
+    "layer1": "Layer 1\n(pipeline)",
+    "review": "Reviewer\nsubagent",
+    "layer2": "Layer 2\n(audit)",
+    "layer3": "Layer 3\n(validation)",
 }
 LAYER_COLOR = {
-    "viewpoint": "#5a4fcf",
+    "operator": "#5a4fcf",
     "layer1": "#1f8a3a",
     "review": "#b08a00",
     "layer2": "#c54a2c",
@@ -64,21 +64,46 @@ def git_log() -> list[dict]:
     return commits
 
 
-def classify(commit: dict) -> str:
-    """Layer attribution. Layer 3 is checked before Layer 1 because
-    Layer-3 commits live under case-study/ paths (case-study/analysis/
-    layer3_external_validation.py, case-study/data/results/layer3_*.json)
-    and would otherwise be swept into Layer 1."""
+def is_case_study_scope(commit: dict) -> bool:
+    """True if the commit is part of the case-study disclosure-2.0
+    manifest. The Viewpoint manuscript and its own reviewer loop are
+    intentionally excluded: this figure depicts the supporting case
+    study's process, not the meta-process of writing the Viewpoint."""
     paths = commit["paths"]
-    if any("layer3" in p.lower() for p in paths):
+    case_study_prefixes = (
+        "case-study/",
+        "reviewer-logs/audit/",
+        "reviewer-logs/round-",  # case-study reviewer rounds (numeric)
+    )
+    if any(any(p.startswith(prefix) for prefix in case_study_prefixes)
+           for p in paths):
+        return True
+    if any(p == "docs/prereg.md" for p in paths):
+        return True  # Layer-3 preregistration anchor
+    return False
+
+
+def classify(commit: dict) -> str:
+    """Layer attribution within the case-study scope.
+
+    Layer 3 is checked before Layer 1 because Layer-3 commits live under
+    case-study/ paths (case-study/analysis/layer3_external_validation.py,
+    case-study/data/results/layer3_*.json) and would otherwise be swept
+    into Layer 1.
+    """
+    paths = commit["paths"]
+    subject = commit.get("subject", "").lower()
+    if any("layer3" in p.lower() for p in paths) or "layer 3" in subject or "layer-3" in subject:
         return "layer3"
     if any(p.startswith("reviewer-logs/audit/") for p in paths):
         return "layer2"
+    if any(p.startswith("reviewer-logs/round-") for p in paths):
+        return "review"
+    if any(p == "docs/prereg.md" for p in paths):
+        return "operator"
     if any(p.startswith("case-study/") for p in paths):
         return "layer1"
-    if any(p.startswith("reviewer-logs/") for p in paths):
-        return "review"
-    return "viewpoint"
+    return "operator"
 
 
 def git_tags() -> list[tuple[str, datetime, str]]:
@@ -139,10 +164,16 @@ def select_milestones(commits: list[dict], tags: list[tuple[str, datetime, str]]
 
 
 def main() -> None:
-    commits = git_log()
-    tags = git_tags()
+    all_commits = git_log()
+    all_tags = git_tags()
+    # Filter to case-study scope only: this figure documents the
+    # supporting case study's Disclosure 2.0 manifest, not the Viewpoint's
+    # own commit history.
+    commits = [c for c in all_commits if is_case_study_scope(c)]
+    case_study_tag_prefix = "case-study-"
+    tags = [t for t in all_tags if t[0].startswith(case_study_tag_prefix)]
     if not commits:
-        raise SystemExit("no commits found")
+        raise SystemExit("no case-study commits found")
 
     fig = plt.figure(figsize=(10.5, 6.5))
     gs = fig.add_gridspec(1, 2, width_ratios=[1.6, 1.0], wspace=0.02)
@@ -190,8 +221,8 @@ def main() -> None:
     ax.set_xticks([])
     ax.set_yticks([])
     ax.set_frame_on(False)
-    ax.set_title("Disclosure 2.0 artefact ledger", fontsize=12, loc="left",
-                 fontweight="bold")
+    ax.set_title("Case-study Disclosure 2.0 artefact ledger",
+                 fontsize=12, loc="left", fontweight="bold")
 
     # Time labels at left
     ax.text(-0.3, 0.0, earliest.strftime("%Y-%m-%d %H:%M"), ha="right",

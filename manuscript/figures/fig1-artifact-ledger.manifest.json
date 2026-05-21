@@ -1,21 +1,20 @@
 {
-  "generated_from_commit": "bdb72e6",
-  "total_commits": 59,
-  "ai_co_authored_commits": 59,
+  "generated_from_commit": "bf43c57",
+  "total_commits": 23,
+  "ai_co_authored_commits": 23,
   "operator_only_commits": 0,
   "tags": [
-    "viewpoint-v1.0.0",
-    "case-study-v1.0.0"
+    "case-study-v1.0.0",
+    "case-study-v1.0.1"
   ],
   "milestones_shown": [
     "0a4c904",
     "59e7faf",
-    "3c43693",
+    "88d6d15",
+    "cf5d224",
     "59a48dc",
-    "ecf8475",
-    "60a8c7f",
-    "bdb72e6"
+    "bf43c57"
   ],
   "earliest_commit": "2026-05-20T16:17:31+00:00",
-  "latest_commit": "2026-05-21T00:24:16+00:00"
+  "latest_commit": "2026-05-20T23:52:22+00:00"
 }
