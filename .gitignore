@@ -55,3 +55,10 @@ reviewer-logs/scratch/
 # macOS
 .DS_Store
 release/
+
+# Home cleanup: generated files and machine-local state
+*.aux
+*.blg
+*.fdb_latexmk
+*.fls
+*.out
